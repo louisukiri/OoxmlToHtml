@@ -10,6 +10,8 @@ namespace OoxmlToHtml.Statements
         public Tokens Token { get; private set; }
         public StringStatement Value { get; private set; }
 
+        Tokens IStatement.Token => throw new NotImplementedException();
+
         public ColorStatement(Tokens token, StringStatement value)
         {
             Token = token;
@@ -23,6 +25,11 @@ namespace OoxmlToHtml.Statements
 
         public void StatementNode()
         {
+        }
+
+        public void AddStatement(IStatement childStatement)
+        {
+            throw new NotImplementedException();
         }
     }
 }

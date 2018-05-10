@@ -39,6 +39,12 @@ namespace OoxmlToHtml
 
         public const char Quote = '"';
 
+        public const string PreviousParagraph = "PreviousParagraph";
+
+        public const string Bold = "Bold";
+
+        public const string Italic = "Italic";
+
         private readonly IDictionary<string, string> _keyWords = new Dictionary<string, string>()
         {
             {"w:r", Run },
@@ -47,7 +53,10 @@ namespace OoxmlToHtml
             {"w:color", Color },
             {"w:val", Value },
             {"/>", ShortEnd},
-            {"</", LongEnd }
+            {"</", LongEnd },
+            {"w:pPr",  PreviousParagraph},
+            {"w:b", Bold },
+            {"w:i", Italic }
         };
 
 

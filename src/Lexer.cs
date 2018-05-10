@@ -32,7 +32,8 @@ namespace OoxmlToHtml
                     if (PeekNext('/'))
                     {
                         ReadChar();
-                        tok = new Tokens(Tokens.LongEnd, "</");
+                        ReadChar();
+                        tok = new Tokens(Tokens.LongEnd, ReadIdentifier());
                     }
                     else
                     {
@@ -97,6 +98,8 @@ namespace OoxmlToHtml
                    (('0' <= ch) && (ch <= '9')) ||
                 ch == ':';
         }
+
+        private bool IsSpace(char ch) => ch == ' ' || ch == '\r' || ch == '\n';
 
         private string ReadIdentifier()
         {

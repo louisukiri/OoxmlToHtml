@@ -17,6 +17,19 @@ namespace OoxmlToHtml.test
         {
             const string input = @"
                     <w:color w:val=""FF0000""/>
+                    <w:p>
+                        <w:pPr>
+                            <w:rPr>
+                                <w:i/>
+                            </w:rPr>
+                        </w:pPr>
+                        <w:r>
+                            <w:rPr>
+                                <w:i/>
+                            </w:rPr>
+                            <w:t>The quick brown fox jumped … </w:t>
+                        </w:r>
+                     </w:p>
 ";
             var l = new Lexer(input);
             var p = new Parser(l);
@@ -27,11 +40,12 @@ namespace OoxmlToHtml.test
                 Assert.Fail("ParseProgram() returned null");
             }
 
-            if (program.Statements.Count() != 1)
+            if (program.Statements.Count() != 2)
             {
                 Assert.Fail("Invalid number of statements in program");
             }
 
+            TestParagraphStatement(program.Statements[1] as ParagraphStatement, 2);
             var tests = new string[]
             {
                 "w:color"
@@ -58,6 +72,17 @@ namespace OoxmlToHtml.test
             if (statement.Value.TokenLiteral() != value)
             {
                 Assert.Fail("Statement's value is incorrect");
+            }
+
+            return true;
+        }
+
+        private bool TestParagraphStatement(ParagraphStatement statement, int numberOfChildren)
+        {
+
+            if (statement.Statements.Count() != 2)
+            {
+                Assert.Fail("Invalid number of child statements in paragraph statements");
             }
 
             return true;

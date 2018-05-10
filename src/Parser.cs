@@ -31,11 +31,85 @@ namespace OoxmlToHtml
             {
                 case Tokens.Color:
                     return ParseColorStatement();
+                case Tokens.Paragraph:
+                    return ParseParagraphStatement();
+                case Tokens.PreviousParagraph:
+                    return ParseParagraphPropertyStatement();
+                case Tokens.Run:
+                    return ParseRunStatement();
+                case Tokens.Text:
+                    return ParseText();
                 default:
                     return null;
             }
         }
 
+        private IStatement ParseText()
+        {
+            MoveToNext(Tokens.StringLiteral);
+            NextToken();
+            var newStatement = new StringStatement(_currentToken);
+            NextToken();
+            while (_currentToken.Type == Tokens.StringLiteral)
+            {
+                newStatement.AppendValue(_currentToken.Literal);
+                NextToken();
+            }
+
+            return newStatement;
+        }
+
+        private IStatement ParseRunStatement()
+        {
+            var newstatement = new RunStatement(_currentToken);
+            MoveToNext(Tokens.End.ToString());
+            NextToken();
+
+            while (!(_currentToken.Type == Tokens.LongEnd && _currentToken.Literal == "w:r"))
+            {
+                var statement = ParseStatement();
+                if (statement != null)
+                {
+                    newstatement.AddStatement(statement);
+                }
+                NextToken();
+            }
+            return newstatement;
+        }
+        private IStatement ParseParagraphPropertyStatement()
+        {
+            var newStatement = new ParagraphPropertyStatement(_currentToken);
+            MoveToNext(Tokens.End.ToString());
+            NextToken();
+            return newStatement;
+        }
+
+        private void MoveToNext(string token)
+        {
+            while (_peekToken.Type != token && _currentToken.Type != Tokens.Eof)
+            {
+                NextToken();
+            }
+        }
+        private IStatement ParseParagraphStatement()
+        {
+            if (!ExpectPeek(Tokens.End.ToString()))
+            {
+                return null;
+            }
+
+            var newStatement = new ParagraphStatement(_currentToken);
+            while (!(_currentToken.Type == Tokens.LongEnd && _currentToken.Literal == "w:p"))
+            {
+                var statement = ParseStatement();
+                if (statement != null)
+                {
+                    newStatement.AddStatement(statement);
+                }
+                NextToken();
+            }
+            return newStatement;
+        }
         private IStatement ParseColorStatement()
         {
             var colorToken = _currentToken;

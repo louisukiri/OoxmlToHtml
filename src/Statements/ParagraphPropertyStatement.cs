@@ -5,27 +5,22 @@ using OoxmlToHtml.AST.abstracts;
 
 namespace OoxmlToHtml.Statements
 {
-    public class StringStatement : IStatement
+    public class ParagraphPropertyStatement : IStatement
     {
-        public Tokens Token { get; private set; }
-        public string Value = String.Empty;
-        public StringStatement(Tokens tokens)
-        {
-            Token = tokens;
-            Value = Token.Literal;
-        }
         public string TokenLiteral()
         {
-            return Value;
+            throw new NotImplementedException();
         }
 
-        public void AppendValue(string value)
+        public Tokens Token { get; }
+
+        public ParagraphPropertyStatement(Tokens token)
         {
-            Value += ((Value != string.Empty) ? " " : "") + value;
+            Token = token;
         }
-
         public void StatementNode()
         {
+            throw new NotImplementedException();
         }
 
         public void AddStatement(IStatement childStatement)

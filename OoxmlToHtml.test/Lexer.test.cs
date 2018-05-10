@@ -14,7 +14,7 @@ namespace OoxmlToHtml.test
         {
             var input = @"<>
 w:p w:r w:t "" someOtherText
-w:color w:val = /> </";
+w:color w:val = /> </w:p w:pPr w:b w:i";
             Tokens [] expected = new Tokens[]
             {
                 new Tokens(Tokens.Start.ToString(), "<"),
@@ -28,7 +28,10 @@ w:color w:val = /> </";
                 new Tokens(Tokens.Value, "w:val"),
                 new Tokens(Tokens.EQ.ToString(), "="),
                 new Tokens(Tokens.ShortEnd, "/>"),
-                new Tokens(Tokens.LongEnd, "</"),
+                new Tokens(Tokens.LongEnd, "w:p"),
+                new Tokens(Tokens.PreviousParagraph, "w:pPr"),
+                new Tokens(Tokens.Bold, "w:b"),
+                new Tokens(Tokens.Italic, "w:i"), 
                 new Tokens(Tokens.Eof, "EOF")
             };
 
