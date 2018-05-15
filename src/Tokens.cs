@@ -45,6 +45,8 @@ namespace OoxmlToHtml
 
         public const string Italic = "Italic";
 
+        public const string Size = "Size";
+
         private readonly IDictionary<string, string> _keyWords = new Dictionary<string, string>()
         {
             {"w:r", Run },
@@ -56,7 +58,8 @@ namespace OoxmlToHtml
             {"</", LongEnd },
             {"w:pPr",  PreviousParagraph},
             {"w:b", Bold },
-            {"w:i", Italic }
+            {"w:i", Italic },
+            {"w:sz", Size }
         };
 
 

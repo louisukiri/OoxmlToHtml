@@ -14,6 +14,11 @@ namespace OoxmlToHtml.Statements
             throw new NotImplementedException();
         }
 
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public void StatementNode()
         {
             throw new NotImplementedException();

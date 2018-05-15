@@ -55,6 +55,7 @@
     <Compile Include="Lexer.test.cs" />
     <Compile Include="Parser.test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HtmlVisitor.test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

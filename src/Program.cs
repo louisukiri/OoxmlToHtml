@@ -24,6 +24,11 @@ namespace OoxmlToHtml
             return Statements.Any() ? Statements[0].TokenLiteral() : "";
         }
 
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public void AddStatement(IStatement statement)
         {
             _backingList.Add(statement);

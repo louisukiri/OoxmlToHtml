@@ -5,20 +5,17 @@ using OoxmlToHtml.AST.abstracts;
 
 namespace OoxmlToHtml.Statements
 {
-    public class ColorStatement : IStatement
+    public class SizeStatement : IStatement
     {
-        public Tokens Token { get; private set; }
-        public string Value { get; private set; }
-        
-        public ColorStatement(Tokens token, string value)
+        private string literal;
+        public SizeStatement(Tokens token, string size)
         {
             Token = token;
-            Value = value;
+            literal = size;
         }
-
         public string TokenLiteral()
         {
-            return Value;
+            return literal;
         }
 
         public void Accept(IVisitor visitor)
@@ -26,8 +23,10 @@ namespace OoxmlToHtml.Statements
             visitor.Visit(this);
         }
 
+        public Tokens Token { get; }
         public void StatementNode()
         {
+            throw new NotImplementedException();
         }
 
         public void AddStatement(IStatement childStatement)

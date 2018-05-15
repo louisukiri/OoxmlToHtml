@@ -19,6 +19,11 @@ namespace OoxmlToHtml.Statements
             return Value;
         }
 
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
+
         public void AppendValue(string value)
         {
             Value += ((Value != string.Empty) ? " " : "") + value;

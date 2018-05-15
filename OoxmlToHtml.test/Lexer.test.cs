@@ -7,14 +7,14 @@ using Assert = Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 namespace OoxmlToHtml.test
 {
     [TestFixture]
-    public class UnitTest1
+    public class LexerTest
     {
         [Test]
         public void TestNextToken()
         {
             var input = @"<>
 w:p w:r w:t "" someOtherText
-w:color w:val = /> </w:p w:pPr w:b w:i";
+w:color w:val = /> </w:p w:pPr w:b w:i w:sz";
             Tokens [] expected = new Tokens[]
             {
                 new Tokens(Tokens.Start.ToString(), "<"),
@@ -31,7 +31,8 @@ w:color w:val = /> </w:p w:pPr w:b w:i";
                 new Tokens(Tokens.LongEnd, "w:p"),
                 new Tokens(Tokens.PreviousParagraph, "w:pPr"),
                 new Tokens(Tokens.Bold, "w:b"),
-                new Tokens(Tokens.Italic, "w:i"), 
+                new Tokens(Tokens.Italic, "w:i"),
+                new Tokens(Tokens.Size, "w:sz"), 
                 new Tokens(Tokens.Eof, "EOF")
             };
 

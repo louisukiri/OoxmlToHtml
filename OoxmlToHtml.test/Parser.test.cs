@@ -30,6 +30,7 @@ namespace OoxmlToHtml.test
                             <w:t>The quick brown fox jumped … </w:t>
                         </w:r>
                      </w:p>
+                    <w:sz w:val=""16"" />
 ";
             var l = new Lexer(input);
             var p = new Parser(l);
@@ -40,12 +41,13 @@ namespace OoxmlToHtml.test
                 Assert.Fail("ParseProgram() returned null");
             }
 
-            if (program.Statements.Count() != 2)
+            if (program.Statements.Count() != 3)
             {
                 Assert.Fail("Invalid number of statements in program");
             }
 
             TestParagraphStatement(program.Statements[1] as ParagraphStatement, 2);
+            TestSizeStatement(program.Statements[2] as SizeStatement, "16");
             var tests = new string[]
             {
                 "w:color"
@@ -64,14 +66,24 @@ namespace OoxmlToHtml.test
 
         private bool TestColorStatement(ColorStatement statement, string name, string value)
         {
-            if (statement.TokenLiteral() != name)
+            if (statement.Token.Literal != name)
             {
                 Assert.Fail("s.TokenLiteral not 'color'");
             }
 
-            if (statement.Value.TokenLiteral() != value)
+            if (statement.Value != value)
             {
                 Assert.Fail("Statement's value is incorrect");
+            }
+
+            return true;
+        }
+
+        private bool TestSizeStatement(SizeStatement statement, string size)
+        {
+            if (statement.TokenLiteral() != size)
+            {
+                Assert.Fail("Invalid value ({0}) for size statement", size);
             }
 
             return true;

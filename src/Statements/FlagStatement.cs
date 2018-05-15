@@ -5,20 +5,15 @@ using OoxmlToHtml.AST.abstracts;
 
 namespace OoxmlToHtml.Statements
 {
-    public class ParagraphPropertyStatement : IStatement
+    public class FlagStatement : IStatement
     {
-        public string TokenLiteral()
-        {
-            throw new NotImplementedException();
-        }
-
         public Tokens Token { get; }
 
-        public ParagraphPropertyStatement(Tokens token)
+        public FlagStatement(Tokens token)
         {
             Token = token;
         }
-        public void StatementNode()
+        public void Accept(IVisitor visitor)
         {
             throw new NotImplementedException();
         }
@@ -28,9 +23,14 @@ namespace OoxmlToHtml.Statements
             throw new NotImplementedException();
         }
 
-        public void Accept(IVisitor visitor)
+        public void StatementNode()
         {
-            visitor.Visit(this);
+            throw new NotImplementedException();
+        }
+
+        public string TokenLiteral()
+        {
+            throw new NotImplementedException();
         }
     }
 }

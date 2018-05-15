@@ -39,9 +39,68 @@ namespace OoxmlToHtml
                     return ParseRunStatement();
                 case Tokens.Text:
                     return ParseText();
+                case Tokens.Size:
+                    return ParseSize();
+                case Tokens.Italic:
+                case Tokens.Bold:
+                    return ParseFlag();
                 default:
                     return null;
             }
+        }
+
+        private string ReadValue()
+        {
+            var sizeToken = _currentToken;
+
+            StringStatement sizeValue = null;
+            while (_currentToken.Type != Tokens.ShortEnd)
+            {
+                if (_currentToken.Type == Tokens.Value)
+                {
+                    if (!ExpectPeek(Tokens.EQ.ToString()))
+                    {
+                        return null;
+                    }
+
+                    if (!ExpectPeek(Tokens.Quote.ToString()))
+                    {
+                        return null;
+                    }
+
+                    if (!ExpectPeek(Tokens.StringLiteral))
+                    {
+                        return null;
+                    }
+
+                    sizeValue = new StringStatement(_currentToken);
+
+                    if (!ExpectPeek(Tokens.Quote.ToString()))
+                    {
+                        return null;
+                    }
+                }
+                NextToken();
+            }
+
+            return sizeValue?.Value;
+        }
+        private IStatement ParseSize()
+        {
+
+            var sizeToken = _currentToken;
+            var sizeValue = ReadValue();
+
+            if (sizeValue == null) return null;
+
+            return new SizeStatement(sizeToken, sizeValue);
+        }
+
+        private IStatement ParseFlag()
+        {
+            var newStatement = new FlagStatement(_currentToken);
+            NextToken();
+            return newStatement;
         }
 
         private IStatement ParseText()
@@ -113,39 +172,12 @@ namespace OoxmlToHtml
         private IStatement ParseColorStatement()
         {
             var colorToken = _currentToken;
-            if (!ExpectPeek(Tokens.Value))
-            {
+            var colorValue = ReadValue();
+
+            if (colorValue == null)
                 return null;
-            }
 
-            if (!ExpectPeek(Tokens.EQ.ToString()))
-            {
-                return null;
-            }
-
-            if (!ExpectPeek(Tokens.Quote.ToString()))
-            {
-                return null;
-            }
-
-            if (!ExpectPeek(Tokens.StringLiteral))
-            {
-                return null;
-            }
-
-            var statement = new ColorStatement(colorToken, new StringStatement(_currentToken));
-
-            if (!ExpectPeek(Tokens.Quote.ToString()))
-            {
-                return null;
-            }
-
-            if (!ExpectPeek(Tokens.ShortEnd))
-            {
-                return null;
-            }
-
-            return statement;
+            return new ColorStatement(colorToken, colorValue);
         }
 
         private bool CurTokenIs(string tokenType)
