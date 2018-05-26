@@ -33,9 +33,21 @@ namespace OoxmlToHtml.test
                             <w:szCs w:val=""16""/>
                         </w:rPr>
                     </w:pPr>
+                    <w:r>
+                        <w:t xml:space=""preserve"">Abc louis</w:t>
+                    </w:r>
+                    <w:r>
+                        <w:rPr>
+                            <w:b/>
+                        </w:rPr>
+                        <w:t xml:space=""preserve"">def </w:t>
+                    </w:r>
+                    <w:r>
+                        <w:t>ijk</w:t>
+                    </w:r>
                 </w:p>
 ";
-            var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""></p>";
+            var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""><span>Abc louis</span><span style=""font-weight: bold; "">def</span><span>ijk</span></p>";
             var l = new Lexer(input);
             var p = new Parser(l);
             var program = p.ParseProgram();

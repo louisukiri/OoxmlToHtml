@@ -30,6 +30,7 @@ namespace OoxmlToHtml
             {
                 case '<':
                     if (PeekNext('/'))
+
                     {
                         ReadChar();
                         ReadChar();
@@ -68,10 +69,31 @@ namespace OoxmlToHtml
                             literal);
                         return tok;
                     }
+                    else if (IsSpecialChar())
+                    {
+                        tok = new Tokens(Tokens.Code, "```");
+                        return tok;
+                    }
                     break;
             }
             ReadChar();
             return tok;
+        }
+
+        private bool IsSpecialChar()
+        {
+            ReadChar();
+            if ('`' != _ch)
+            {
+                return false;
+            }
+            ReadChar();
+            if ('`' != _ch)
+            {
+                return false;
+            }
+            ReadChar();
+            return true;
         }
 
         private bool PeekNext(char expected)
@@ -101,10 +123,10 @@ namespace OoxmlToHtml
 
         private bool IsSpace(char ch) => ch == ' ' || ch == '\r' || ch == '\n';
 
-        private string ReadIdentifier()
+        private string ReadIdentifier(bool includeSpace = false)
         {
             var oldPosition = _position;
-            while (IsLetter(_ch))
+            while (IsLetter(_ch) || (includeSpace && IsSpace(_ch)))
             {
                 ReadChar();
             }

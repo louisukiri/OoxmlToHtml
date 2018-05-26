@@ -29,12 +29,27 @@ namespace OoxmlToHtml.Visitors
 
         public void Visit(RunStatement statement)
         {
-            throw new NotImplementedException();
+            _value.Append("<span");
+            if (statement.styles != Styles.None)
+            {
+                _value.Append(" style=\"");
+                if (statement.styles.HasFlag(Styles.Bold))
+                {
+                    _value.Append("font-weight: bold; ");
+                }
+
+                if (statement.styles.HasFlag(Styles.Italic))
+                {
+                    _value.Append("font-style: italic; ");
+                }
+                _value.Append("\"");
+            }
+            _value.AppendFormat(">{0}</span>", statement.Text);
         }
 
         public void Visit(StringStatement statement)
         {
-            throw new NotImplementedException();
+            _value.AppendFormat("<span>{0}</span>", statement.TokenLiteral());
         }
 
         public void Visit(IdentifierExpression expression)
@@ -72,7 +87,12 @@ namespace OoxmlToHtml.Visitors
                 }
                 _value.Append("\"");
             }
-            _value.Append("></p>");
+            _value.Append(">");
+            foreach (var childStatements in statement.Statements)
+            {
+                childStatements.Accept(this);
+            }
+            _value.Append("</p>");
         }
 
         public void Visit(SizeStatement statement)

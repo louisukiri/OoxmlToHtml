@@ -7,16 +7,19 @@ namespace OoxmlToHtml
 {
     public class AttributeStatement : IStatement
     {
-        public IExpression Value { get; private set; }
+        public string Value { get; private set; }
         public Tokens Token { get; }
+        public string Name { get; }
 
-        public AttributeStatement(string token, string name, IExpression value)
+        public AttributeStatement(Tokens token, string value)
         {
             Value = value;
+            Token = token;
+            Name = token.Literal;
         }
         public string TokenLiteral()
         {
-            throw new NotImplementedException();
+            return Value;
         }
 
 

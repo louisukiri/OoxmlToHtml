@@ -30,7 +30,8 @@ namespace OoxmlToHtml.Statements
         public void AddStatement(IStatement statement)
         {
             if (statement == null) return;
-            if (statement.Token.Type == Tokens.PreviousParagraph || statement.Token.Type == Tokens.Run)
+            if (statement.Token.Type == Tokens.PreviousParagraph ||
+                statement.Token.Type == Tokens.Run)
                 _statements.Add(statement);
             if (statement.Token.Type == Tokens.Bold)
                 styles |= Styles.Bold;

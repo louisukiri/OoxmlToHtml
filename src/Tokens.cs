@@ -10,6 +10,8 @@ namespace OoxmlToHtml
         public string Type { get; }
         public string Literal { get; }
 
+        public const string Code = "Code";
+
         public const string Illegal = "ILLEGAL";
         public const string Eof = "EOF";
 
@@ -47,6 +49,10 @@ namespace OoxmlToHtml
 
         public const string Size = "Size";
 
+        public const string RunProperty = "RunProperty";
+
+        public const string SpaceAttribute = "SpaceAttribute";
+
         private readonly IDictionary<string, string> _keyWords = new Dictionary<string, string>()
         {
             {"w:r", Run },
@@ -59,19 +65,10 @@ namespace OoxmlToHtml
             {"w:pPr",  PreviousParagraph},
             {"w:b", Bold },
             {"w:i", Italic },
-            {"w:sz", Size }
+            {"w:sz", Size },
+            {"w:rPr", RunProperty },
+            {"xml:space", SpaceAttribute }
         };
-
-
-        //public const char WordClass = 'w';
-        //public const string Paragraph = "w:p";
-        //public const string Paragraphproperty = "w:pPr";
-        //public const string Run = "w:r";
-        //public const string Text = "w:t";
-        //public const string Runproperty = "w:rPr";
-        //public const string Color = "w:color";
-        //public const string Value = "w:value";
-
 
         public Tokens(string type, string literal)
         {

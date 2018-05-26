@@ -24,7 +24,7 @@ namespace OoxmlToHtml
             _currentToken = _peekToken;
             _peekToken = _lexer.NextToken();
         }
-
+        
         private IStatement ParseStatement()
         {
             switch (_currentToken.Type)
@@ -44,6 +44,8 @@ namespace OoxmlToHtml
                 case Tokens.Italic:
                 case Tokens.Bold:
                     return ParseFlag();
+                case Tokens.SpaceAttribute:
+                    return ParseAttribute();
                 default:
                     return null;
             }
@@ -103,8 +105,16 @@ namespace OoxmlToHtml
             return newStatement;
         }
 
+        private IStatement ParseAttribute()
+        {
+            var newStatement = new AttributeStatement(_currentToken, _peekToken.Literal);
+            NextToken();
+            return newStatement;
+        }
+
         private IStatement ParseText()
         {
+            MoveToNext(Tokens.End.ToString());
             MoveToNext(Tokens.StringLiteral);
             NextToken();
             var newStatement = new StringStatement(_currentToken);
@@ -122,6 +132,7 @@ namespace OoxmlToHtml
         {
             var newstatement = new RunStatement(_currentToken);
             MoveToNext(Tokens.End.ToString());
+            NextToken();
             NextToken();
 
             while (!(_currentToken.Type == Tokens.LongEnd && _currentToken.Literal == "w:r"))

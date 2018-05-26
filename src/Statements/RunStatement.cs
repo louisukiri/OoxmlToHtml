@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Flags;
 
 namespace OoxmlToHtml.Statements
 {
@@ -9,9 +10,17 @@ namespace OoxmlToHtml.Statements
     {
         public Tokens Token { get; }
         public string Text { get; private set; }
+        public Styles styles { get; private set; }
+
+        public RunStatement(Tokens token)
+        {
+            Token = token;
+            Text = string.Empty;
+        }
+
         public string TokenLiteral()
         {
-            throw new NotImplementedException();
+            return Text;
         }
 
         public void Accept(IVisitor visitor)
@@ -28,13 +37,26 @@ namespace OoxmlToHtml.Statements
         {
             if (childStatement.Token.Type == Tokens.StringLiteral)
             {
-                Text = childStatement.TokenLiteral();
+                AddSpace();
+                Text += childStatement.TokenLiteral();
+            }
+
+            if (childStatement.Token.Type == Tokens.Bold)
+            {
+                styles |= Styles.Bold;
+            }
+
+            if (childStatement.Token.Type == Tokens.Italic)
+            {
+                styles |= Styles.Italic;
             }
         }
 
-        public RunStatement(Tokens token)
+        private void AddSpace()
         {
-            Token = token;
+            if (string.IsNullOrEmpty(Text))
+                return;
+            Text += " ";
         }
     }
 }
