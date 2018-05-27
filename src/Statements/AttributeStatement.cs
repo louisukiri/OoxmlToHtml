@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Abstracts.Ast;
 
-namespace OoxmlToHtml
+namespace OoxmlToHtml.Statements
 {
     public class AttributeStatement : IStatement
     {

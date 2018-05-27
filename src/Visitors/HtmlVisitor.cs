@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Abstracts.Ast;
 using OoxmlToHtml.Flags;
 using OoxmlToHtml.Statements;
 
@@ -57,7 +56,7 @@ namespace OoxmlToHtml.Visitors
             throw new NotImplementedException();
         }
 
-        public void Visit(Program program)
+        public void Visit(IProgram program)
         {
             foreach(var s in program.Statements)
             {

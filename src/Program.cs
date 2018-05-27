@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Abstracts.Ast;
 
 namespace OoxmlToHtml
 {
-    public class Program : INode
+    public class Program : IProgram
     {
         private readonly List<IStatement> _backingList;
         public IReadOnlyList<IStatement> Statements => _backingList.AsReadOnly();

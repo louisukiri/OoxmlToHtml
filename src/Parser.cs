@@ -1,16 +1,22 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Abstracts.Ast;
 using OoxmlToHtml.Statements;
 
 namespace OoxmlToHtml
 {
-    public class Parser
+    public class Parser : IParser
     {
         private readonly Lexer _lexer;
         private Tokens _currentToken;
         private Tokens _peekToken;
+        private IList<IAnalyzer> _analyzers = new List<IAnalyzer>();
+
+        public Parser(string input) : this(new Lexer(input))
+        {
+
+        }
         public Parser(Lexer lexer)
         {
             _lexer = lexer;
@@ -208,7 +214,7 @@ namespace OoxmlToHtml
             return true;
         }
 
-        public Program ParseProgram()
+        public IProgram ParseProgram()
         {
             var program = new Program();
             while (_currentToken.Type != Tokens.Eof)
@@ -222,6 +228,21 @@ namespace OoxmlToHtml
             }
 
             return program;
+        }
+
+        public IParser Use(IAnalyzer analyzer)
+        {
+            _analyzers.Add(analyzer);
+            return this;
+        }
+
+        public void Analyze()
+        {
+            var program = new Program();
+            foreach (var analyzer in _analyzers)
+            {
+                analyzer.Analyze(program);
+            }
         }
     }
 }

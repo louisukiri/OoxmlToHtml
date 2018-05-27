@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OoxmlToHtml.Statements;
+﻿using OoxmlToHtml.Statements;
 
-namespace OoxmlToHtml.AST.abstracts
+namespace OoxmlToHtml.Abstracts.Ast
 {
     public interface IVisitor
     {
@@ -13,7 +10,7 @@ namespace OoxmlToHtml.AST.abstracts
         void Visit(RunStatement statement);
         void Visit(StringStatement statement);
         void Visit(IdentifierExpression expression);
-        void Visit(Program program);
+        void Visit(IProgram program);
         void Visit(ParagraphStatement statement);
         void Visit(SizeStatement statement);
     }

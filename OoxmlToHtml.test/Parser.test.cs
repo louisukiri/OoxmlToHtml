@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using OoxmlToHtml.Statements;
+using Moq;
+using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml.test
 {
     [TestFixture]
     public class ParserTest
     {
-        [Test]
-        public void TestBasicNode()
+        private string _input;
+        private Lexer _lexer;
+        private Parser _parser;
+        [SetUp]
+        public void Setup()
         {
-            const string input = @"
+            _input = @"
                     <w:color w:val=""FF0000""/>
                     <w:p>
                         <w:pPr>
@@ -32,9 +32,29 @@ namespace OoxmlToHtml.test
                      </w:p>
                     <w:sz w:val=""16"" />
 ";
-            var l = new Lexer(input);
-            var p = new Parser(l);
-            var program = p.ParseProgram();
+            _lexer = new Lexer(_input);
+            _parser = new Parser(_lexer);
+        }
+        [Test]
+        public void AnalyzeRunsThroughAllAnalyzers()
+        {
+            var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
+                .Returns(
+                    new Mock<IAnalysisResult>().Object
+                );
+            _parser.Use(analyzer.Object);
+
+            _parser.Analyze();
+
+            analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
+        }
+
+#region parsing test
+        [Test]
+        public void TestBasicNode()
+        {
+            var program = _parser.ParseProgram();
 
             if (program == null)
             {
@@ -99,5 +119,6 @@ namespace OoxmlToHtml.test
 
             return true;
         }
+#endregion
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using OoxmlToHtml.AST.abstracts;
+using OoxmlToHtml.Abstracts.Ast;
 using OoxmlToHtml.Flags;
 
 namespace OoxmlToHtml.Statements
