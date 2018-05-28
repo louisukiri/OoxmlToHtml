@@ -4,6 +4,7 @@
     {
         IProgram ParseProgram();
         IParser Use(IAnalyzer analyzer);
-        void Analyze();
+        IParseResult Parse();
+        IProgram Analyze(IProgram program);
     }
 }

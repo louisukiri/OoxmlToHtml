@@ -50,11 +50,8 @@ namespace OoxmlToHtml.test
             var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""><span>Abc louis</span><span style=""font-weight: bold; "">def</span><span>ijk</span></p>";
             var l = new Lexer(input);
             var p = new Parser(l);
-            var program = p.ParseProgram();
-            var htmlVisitor = new HtmlVisitor();
-            htmlVisitor.Visit(program);
 
-            Assert.AreEqual(expected, htmlVisitor.Value);
+            Assert.AreEqual(expected, p.Parse().Value);
         }
     }
 }

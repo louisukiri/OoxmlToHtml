@@ -38,19 +38,20 @@ namespace OoxmlToHtml.test
         [Test]
         public void AnalyzeRunsThroughAllAnalyzers()
         {
+            var program = new Mock<IProgram>();
             var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
             analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
                 .Returns(
-                    new Mock<IAnalysisResult>().Object
+                    program.Object
                 );
             _parser.Use(analyzer.Object);
 
-            _parser.Analyze();
+            _parser.Analyze(program.Object);
 
             analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
         }
 
-#region parsing test
+        #region parsing test
         [Test]
         public void TestBasicNode()
         {

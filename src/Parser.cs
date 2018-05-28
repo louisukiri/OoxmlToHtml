@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Abstracts.Ast;
 using OoxmlToHtml.Statements;
+using OoxmlToHtml.Visitors;
 
 namespace OoxmlToHtml
 {
@@ -12,6 +13,7 @@ namespace OoxmlToHtml
         private Tokens _currentToken;
         private Tokens _peekToken;
         private IList<IAnalyzer> _analyzers = new List<IAnalyzer>();
+        private readonly HtmlVisitor _visitor = new HtmlVisitor();
 
         public Parser(string input) : this(new Lexer(input))
         {
@@ -236,13 +238,22 @@ namespace OoxmlToHtml
             return this;
         }
 
-        public void Analyze()
+        public IProgram Analyze(IProgram program)
         {
-            var program = new Program();
             foreach (var analyzer in _analyzers)
             {
-                analyzer.Analyze(program);
+                program = analyzer.Analyze(program);
             }
+
+            return program;
+        }
+
+        public IParseResult Parse()
+        {
+            var program = Analyze(ParseProgram());
+            _visitor.Visit(program);
+
+            return _visitor;
         }
     }
 }

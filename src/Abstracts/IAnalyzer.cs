@@ -2,6 +2,6 @@
 {
     public interface IAnalyzer
     {
-        IAnalysisResult Analyze(IProgram program);
+        IProgram Analyze(IProgram program);
     }
 }

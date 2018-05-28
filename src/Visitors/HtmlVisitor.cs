@@ -7,7 +7,7 @@ using OoxmlToHtml.Statements;
 
 namespace OoxmlToHtml.Visitors
 {
-    public class HtmlVisitor : IVisitor
+    public class HtmlVisitor : IVisitor, IParseResult
     {
         private readonly StringBuilder _value;
         public string Value => _value.ToString();
