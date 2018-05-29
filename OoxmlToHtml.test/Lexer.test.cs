@@ -11,7 +11,7 @@ namespace OoxmlToHtml.test
         {
             var input = @"<>
 w:p w:r w:t "" someOtherText
-w:color w:val = /> </w:p w:pPr w:b w:i w:sz xml:space";
+w:color w:val = /> </w:p w:pPr w:b w:i w:sz xml:space w:pStyle";
             Tokens [] expected = new Tokens[]
             {
                 new Tokens(Tokens.Start.ToString(), "<"),
@@ -30,7 +30,8 @@ w:color w:val = /> </w:p w:pPr w:b w:i w:sz xml:space";
                 new Tokens(Tokens.Bold, "w:b"),
                 new Tokens(Tokens.Italic, "w:i"),
                 new Tokens(Tokens.Size, "w:sz"),
-                new Tokens(Tokens.SpaceAttribute, "xml:space"), 
+                new Tokens(Tokens.SpaceAttribute, "xml:space"),
+                new Tokens(Tokens.ParagraphStyle, "w:pStyle"),
                 new Tokens(Tokens.Eof, "EOF")
             };
 

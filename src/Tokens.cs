@@ -51,6 +51,8 @@ namespace OoxmlToHtml
 
         public const string SpaceAttribute = "SpaceAttribute";
 
+        public const string ParagraphStyle = "ParagraphStyle";
+
         private readonly IDictionary<string, string> _keyWords = new Dictionary<string, string>()
         {
             {"w:r", Run },
@@ -65,7 +67,8 @@ namespace OoxmlToHtml
             {"w:i", Italic },
             {"w:sz", Size },
             {"w:rPr", RunProperty },
-            {"xml:space", SpaceAttribute }
+            {"xml:space", SpaceAttribute },
+            {"w:pStyle", ParagraphStyle }
         };
 
         public Tokens(string type, string literal)

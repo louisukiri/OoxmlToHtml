@@ -53,5 +53,26 @@ namespace OoxmlToHtml.test
 
             Assert.AreEqual(expected, p.Parse().Value);
         }
+
+        [Test]
+        public void HeaderH1Test()
+        {
+            var input = @"
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val=""Title""/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t>Title</w:t>
+                    </w:r>
+                </w:p>
+";
+            var expected = @"<p style=""""><h1><span>Title</span></h1></p>";
+            var l = new Lexer(input);
+            var p = new Parser(l);
+
+            Assert.AreEqual(expected, p.Parse().Value);
+        }
+
     }
 }

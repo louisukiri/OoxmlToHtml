@@ -56,6 +56,11 @@ namespace OoxmlToHtml.Visitors
             throw new NotImplementedException();
         }
 
+        public void Visit(ParagraphStyleStatement paragraphStyleStatement)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Visit(IProgram program)
         {
             foreach(var s in program.Statements)
@@ -87,9 +92,17 @@ namespace OoxmlToHtml.Visitors
                 _value.Append("\"");
             }
             _value.Append(">");
+            if (statement.styles.HasFlag(Styles.H1))
+            {
+                _value.Append("<h1>");
+            }
             foreach (var childStatements in statement.Statements)
             {
                 childStatements.Accept(this);
+            }
+            if (statement.styles.HasFlag(Styles.H1))
+            {
+                _value.Append("</h1>");
             }
             _value.Append("</p>");
         }
@@ -97,6 +110,11 @@ namespace OoxmlToHtml.Visitors
         public void Visit(SizeStatement statement)
         {
             _value.AppendFormat("font-size: {0}px; ", statement.TokenLiteral());
+        }
+
+        public void Visit(HeaderStatement statement)
+        {
+            throw new NotImplementedException();
         }
 
         public HtmlVisitor()

@@ -36,6 +36,14 @@ namespace OoxmlToHtml.Statements
                 styles |= Styles.Bold;
             if (statement.Token.Type == Tokens.Italic)
                 styles |= Styles.Italic;
+            if (statement.Token.Type == Tokens.ParagraphStyle)
+            {
+                var aa = statement.TokenLiteral();
+                if (statement.TokenLiteral() == "Title")
+                {
+                    styles |= Styles.H1;
+                }
+            }
             if (statement.Token.Type == Tokens.Color ||
                 statement.Token.Type == Tokens.Size)
                 _properties.Add(statement);

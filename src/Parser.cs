@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Abstracts.Ast;
@@ -52,54 +53,69 @@ namespace OoxmlToHtml
                 case Tokens.Italic:
                 case Tokens.Bold:
                     return ParseFlag();
+                case Tokens.Value:
                 case Tokens.SpaceAttribute:
                     return ParseAttribute();
+                case Tokens.ParagraphStyle:
+                    return ParsePStyle();
                 default:
                     return null;
             }
         }
 
-        private string ReadValue()
+        private IStatement ParsePStyle()
+        {
+            var statement = new ParagraphStyleStatement(_currentToken);
+            while (_currentToken.Type != Tokens.ShortEnd)
+            {
+                NextToken();
+                var childStatement = ParseStatement();
+                if (childStatement != null)
+                {
+                    statement.AddStatement(childStatement);
+                }
+            }
+
+            return statement;
+        }
+
+        private string ReadValue(string attributeName)
         {
             var sizeToken = _currentToken;
 
             StringStatement sizeValue = null;
-            while (_currentToken.Type != Tokens.ShortEnd)
-            {
-                if (_currentToken.Type == Tokens.Value)
-                {
-                    if (!ExpectPeek(Tokens.EQ.ToString()))
-                    {
-                        return null;
-                    }
-
-                    if (!ExpectPeek(Tokens.Quote.ToString()))
-                    {
-                        return null;
-                    }
-
-                    if (!ExpectPeek(Tokens.StringLiteral))
-                    {
-                        return null;
-                    }
-
-                    sizeValue = new StringStatement(_currentToken);
-
-                    if (!ExpectPeek(Tokens.Quote.ToString()))
-                    {
-                        return null;
-                    }
-                }
+            if (_currentToken.Type != attributeName)
+                return null;
+            if (attributeName != Tokens.Value)
                 NextToken();
+            if (!ExpectPeek(Tokens.EQ.ToString()))
+            {
+                return null;
             }
 
+            if (!ExpectPeek(Tokens.Quote.ToString()))
+            {
+                return null;
+            }
+
+            if (!ExpectPeek(Tokens.StringLiteral))
+            {
+                return null;
+            }
+
+            sizeValue = new StringStatement(_currentToken);
+
+            if (!ExpectPeek(Tokens.Quote.ToString()))
+            {
+                return null;
+            }
             return sizeValue?.Value;
         }
         private IStatement ParseSize()
         {
 
             var sizeToken = _currentToken;
-            var sizeValue = ReadValue();
+            var sizeValue = ReadValue(Tokens.Size);
 
             if (sizeValue == null) return null;
 
@@ -115,8 +131,9 @@ namespace OoxmlToHtml
 
         private IStatement ParseAttribute()
         {
-            var newStatement = new AttributeStatement(_currentToken, _peekToken.Literal);
-            NextToken();
+            var attribToken = _currentToken;
+            var value = ReadValue(_currentToken.Type);
+            var newStatement = new AttributeStatement(attribToken, value);
             return newStatement;
         }
 
@@ -191,7 +208,7 @@ namespace OoxmlToHtml
         private IStatement ParseColorStatement()
         {
             var colorToken = _currentToken;
-            var colorValue = ReadValue();
+            var colorValue = ReadValue(Tokens.Color);
 
             if (colorValue == null)
                 return null;
