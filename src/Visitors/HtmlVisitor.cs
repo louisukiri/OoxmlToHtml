@@ -19,7 +19,6 @@ namespace OoxmlToHtml.Visitors
 
         public void Visit(AttributeStatement statement)
         {
-            throw new NotImplementedException();
         }
 
         public void Visit(ParagraphPropertyStatement statement)
@@ -58,7 +57,6 @@ namespace OoxmlToHtml.Visitors
 
         public void Visit(ParagraphStyleStatement paragraphStyleStatement)
         {
-            throw new NotImplementedException();
         }
 
         public void Visit(IProgram program)
@@ -114,7 +112,6 @@ namespace OoxmlToHtml.Visitors
 
         public void Visit(HeaderStatement statement)
         {
-            throw new NotImplementedException();
         }
 
         public HtmlVisitor()

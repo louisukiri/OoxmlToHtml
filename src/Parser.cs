@@ -86,8 +86,9 @@ namespace OoxmlToHtml
             StringStatement sizeValue = null;
             if (_currentToken.Type != attributeName)
                 return null;
-            if (attributeName != Tokens.Value)
-                NextToken();
+
+            MoveToNext(Tokens.EQ.ToString());
+
             if (!ExpectPeek(Tokens.EQ.ToString()))
             {
                 return null;
@@ -188,12 +189,9 @@ namespace OoxmlToHtml
         }
         private IStatement ParseParagraphStatement()
         {
-            if (!ExpectPeek(Tokens.End.ToString()))
-            {
-                return null;
-            }
-
             var newStatement = new ParagraphStatement(_currentToken);
+            MoveToNext(Tokens.End.ToString());
+            NextToken();
             while (!(_currentToken.Type == Tokens.LongEnd && _currentToken.Literal == "w:p"))
             {
                 var statement = ParseStatement();
