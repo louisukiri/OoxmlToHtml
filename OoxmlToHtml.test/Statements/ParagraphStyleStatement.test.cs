@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OoxmlToHtml.Statements;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test.Statements
 {
@@ -14,13 +15,46 @@ namespace OoxmlToHtml.test.Statements
         [Test]
         public void ShouldCorrectlyParseValue()
         {
-            var input = @"
-                        <w:pStyle w:val=""Title""/>
+            var input = @"<w:body><w:p>
+                            <w:pStyle w:val=""Title""/>
+                          </w:p></w:body>
 ";
-            var actual = new Parser(input).ParseProgram().Statements.First() as ParagraphStyleStatement;
-            
+            var actual = TestHelper.ParseString(input);
+
             Assert.IsNotNull(actual);
-            Assert.AreEqual("Title", actual?.TokenLiteral());
+            Assert.AreEqual("Title", actual?
+                .Children.First()
+                    .GetAttribute("value"));
+        }
+
+        [Test]
+        public void ShouldNotAddUnknownTagAsProp()
+        {
+            var input = @"
+                            <w:p>
+                                <w:unknown w:val=""unknown tag value"">test</w:unknown>
+                            </w:p>
+";
+            var actual = TestHelper.ParseString(input);
+
+            Assert.IsNotNull(actual);
+            Assert.IsFalse(actual.HasAttribute("Text") && actual.GetAttribute("Text") == "w:unknown");
+        }
+
+        [Test]
+        public void ShouldPropagateValuesAsPropForUnknownTag()
+        {
+            var input = @"
+                            <w:p>
+                                <w:unknown w:val=""unknown tag value"">test</w:unknown>
+                            </w:p>
+";
+            var actual = TestHelper.ParseString(input);
+
+            Assert.IsNotNull(actual);
+            Assert.AreEqual("unknown tag value", actual?
+                .Children.First()
+                    .GetAttribute("value"));
         }
     }
 }

@@ -5,11 +5,11 @@ namespace OoxmlToHtml.Statements
 {
     public class StringStatement : IStatement
     {
-        public Tokens Token { get; private set; }
+        public Token Token { get; private set; }
         public string Value = String.Empty;
-        public StringStatement(Tokens tokens)
+        public StringStatement(Token token)
         {
-            Token = tokens;
+            Token = token;
             Value = Token.Literal;
         }
         public string TokenLiteral()

@@ -20,23 +20,23 @@ namespace OoxmlToHtml.Statements
         public IReadOnlyCollection<IStatement> Run => _run.AsReadOnly();
         public IReadOnlyCollection<IStatement> Custom => _custom.AsReadOnly();
 
-        public Tokens Token { get; private set; }
+        public Token Token { get; private set; }
 
-        public ParagraphStatement(Tokens token)
+        public ParagraphStatement(Token token)
         {
             Token = token;
         }
         public void AddStatement(IStatement statement)
         {
             if (statement == null) return;
-            if (statement.Token.Type == Tokens.PreviousParagraph ||
-                statement.Token.Type == Tokens.Run)
+            if (statement.Token.Type == Token.PreviousParagraph ||
+                statement.Token.Type == Token.Run)
                 _statements.Add(statement);
-            if (statement.Token.Type == Tokens.Bold)
+            if (statement.Token.Type == Token.Bold)
                 styles |= Styles.Bold;
-            if (statement.Token.Type == Tokens.Italic)
+            if (statement.Token.Type == Token.Italic)
                 styles |= Styles.Italic;
-            if (statement.Token.Type == Tokens.ParagraphStyle)
+            if (statement.Token.Type == Token.ParagraphStyle)
             {
                 var aa = statement.TokenLiteral();
                 if (statement.TokenLiteral() == "Title")
@@ -44,8 +44,8 @@ namespace OoxmlToHtml.Statements
                     styles |= Styles.H1;
                 }
             }
-            if (statement.Token.Type == Tokens.Color ||
-                statement.Token.Type == Tokens.Size)
+            if (statement.Token.Type == Token.Color ||
+                statement.Token.Type == Token.Size)
                 _properties.Add(statement);
         }
 

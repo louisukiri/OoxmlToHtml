@@ -6,11 +6,11 @@ namespace OoxmlToHtml.Statements
 {
     public class RunStatement : IStatement
     {
-        public Tokens Token { get; }
+        public Token Token { get; }
         public string Text { get; private set; }
         public Styles styles { get; private set; }
 
-        public RunStatement(Tokens token)
+        public RunStatement(Token token)
         {
             Token = token;
             Text = string.Empty;
@@ -33,18 +33,18 @@ namespace OoxmlToHtml.Statements
 
         public void AddStatement(IStatement childStatement)
         {
-            if (childStatement.Token.Type == Tokens.StringLiteral)
+            if (childStatement.Token.Type == Token.StringLiteral)
             {
                 AddSpace();
                 Text += childStatement.TokenLiteral();
             }
 
-            if (childStatement.Token.Type == Tokens.Bold)
+            if (childStatement.Token.Type == Token.Bold)
             {
                 styles |= Styles.Bold;
             }
 
-            if (childStatement.Token.Type == Tokens.Italic)
+            if (childStatement.Token.Type == Token.Italic)
             {
                 styles |= Styles.Italic;
             }

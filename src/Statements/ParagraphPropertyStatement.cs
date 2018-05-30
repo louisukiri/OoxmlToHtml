@@ -10,9 +10,9 @@ namespace OoxmlToHtml.Statements
             throw new NotImplementedException();
         }
 
-        public Tokens Token { get; }
+        public Token Token { get; }
 
-        public ParagraphPropertyStatement(Tokens token)
+        public ParagraphPropertyStatement(Token token)
         {
             Token = token;
         }

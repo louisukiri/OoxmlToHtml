@@ -6,7 +6,7 @@ namespace OoxmlToHtml.Statements
     public class SizeStatement : IStatement
     {
         private string literal;
-        public SizeStatement(Tokens token, string size)
+        public SizeStatement(Token token, string size)
         {
             Token = token;
             literal = size;
@@ -21,7 +21,7 @@ namespace OoxmlToHtml.Statements
             visitor.Visit(this);
         }
 
-        public Tokens Token { get; }
+        public Token Token { get; }
         public void StatementNode()
         {
             throw new NotImplementedException();

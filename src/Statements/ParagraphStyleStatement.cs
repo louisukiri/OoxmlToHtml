@@ -4,11 +4,11 @@ namespace OoxmlToHtml.Statements
 {
     public class ParagraphStyleStatement : IStatement
     {
-        public Tokens Token { get; private set; }
+        public Token Token { get; private set; }
         private string _value = "";
-        public ParagraphStyleStatement(Tokens tokens)
+        public ParagraphStyleStatement(Token token)
         {
-            Token = tokens;
+            Token = token;
         }
         public void Accept(IVisitor visitor)
         {
@@ -17,7 +17,7 @@ namespace OoxmlToHtml.Statements
 
         public void AddStatement(IStatement childStatement)
         {
-            if (childStatement.Token.Type == Tokens.Value)
+            if (childStatement.Token.Type == Token.Value)
             {
                 _value = childStatement.TokenLiteral();
             }

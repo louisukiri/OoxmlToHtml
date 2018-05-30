@@ -5,7 +5,7 @@ namespace OoxmlToHtml
 {
     public class IdentifierExpression : IExpression
     {
-        private Tokens token;
+        private Token _token;
         public string value { get; private set; }
         public string TokenLiteral()
         {
