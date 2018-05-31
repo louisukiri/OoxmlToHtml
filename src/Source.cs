@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace OoxmlToHtml
 {
@@ -6,35 +7,40 @@ namespace OoxmlToHtml
     {
         public static char EOL = '\n';
         public static char EOF = '\0';
-        private StringReader reader;
-        private string line;
-        private int lineNumber;
-        private int currentPos;
+        private int _position = 0;
+        private int _readPosition = 0;
+        private bool skipWhiteSpace = true;
+        private readonly string _input;
+        private char _ch;
 
-        public Source(StringReader reader)
+        public Source(string input, bool skipWhiteSpace = true)
         {
-            lineNumber = 0;
-            currentPos = -2;
-            this.reader = reader;
+            _input = input;
+            this.skipWhiteSpace = skipWhiteSpace;
+            ReadChar();
         }
 
-        public char currentChar()
+        public void ReadChar()
         {
-            if (currentPos == -2)
-            {
-                readLine();
-                return nextChar();
-            }
-            else if (line == null)
-            {
-                return EOF;
-            }
-            else if (currentPos == -1 || currentPos == line.Length)
-            {
-                return EOL;
-            }
+            _ch = _readPosition >= _input.Length ? EOF :
+                _input[_readPosition];
 
-            return line[currentPos];
+            _position = _readPosition;
+            _readPosition += 1;
+
         }
+
+        public char NextChar()
+        {
+            ++_position;
+            return CurrentChar();
+        }
+
+        public char PeekChar()
+        {
+            if (_readPosition >= _input.Length) return EOF;
+            return _input[_readPosition];
+        }
+        public char CurrentChar => _input[_position];
     }
 }
