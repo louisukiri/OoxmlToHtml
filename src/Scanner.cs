@@ -6,12 +6,12 @@ namespace OoxmlToHtml
 {
     public abstract class Scanner
     {
-        protected Source source;
+        protected Source Source;
         public Tokens CurrentToken { get; private set; }
 
-        public Scanner(Source _source)
+        protected Scanner(Source source)
         {
-            source = _source;
+            Source = source;
         }
 
         public Tokens NextToken()
@@ -22,14 +22,8 @@ namespace OoxmlToHtml
 
         public abstract Tokens ExtractToken();
 
-        public char CurrentChar()
-        {
-            return source.CurrentChar();
-        }
+        public char CurrentChar => Source.CurrentChar;
 
-        public char NextChar()
-        {
-            return source.NextChar();
-        }
+        public char NextChar => Source.NextChar;
     }
 }

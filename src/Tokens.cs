@@ -1,10 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Xml;
+using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml
 {
 
     public class Tokens
     {
+        protected ITokenType type;
+        protected object value;
+        protected Source source;
+        protected int position;
+        protected string text;
+
         public string Type { get; }
         public string Literal { get; }
 
@@ -71,12 +79,27 @@ namespace OoxmlToHtml
             {"w:pStyle", ParagraphStyle }
         };
 
+        public Tokens(Source source)
+        {
+            this.source = source;
+            this.position = source.Position;
+            Extract();
+        }
         public Tokens(string type, string literal)
         {
             Type = type;
             Literal = literal;
         }
 
+        protected char CurrentChar => source.CurrentChar;
+        protected char NextChar => source.NextChar;
+        protected char PeekChar => source.PeekChar;
+        protected void Extract()
+        {
+            text = CurrentChar.ToString();
+            value = null;
+            var ch = NextChar;
+        }
         public string LookupIdent(string ident)
         {
             return _keyWords.ContainsKey(ident) ?
