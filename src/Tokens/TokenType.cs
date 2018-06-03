@@ -48,6 +48,7 @@ namespace OoxmlToHtml
         [TokenAttribute('/')] SLASH,
         [TokenAttribute('=')] EQ,
         [TokenAttribute("EOF")] EOF,
+        [TokenAttribute('`')] Code
         // ReSharper restore InconsistentNaming
     }
     
@@ -70,6 +71,10 @@ namespace OoxmlToHtml
                 foreach (var z in Enum.GetNames(typeof(KeywordToken)))
                 {
                     var e = (KeywordToken)Enum.Parse(typeof(KeywordToken), z);
+                    if (e.IsCharTokenType())
+                    {
+                        continue;
+                    }
                     _reservedWords.Add(e.GetText().ToLower(), (KeywordToken)Enum.Parse(typeof(KeywordToken), z));
                 }
 
@@ -89,7 +94,10 @@ namespace OoxmlToHtml
                 foreach (var z in Enum.GetNames(typeof(KeywordToken)))
                 {
                     var e = (KeywordToken)Enum.Parse(typeof(KeywordToken), z);
-                    
+                    if (!e.IsCharTokenType())
+                    {
+                        continue;
+                    }
                     _symbols.Add(e.GetText(), (KeywordToken)Enum.Parse(typeof(KeywordToken), z));
                 }
 

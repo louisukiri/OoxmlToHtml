@@ -32,9 +32,9 @@ namespace OoxmlToHtml
 
         public int Position => _position;
 
-        public void NextChar()
+        public void NextChar(int offset = 1)
         {
-            ++_position;
+            _position += offset;
         }
 
         public char PeekChar
@@ -45,6 +45,14 @@ namespace OoxmlToHtml
                 return _input[_position + 1];
             }
         }
+
+        public char PeekCharAhead(int ahead)
+        {
+            var pos = _position + ahead;
+            if (_position >= _input.Length) return EOF;
+            return _input[pos];
+        }
+
         public char CurrentChar
         {
             get

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Xml;
 using OoxmlToHtml.Abstracts;
 
@@ -100,9 +101,12 @@ namespace OoxmlToHtml
             }
         }
 
-        protected void NextChar() => source.NextChar();
+        protected void NextChar(int offset = 1) => source.NextChar(offset);
 
         protected char PeekChar => source.PeekChar;
+
+        protected char PeekCharAhead(int ahead) => source.PeekCharAhead(ahead);
+
         protected virtual void Extract()
         {
             text = CurrentChar.ToString();

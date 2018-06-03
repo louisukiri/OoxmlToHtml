@@ -2,12 +2,13 @@
 {
     public static class CharExtension
     {
-        public static bool IsLetter(this char ch)
+        public static bool IsLetter(this char ch, bool ignoreSpace = true)
         {
             return (('a' <= ch) && (ch <= 'z')) ||
                    (('A' <= ch) && (ch <= 'Z')) ||
                    (('0' <= ch) && (ch <= '9')) ||
-                   ch == ':';
+                   ch == ':' ||
+                    (!ignoreSpace && ch == ' ');
         }
         public static bool IsEOF(this char ch) => ch == '\0';
         public static bool IsSpace(this char ch) => ch == ' ' || ch == '\r' || ch == '\n';
