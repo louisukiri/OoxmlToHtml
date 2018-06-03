@@ -5,15 +5,17 @@ using OoxmlToHtml.Abstracts;
 namespace OoxmlToHtml
 {
 
-    public class Tokens
+    public class Token
     {
-        protected ITokenType type;
+        protected KeywordToken type;
         protected object value;
         protected Source source;
         protected int position;
         protected string text;
 
         public string Type { get; }
+        public KeywordToken Keyword => type;
+        public string Text => text;
         public string Literal { get; }
 
         public const string Code = "Code";
@@ -32,9 +34,7 @@ namespace OoxmlToHtml
         public const string Paragraph = "Paragraph";
 
         public const string Run = "Run";
-
-        public const string Text = "Text";
-
+        
         public const string Color = "Color";
 
         public const string Value = "Value";
@@ -64,7 +64,6 @@ namespace OoxmlToHtml
         private readonly IDictionary<string, string> _keyWords = new Dictionary<string, string>()
         {
             {"w:r", Run },
-            {"w:t", Text },
             {"w:p", Paragraph },
             {"w:color", Color },
             {"w:val", Value },
@@ -79,26 +78,36 @@ namespace OoxmlToHtml
             {"w:pStyle", ParagraphStyle }
         };
 
-        public Tokens(Source source)
+        public Token(Source source)
         {
             this.source = source;
             this.position = source.Position;
             Extract();
         }
-        public Tokens(string type, string literal)
+        public Token(string type, string literal)
         {
             Type = type;
             Literal = literal;
         }
 
         protected char CurrentChar => source.CurrentChar;
-        protected char NextChar => source.NextChar;
+        protected char NextCharValue
+        {
+            get
+            {
+                source.NextChar();
+                return CurrentChar;
+            }
+        }
+
+        protected void NextChar() => source.NextChar();
+
         protected char PeekChar => source.PeekChar;
-        protected void Extract()
+        protected virtual void Extract()
         {
             text = CurrentChar.ToString();
             value = null;
-            var ch = NextChar;
+            NextChar();
         }
         public string LookupIdent(string ident)
         {

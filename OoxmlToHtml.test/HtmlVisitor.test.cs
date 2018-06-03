@@ -13,7 +13,7 @@ namespace OoxmlToHtml.test
         {
             var htmlVisitor = new HtmlVisitor();
             htmlVisitor.Visit(new ColorStatement(
-                new Tokens(Tokens.Color, "w:color"),
+                new Token(Token.Color, "w:color"),
                 "ff000f"
                 ));
 
@@ -49,7 +49,7 @@ namespace OoxmlToHtml.test
 ";
             var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""><span>Abc louis</span><span style=""font-weight: bold; "">def</span><span>ijk</span></p>";
             var l = new Lexer(input);
-            var p = new Parser(l);
+            var p = new OoXmlParser(l);
 
             Assert.AreEqual(expected, p.Parse().Value);
         }
@@ -69,7 +69,7 @@ namespace OoxmlToHtml.test
 ";
             var expected = @"<p style=""""><h1><span>Title</span></h1></p>";
             var l = new Lexer(input);
-            var p = new Parser(l);
+            var p = new OoXmlParser(l);
 
             Assert.AreEqual(expected, p.Parse().Value);
         }

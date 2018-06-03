@@ -6,10 +6,10 @@ namespace OoxmlToHtml.Statements
     public class AttributeStatement : IStatement
     {
         public string Value { get; private set; }
-        public Tokens Token { get; }
+        public Token Token { get; }
         public string Name { get; }
 
-        public AttributeStatement(Tokens token, string value)
+        public AttributeStatement(Token token, string value)
         {
             Value = value;
             Token = token;

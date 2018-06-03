@@ -32,23 +32,26 @@ namespace OoxmlToHtml
 
         public int Position => _position;
 
-        public char NextChar
+        public void NextChar()
         {
-            get
-            {
-                ++_position;
-                return CurrentChar;
-            }
+            ++_position;
         }
 
         public char PeekChar
         {
             get
             {
-                if (_readPosition >= _input.Length) return EOF;
-                return _input[_readPosition];
+                if (_position + 1 >= _input.Length) return EOF;
+                return _input[_position + 1];
             }
         }
-        public char CurrentChar => _input[_position];
+        public char CurrentChar
+        {
+            get
+            {
+                if (_position >= _input.Length) return EOF;
+                return _input[_position];
+            }
+        }
     }
 }

@@ -5,10 +5,10 @@ namespace OoxmlToHtml.Statements
 {
     public class ColorStatement : IStatement
     {
-        public Tokens Token { get; private set; }
+        public Token Token { get; private set; }
         public string Value { get; private set; }
         
-        public ColorStatement(Tokens token, string value)
+        public ColorStatement(Token token, string value)
         {
             Token = token;
             Value = value;

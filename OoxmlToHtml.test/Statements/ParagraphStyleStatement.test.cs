@@ -17,7 +17,7 @@ namespace OoxmlToHtml.test.Statements
             var input = @"
                         <w:pStyle w:val=""Title""/>
 ";
-            var actual = new Parser(input).ParseProgram().Statements.First() as ParagraphStyleStatement;
+            var actual = new OoXmlParser(input).ParseProgram().Statements.First() as ParagraphStyleStatement;
             
             Assert.IsNotNull(actual);
             Assert.AreEqual("Title", actual?.TokenLiteral());

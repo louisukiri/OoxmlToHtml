@@ -2,7 +2,7 @@
 {
     public interface IStatement : INode
     {
-        Tokens Token { get; }
+        Token Token { get; }
         void StatementNode();
         void AddStatement(IStatement childStatement);
     }

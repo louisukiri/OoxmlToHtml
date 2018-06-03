@@ -5,9 +5,9 @@ namespace OoxmlToHtml.Statements
 {
     public class FlagStatement : IStatement
     {
-        public Tokens Token { get; }
+        public Token Token { get; }
 
-        public FlagStatement(Tokens token)
+        public FlagStatement(Token token)
         {
             Token = token;
         }

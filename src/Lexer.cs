@@ -15,13 +15,13 @@ namespace OoxmlToHtml
             ReadChar();
         }
 
-        public Tokens NextToken()
+        public Token NextToken()
         {
             SkipWhitespace();
-            Tokens tok = new Tokens("","");
+            Token tok = new Token("","");
             if (_ch == '\0')
             {
-                return new Tokens(Tokens.Eof, "EOF");
+                return new Token(Token.Eof, "EOF");
             }
             switch (_ch)
             {
@@ -31,44 +31,44 @@ namespace OoxmlToHtml
                     {
                         ReadChar();
                         ReadChar();
-                        tok = new Tokens(Tokens.LongEnd, ReadIdentifier());
+                        tok = new Token(Token.LongEnd, ReadIdentifier());
                     }
                     else
                     {
-                        tok = new Tokens(Tokens.Start.ToString(), _ch.ToString());
+                        tok = new Token(Token.Start.ToString(), _ch.ToString());
                     }
                     break;
                 case '>':
-                    tok = new Tokens(Tokens.End.ToString(), _ch.ToString());
+                    tok = new Token(Token.End.ToString(), _ch.ToString());
                     break;
                 case '"':
-                    tok = new Tokens(Tokens.Quote.ToString(), _ch.ToString());
+                    tok = new Token(Token.Quote.ToString(), _ch.ToString());
                     break;
                 case '=':
-                    tok = new Tokens(Tokens.EQ.ToString(), _ch.ToString());
+                    tok = new Token(Token.EQ.ToString(), _ch.ToString());
                     break;
                 case '/':
                     if (PeekNext('>'))
                     {
                         ReadChar();
-                        tok = new Tokens(Tokens.ShortEnd, "/>");
+                        tok = new Token(Token.ShortEnd, "/>");
                     }
                     else
                     {
-                        tok = new Tokens(Tokens.Illegal, "\\");
+                        tok = new Token(Token.Illegal, "\\");
                     }
                     break;
                 default:
                     if (IsLetter(_ch))
                     {
                         var literal = ReadIdentifier();
-                        tok = new Tokens(tok.LookupIdent(literal),
+                        tok = new Token(tok.LookupIdent(literal),
                             literal);
                         return tok;
                     }
                     else if (IsSpecialChar())
                     {
-                        tok = new Tokens(Tokens.Code, "```");
+                        tok = new Token(Token.Code, "```");
                         return tok;
                     }
                     break;

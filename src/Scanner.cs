@@ -7,23 +7,35 @@ namespace OoxmlToHtml
     public abstract class Scanner
     {
         protected Source Source;
-        public Tokens CurrentToken { get; private set; }
-
+        private Token _currentToken;
+        protected char EOF => Source.EOF;
         protected Scanner(Source source)
         {
             Source = source;
         }
 
-        public Tokens NextToken()
+        public Token NextToken()
         {
-            CurrentToken = ExtractToken();
-            return CurrentToken;
+            _currentToken = ExtractToken();
+            return CurrentToken();
         }
 
-        public abstract Tokens ExtractToken();
+        public Token CurrentToken()
+        {
+            return _currentToken;
+        }
+
+        public abstract Token ExtractToken();
 
         public char CurrentChar => Source.CurrentChar;
 
-        public char NextChar => Source.NextChar;
+        public char NextChar
+        {
+            get
+            {
+                Source.NextChar();
+                return CurrentChar;
+            }
+        }
     }
 }

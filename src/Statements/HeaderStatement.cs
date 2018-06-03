@@ -4,12 +4,12 @@ namespace OoxmlToHtml.Statements
 {
     public class HeaderStatement : IStatement
     {
-        public Tokens Token { get; private set; }
+        public Token Token { get; private set; }
         private string _value = string.Empty;
         private string _name = string.Empty;
-        public HeaderStatement(Tokens tokens)
+        public HeaderStatement(Token token)
         {
-            Token = tokens;
+            Token = token;
         }
         public void Accept(IVisitor visitor)
         {
@@ -18,7 +18,7 @@ namespace OoxmlToHtml.Statements
 
         public void AddStatement(IStatement childStatement)
         {
-            if (childStatement.Token.Type != Tokens.StringLiteral) return;
+            if (childStatement.Token.Type != Token.StringLiteral) return;
             _value = childStatement.TokenLiteral();
         }
 

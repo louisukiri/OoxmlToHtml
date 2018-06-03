@@ -11,7 +11,7 @@ namespace OoxmlToHtml.test
     {
         private string _input;
         private Lexer _lexer;
-        private Parser _parser;
+        private OoXmlParser _ooXmlParser;
         [SetUp]
         public void Setup()
         {
@@ -33,7 +33,7 @@ namespace OoxmlToHtml.test
                     <w:sz w:val=""16"" />
 ";
             _lexer = new Lexer(_input);
-            _parser = new Parser(_lexer);
+            _ooXmlParser = new OoXmlParser(_lexer);
         }
         [Test]
         public void AnalyzeRunsThroughAllAnalyzers()
@@ -44,9 +44,9 @@ namespace OoxmlToHtml.test
                 .Returns(
                     program.Object
                 );
-            _parser.Use(analyzer.Object);
+            _ooXmlParser.Use(analyzer.Object);
 
-            _parser.Analyze(program.Object);
+            _ooXmlParser.Analyze(program.Object);
 
             analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
         }
@@ -55,7 +55,7 @@ namespace OoxmlToHtml.test
         [Test]
         public void TestBasicNode()
         {
-            var program = _parser.ParseProgram();
+            var program = _ooXmlParser.ParseProgram();
 
             if (program == null)
             {

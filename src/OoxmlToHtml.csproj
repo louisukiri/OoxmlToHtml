@@ -8,4 +8,8 @@
     <PackageReference Include="Moq" Version="4.8.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>
