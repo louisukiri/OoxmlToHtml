@@ -1,5 +1,6 @@
 ﻿using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Factories;
+using OoxmlToHtml.Parsers;
 using OoxmlToHtml.Tokens;
 
 namespace OoxmlToHtml
@@ -20,13 +21,19 @@ namespace OoxmlToHtml
         {
             var token = NextToken();
             Root = NodeFactory.CreateRootNode();
-            
-            // only container elements can be processed here
-            switch (token.Keyword)
-            {
-                case KeywordToken.Paragraph:
 
-                    break;
+            while (CurrentToken.Keyword != KeywordToken.EOF)
+            {
+                // only container elements can be processed here
+                switch (CurrentToken.Keyword)
+                {
+                    case KeywordToken.Paragraph:
+                        var a = new ParagraphStatementParser(this);
+                        Root.SetRootNode(a.Parse(CurrentToken));
+                        break;
+                }
+
+                NextToken();
             }
         }
     }

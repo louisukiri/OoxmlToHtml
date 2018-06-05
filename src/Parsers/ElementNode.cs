@@ -19,14 +19,20 @@ namespace OoxmlToHtml.Parsers
             {
                 switch (CurrentToken.Keyword)
                 {
+                    case KeywordToken.StringLiteral:
+                        var c = new UnknownStringLiteralAttribute(this);
+                        m.SetAttribute("unknown", c.Parse(CurrentToken).GetAttribute("value"));
+                        break;
                     case KeywordToken.Value:
                         var a = new ValueStatementNode(this);
                         var b = a.Parse(CurrentToken);
                         m.SetAttribute("value", b.GetAttribute("value"));
                         b.SetParent(m);
                         break;
+                    default:
+                        NextToken();
+                        break;
                 }
-                NextToken();
             }
 
             if (CurrentToken.Keyword == KeywordToken.ENDING_ELEMENT)
@@ -38,7 +44,8 @@ namespace OoxmlToHtml.Parsers
                     switch (CurrentToken.Keyword)
                     {
                         case KeywordToken.StringLiteral:
-
+                            var strLitParser = new StringLiteralStatementParser(this);
+                            m.AddChild(strLitParser.Parse(CurrentToken));
                             break;
                         case KeywordToken.Paragraph:
 
@@ -47,6 +54,8 @@ namespace OoxmlToHtml.Parsers
 
                             break;
                     }
+
+                    NextToken();
                 }
             }
             return m;

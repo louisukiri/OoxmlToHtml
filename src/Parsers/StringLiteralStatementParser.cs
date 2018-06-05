@@ -1,9 +1,29 @@
-﻿namespace OoxmlToHtml.Parsers
+﻿using System.Text;
+using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Factories;
+
+namespace OoxmlToHtml.Parsers
 {
     public class StringLiteralStatementParser : OoxmlNodeTd
     {
         public StringLiteralStatementParser(OoxmlNodeTd parent) : base(parent)
         {
+        }
+
+        public virtual INode Parse(Token token)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            while (CurrentToken.Keyword != KeywordToken.EOF
+                   && CurrentToken.Keyword == KeywordToken.StringLiteral)
+            {
+                stringBuilder.Append(CurrentToken.Text);
+                stringBuilder.Append(' ');
+                NextToken();
+            }
+
+            var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);
+            newNode.SetAttribute("value", stringBuilder.ToString().TrimEnd());
+            return newNode;
         }
         
     }

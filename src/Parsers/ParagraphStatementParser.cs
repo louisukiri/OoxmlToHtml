@@ -9,11 +9,5 @@ namespace OoxmlToHtml.Parsers
         }
 
         protected override KeywordToken AttributeName => KeywordToken.Paragraph;
-
-        public override INode Parse(Token token)
-        {
-
-            return null;
-        }
     }
 }

@@ -32,57 +32,80 @@ namespace OoxmlToHtml.test
                      </w:p>
                     <w:sz w:val=""16"" />
 ";
-            _lexer = new Lexer(_input);
-            _ooXmlParser = new OoXmlParser(_lexer);
+            //_lexer = new Lexer(_input);
+            //_ooXmlParser = new OoXmlParser(_lexer);
         }
-        [Test]
-        public void AnalyzeRunsThroughAllAnalyzers()
-        {
-            var program = new Mock<IProgram>();
-            var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
-            analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
-                .Returns(
-                    program.Object
-                );
-            _ooXmlParser.Use(analyzer.Object);
+        //[Test]
+        //public void AnalyzeRunsThroughAllAnalyzers()
+        //{
+        //    var program = new Mock<IProgram>();
+        //    var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
+        //    analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
+        //        .Returns(
+        //            program.Object
+        //        );
+        //    _ooXmlParser.Use(analyzer.Object);
 
-            _ooXmlParser.Analyze(program.Object);
+        //    _ooXmlParser.Analyze(program.Object);
 
-            analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
-        }
+        //    analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
+        //}
 
         #region parsing test
+
+        [Test]
+        public void CurrentTokenDoesNotMoveCharForward()
+        {
+            var testInput = @"<w:p testAttrib=""test"">ok jim</w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.NextToken();
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.STARTING_ELEMENT);
+            a.NextToken();
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);
+
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);
+        }
         [Test]
         public void TestBasicNode()
         {
-            var program = _ooXmlParser.ParseProgram();
+            var testInput = @"<w:p testAttrib=""test"" another=""testagain"">ok jim</w:p>";
 
-            if (program == null)
-            {
-                Assert.Fail("ParseProgram() returned null");
-            }
+            var program = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            program.Parse();
 
-            if (program.Statements.Count() != 3)
-            {
-                Assert.Fail("Invalid number of statements in program");
-            }
+            var rootNode = program.Root.Root;
+            Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
+            Assert.AreEqual("test", rootNode.GetAttribute("unknown"));
+            Assert.AreEqual("testagain",rootNode.GetAttribute("unknown_2"));
+            Assert.AreEqual(1, rootNode.Children.Count);
+            //var program = _ooXmlParser.ParseProgram();
 
-            TestParagraphStatement(program.Statements[1] as ParagraphStatement, 2);
-            TestSizeStatement(program.Statements[2] as SizeStatement, "16");
-            var tests = new string[]
-            {
-                "w:color"
-            };
+            //if (program == null)
+            //{
+            //    Assert.Fail("ParseProgram() returned null");
+            //}
 
-            for (var i = 0; i < tests.Length; i++)
-            {
-                var test = tests[i];
-                var statement = program.Statements[i] as ColorStatement;
-                if (!TestColorStatement(statement, test, "FF0000"))
-                {
-                    return;
-                }
-            }
+            //if (program.Statements.Count() != 3)
+            //{
+            //    Assert.Fail("Invalid number of statements in program");
+            //}
+
+            //TestParagraphStatement(program.Statements[1] as ParagraphStatement, 2);
+            //TestSizeStatement(program.Statements[2] as SizeStatement, "16");
+            //var tests = new string[]
+            //{
+            //    "w:color"
+            //};
+
+            //for (var i = 0; i < tests.Length; i++)
+            //{
+            //    var test = tests[i];
+            //    var statement = program.Statements[i] as ColorStatement;
+            //    if (!TestColorStatement(statement, test, "FF0000"))
+            //    {
+            //        return;
+            //    }
+            //}
         }
 
         private bool TestColorStatement(ColorStatement statement, string name, string value)

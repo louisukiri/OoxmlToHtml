@@ -1,4 +1,5 @@
-﻿using OoxmlToHtml.Abstracts;
+﻿using System.Text;
+using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
@@ -16,20 +17,34 @@ namespace OoxmlToHtml.Parsers
                 return null;
             }
 
-            token = NextToken();
-            if (token.Keyword != KeywordToken.EQ)
+            NextToken();
+            if (CurrentToken.Keyword != KeywordToken.EQ)
             {
                 return null;
             }
 
-            token = NextToken();
-            if (token.Keyword != KeywordToken.StringValue)
-            {
-                return null;
-            }
-
+            NextToken();
             var newNode = NodeFactory.CreateNode(AttributeName);
-            newNode.SetAttribute("value", token.Literal);
+            if (CurrentToken.Keyword != KeywordToken.StringValue
+                && CurrentToken.Keyword != KeywordToken.StringLiteral)
+            {
+                return null;
+            }
+
+            if (CurrentToken.Keyword == KeywordToken.StringValue)
+            {
+                newNode.SetAttribute("value", CurrentToken.Text);
+                return newNode;
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            while (CurrentToken.Keyword == KeywordToken.StringLiteral)
+            {
+                stringBuilder.Append(CurrentToken.Text);
+            }
+
+            newNode.SetAttribute("value", stringBuilder.ToString());
+
+            NextToken();
             return newNode;
         }
     }

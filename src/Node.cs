@@ -25,6 +25,16 @@ namespace OoxmlToHtml
 
         public void SetAttribute(string name, string value)
         {
+            if (ContainsKey(name))
+            {
+                var keyIndex = 2;
+                while (ContainsKey(name + "_" + keyIndex))
+                {
+                    keyIndex++;
+                }
+
+                name = name + "_" + keyIndex;
+            }
             Add(name, value);
         }
 
