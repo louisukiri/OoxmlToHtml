@@ -1,4 +1,5 @@
-﻿using OoxmlToHtml.Abstracts;
+﻿using System;
+using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml.Factories
 {
@@ -12,6 +13,11 @@ namespace OoxmlToHtml.Factories
         public static ISymTab CreateSymTab(int currentNestingLevel)
         {
             return null;
+        }
+
+        internal static ISymTabEntry CreateSymTabEntry(string name, SymTab symTab)
+        {
+            throw new NotImplementedException();
         }
     }
 }

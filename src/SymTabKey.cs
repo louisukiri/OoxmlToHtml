@@ -1,6 +1,8 @@
-﻿namespace OoxmlToHtml
+﻿using OoxmlToHtml.Abstracts;
+
+namespace OoxmlToHtml
 {
-    public class SymTabKey
+    public class SymTabKey : ISymTabKey
     {
         
     }
