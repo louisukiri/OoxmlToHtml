@@ -6,6 +6,10 @@
         {
         }
 
-        protected override KeywordToken AttributeName => KeywordToken.StringLiteral;
+        public override string AttributeName => "unknown";
+
+        public override KeywordToken Token => KeywordToken.StringLiteral
+        
+        ;
     }
 }

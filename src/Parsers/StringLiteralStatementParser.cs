@@ -4,7 +4,7 @@ using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
 {
-    public class StringLiteralStatementParser : OoxmlNodeTd
+    public class StringLiteralStatementParser : OoxmlNodeTd, IStatementParser
     {
         public StringLiteralStatementParser(OoxmlNodeTd parent) : base(parent)
         {

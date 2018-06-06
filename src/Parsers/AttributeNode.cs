@@ -4,15 +4,17 @@ using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
 {
-    public abstract class AttributeNode : OoxmlNodeTd
+    public abstract class AttributeNode : OoxmlNodeTd, IAttributeStatementParser
     {
         protected AttributeNode(OoxmlNodeTd parent) : base(parent)
         {
         }
-        protected abstract KeywordToken AttributeName { get; }
+
+        public abstract string AttributeName { get; }
+        public abstract KeywordToken Token { get; }
         public virtual INode Parse(Token token)
         {
-            if (token.Keyword != AttributeName)
+            if (token.Keyword != Token)
             {
                 return null;
             }
@@ -24,7 +26,7 @@ namespace OoxmlToHtml.Parsers
             }
 
             NextToken();
-            var newNode = NodeFactory.CreateNode(AttributeName);
+            var newNode = NodeFactory.CreateNode(Token);
             if (CurrentToken.Keyword != KeywordToken.StringValue
                 && CurrentToken.Keyword != KeywordToken.StringLiteral)
             {

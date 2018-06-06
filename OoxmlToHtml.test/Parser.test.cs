@@ -108,6 +108,28 @@ namespace OoxmlToHtml.test
             //}
         }
 
+        [Test]
+        public void TestContainerElementInsideContainerElement()
+        {
+            var testInput = @"<w:p>
+                                <w:pPr>
+                                    <w:color w:val=""FF0000"" />
+                                </w:pPr>
+                                <w:t>testing me too</w:t>
+                              </w:p>";
+
+            var program = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            program.Parse();
+
+            var rootNode = program.Root.Root;
+            Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
+            Assert.AreEqual(KeywordToken.Color, rootNode.Children[0].Children[0].Type);
+            Assert.AreEqual("FF0000", rootNode.Children[0].Children[0].GetAttribute("value"));
+            Assert.AreEqual(KeywordToken.Text, rootNode.Children[1].Type);
+            Assert.AreEqual("testing me too", rootNode.Children[1].Children[0].GetAttribute("value"));
+            Assert.AreEqual(2, rootNode.Children.Count);
+        }
+
         private bool TestColorStatement(ColorStatement statement, string name, string value)
         {
             if (statement.Token.Literal != name)

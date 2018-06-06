@@ -48,7 +48,8 @@ namespace OoxmlToHtml
         [TokenAttribute('/')] SLASH,
         [TokenAttribute('=')] EQ,
         [TokenAttribute("EOF")] EOF,
-        [TokenAttribute('`')] Code
+        [TokenAttribute('`')] Code,
+        [TokenAttribute("")] Unknown
         // ReSharper restore InconsistentNaming
     }
     

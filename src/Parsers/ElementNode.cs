@@ -3,9 +3,9 @@ using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
 {
-    public abstract class ElementNode : OoxmlNodeTd
+    public abstract class ElementNode : OoxmlNodeTd, IStatementParser
     {
-        public ElementNode(OoxmlNodeTd parent) : base(parent)
+        protected ElementNode(OoxmlNodeTd parent) : base(parent)
         {
         }
         protected abstract KeywordToken AttributeName { get; }
@@ -17,44 +17,61 @@ namespace OoxmlToHtml.Parsers
                    && CurrentToken.Keyword != KeywordToken.EOF
                    && CurrentToken.Keyword != KeywordToken.ShortClose)
             {
+                IAttributeStatementParser attributeNode = null;
                 switch (CurrentToken.Keyword)
                 {
+                    // parse attributes
                     case KeywordToken.StringLiteral:
-                        var c = new UnknownStringLiteralAttribute(this);
-                        m.SetAttribute("unknown", c.Parse(CurrentToken).GetAttribute("value"));
+                        attributeNode = new UnknownStringLiteralAttribute(this);
                         break;
                     case KeywordToken.Value:
-                        var a = new ValueStatementNode(this);
-                        var b = a.Parse(CurrentToken);
-                        m.SetAttribute("value", b.GetAttribute("value"));
-                        b.SetParent(m);
+                        attributeNode = new ValueAttribute(this);
                         break;
                     default:
                         NextToken();
                         break;
                 }
+
+                if (attributeNode != null)
+                {
+                    m.SetAttribute(attributeNode.AttributeName,
+                        attributeNode.Parse(CurrentToken).GetAttribute("value"));
+                }
             }
 
             if (CurrentToken.Keyword == KeywordToken.ENDING_ELEMENT)
             {
+                // we are in the body of the element
                 NextToken();
                 while (CurrentToken.Keyword != KeywordToken.EOF
                        && CurrentToken.Keyword != KeywordToken.Close)
                 {
+                    IStatementParser elementNode = null;
                     switch (CurrentToken.Keyword)
                     {
                         case KeywordToken.StringLiteral:
-                            var strLitParser = new StringLiteralStatementParser(this);
-                            m.AddChild(strLitParser.Parse(CurrentToken));
+                            elementNode = new StringLiteralStatementParser(this);
                             break;
                         case KeywordToken.Paragraph:
-
+                            elementNode = new ParagraphStatementParser(this);
                             break;
                         case KeywordToken.ParagraphStyle:
-
+                            break;
+                        case KeywordToken.PreviousParagraph:
+                            elementNode = new PreviousParagraphStatementParser(this);
+                            break;
+                        case KeywordToken.Color:
+                            elementNode = new ColorStatementNode(this);
+                            break;
+                        case KeywordToken.Text:
+                            elementNode = new TextStatementParser(this);
                             break;
                     }
 
+                    if (elementNode != null)
+                    {
+                        m.AddChild(elementNode.Parse(CurrentToken));
+                    }
                     NextToken();
                 }
             }
