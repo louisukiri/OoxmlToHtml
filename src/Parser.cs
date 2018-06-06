@@ -11,9 +11,6 @@ namespace OoxmlToHtml
 {
     public abstract class Parser
     {
-        private readonly Lexer _lexer;
-        private Token _currentToken;
-        private Token _peekToken;
         private IList<IAnalyzer> _analyzers = new List<IAnalyzer>();
         private readonly HtmlVisitor _visitor = new HtmlVisitor();
         protected Scanner scanner;

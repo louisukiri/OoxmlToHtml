@@ -19,7 +19,7 @@ namespace OoxmlToHtml
 
         public override void Parse()
         {
-            var token = NextToken();
+            NextToken();
             Root = NodeFactory.CreateRootNode();
 
             while (CurrentToken.Keyword != KeywordToken.EOF)

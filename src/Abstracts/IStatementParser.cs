@@ -1,4 +1,6 @@
-﻿namespace OoxmlToHtml.Abstracts
+﻿using System.Dynamic;
+
+namespace OoxmlToHtml.Abstracts
 {
     public interface IStatementParser
     {

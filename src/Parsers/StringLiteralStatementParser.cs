@@ -9,7 +9,7 @@ namespace OoxmlToHtml.Parsers
         public StringLiteralStatementParser(OoxmlNodeTd parent) : base(parent)
         {
         }
-
+        
         public virtual INode Parse(Token token)
         {
             StringBuilder stringBuilder = new StringBuilder();

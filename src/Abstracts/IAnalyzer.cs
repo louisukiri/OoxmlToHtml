@@ -2,6 +2,7 @@
 {
     public interface IAnalyzer
     {
-        IProgram Analyze(IProgram program);
+        IAnalyzer Next { get; }
+        INode Analyze(INode node);
     }
 }

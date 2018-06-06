@@ -1,4 +1,5 @@
-﻿using OoxmlToHtml.Abstracts;
+﻿using System.Linq;
+using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
@@ -9,6 +10,7 @@ namespace OoxmlToHtml.Parsers
         {
         }
         protected abstract KeywordToken AttributeName { get; }
+        protected virtual KeywordToken[] IgnoredTokens => null;
         public virtual INode Parse(Token token)
         {
             var m = NodeFactory.CreateNode(AttributeName);
@@ -26,8 +28,7 @@ namespace OoxmlToHtml.Parsers
                         break;
                     case KeywordToken.Value:
                         attributeNode = new ValueAttribute(this);
-                        break;
-                    default:
+                        break;                    default:
                         NextToken();
                         break;
                 }
@@ -66,11 +67,22 @@ namespace OoxmlToHtml.Parsers
                         case KeywordToken.Text:
                             elementNode = new TextStatementParser(this);
                             break;
+                        case KeywordToken.Italic:
+                            elementNode = new ItalicStatementParser(this);
+                            break;
                     }
 
                     if (elementNode != null)
                     {
-                        m.AddChild(elementNode.Parse(CurrentToken));
+                        var parsedNode = elementNode.Parse(CurrentToken);
+                        if (parsedNode.HasAttribute("__isAttributeElement"))
+                        {
+                            m.CopyAttributes(parsedNode);
+                        }
+                        else
+                        {
+                            m.AddChild(elementNode.Parse(CurrentToken));
+                        }
                     }
                     NextToken();
                 }

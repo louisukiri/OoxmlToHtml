@@ -12,6 +12,7 @@ namespace OoxmlToHtml.Parsers
 
         public abstract string AttributeName { get; }
         public abstract KeywordToken Token { get; }
+        
         public virtual INode Parse(Token token)
         {
             if (token.Keyword != Token)

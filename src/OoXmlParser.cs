@@ -261,7 +261,7 @@ namespace OoxmlToHtml
         {
             foreach (var analyzer in _analyzers)
             {
-                program = analyzer.Analyze(program);
+                // program = analyzer.Analyze(program);
             }
 
             return program;
