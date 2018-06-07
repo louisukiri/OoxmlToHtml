@@ -36,6 +36,7 @@ namespace OoxmlToHtml
         [TokenAttribute("w:i")] Italic,
         [TokenAttribute("w:sz")] Size,
         [TokenAttribute("w:val")] Value,
+        [TokenAttribute("w:body")] Body,
         [TokenAttribute("StringValue")] StringValue,
         [TokenAttribute("/>")] ShortClose,
         [TokenAttribute("</")] Close,

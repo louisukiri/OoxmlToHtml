@@ -56,6 +56,17 @@ namespace OoxmlToHtml.test.Parsers
             Assert.AreEqual(bool.TrueString, result.GetAttribute("italic"));
         }
 
+        [Test]
+        public void ShouldParseColorAttributesToColorProperty()
+        {
+            var result = ParseString(@"<w:p w:val=""test"">
+                                            <w:i />
+                                            <w:color w:val=""FF0000"" />
+                                        </w:p>");
+
+            Assert.AreEqual("FF0000", result.GetAttribute("fontColor"));
+        }
+
         private INode ParseString(string text)
         {
             OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));

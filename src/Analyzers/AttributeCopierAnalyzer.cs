@@ -3,7 +3,11 @@ using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml.Analyzers
 {
-    public class StyleAnalyzer : IAnalyzer
+    /*
+     * Will copy all the attributes from all children to the parent
+     * This will simplify the rendering of paragraphs as divs
+     */
+    public class AttributeCopierAnalyzer : IAnalyzer
     {
         public IAnalyzer Next { get; set; }
         public virtual bool ShouldAnalyze(INode node) => true;

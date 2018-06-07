@@ -3,6 +3,7 @@ using NUnit.Framework;
 using OoxmlToHtml.Statements;
 using Moq;
 using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Analyzers;
 
 namespace OoxmlToHtml.test
 {
@@ -33,21 +34,21 @@ namespace OoxmlToHtml.test
             //_lexer = new Lexer(_input);
             //_ooXmlParser = new OoXmlParser(_lexer);
         }
-        //[Test]
-        //public void AnalyzeRunsThroughAllAnalyzers()
-        //{
-        //    var program = new Mock<IProgram>();
-        //    var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
-        //    analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
-        //        .Returns(
-        //            program.Object
-        //        );
-        //    _ooXmlParser.Use(analyzer.Object);
 
-        //    _ooXmlParser.Analyze(program.Object);
+        [Test]
+        public void AnalyzeRunsThroughAnalyzer()
+        {
+            var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
+                .Returns<INode>(n => n);
 
-        //    analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
-        //}
+            var testInput = @"<w:p testAttrib=""test"">ok jim</w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Use(analyzer.Object);
+            a.Parse();
+
+            analyzer.Verify(z => z.Analyze(It.IsAny<INode>()));
+        }
 
         #region parsing test
 
@@ -94,7 +95,7 @@ namespace OoxmlToHtml.test
             var rootNode = program.Root.Root;
             Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
             //Assert.AreEqual(KeywordToken.Color, rootNode.Children[0].Children[0].Type);
-            Assert.AreEqual("FF0000", rootNode.GetAttribute("value"));
+            // Assert.AreEqual("FF0000", rootNode.GetAttribute("fontColor"));
             //Assert.AreEqual(KeywordToken.Text, rootNode.Children[1].Type);
             //Assert.AreEqual("testing me too", rootNode.Children[1].Children[0].GetAttribute("value"));
             //Assert.AreEqual(2, rootNode.Children.Count);

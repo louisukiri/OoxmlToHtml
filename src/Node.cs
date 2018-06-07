@@ -79,5 +79,10 @@ namespace OoxmlToHtml
         {
             return this.ContainsKey(attributeName);
         }
+
+        public void RemoveAttribute(string name)
+        {
+            Remove(name);
+        }
     }
 }

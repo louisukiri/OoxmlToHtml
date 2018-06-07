@@ -74,15 +74,7 @@ namespace OoxmlToHtml.Parsers
 
                     if (elementNode != null)
                     {
-                        var parsedNode = elementNode.Parse(CurrentToken);
-                        if (parsedNode.HasAttribute("__isAttributeElement"))
-                        {
-                            m.CopyAttributes(parsedNode);
-                        }
-                        else
-                        {
-                            m.AddChild(elementNode.Parse(CurrentToken));
-                        }
+                       m.AddChild(elementNode.Parse(CurrentToken));
                     }
                     NextToken();
                 }

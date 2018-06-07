@@ -42,6 +42,20 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
+        public void ShouldRemoveAttribute()
+        {
+            node.SetAttribute("test", "testValue");
+
+            Assert.AreEqual("testValue", node["test"]);
+            node.RemoveAttribute("test");
+
+            Assert.Throws<KeyNotFoundException>(() =>
+            {
+                var c = node["test"];
+            });
+        }
+
+        [Test]
         public void ShouldGetAllAttributes()
         {
             node.SetAttribute("test1", "testValue1");

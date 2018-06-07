@@ -16,5 +16,6 @@ namespace OoxmlToHtml.Abstracts
         void CopyAttributes(INode source);
         void RemoveChild(INode child);
         bool HasAttribute(string attributeName);
+        void RemoveAttribute(string value);
     }
 }

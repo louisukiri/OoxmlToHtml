@@ -2,7 +2,7 @@
 
 namespace OoxmlToHtml.Analyzers
 {
-    public class ParagraphNodeAnalyzer : StyleAnalyzer
+    public class ParagraphNodeAnalyzer : AttributeCopierAnalyzer
     {
         public override bool ShouldAnalyze(INode node)
         {

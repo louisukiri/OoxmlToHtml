@@ -19,7 +19,7 @@ namespace OoxmlToHtml.test.Analyzers
 
             paragraph.AddChild(pParagraphProp);
 
-            var styleAnalyzer = new StyleAnalyzer();
+            var styleAnalyzer = new AttributeCopierAnalyzer();
             styleAnalyzer.Analyze(paragraph);
 
             Assert.AreEqual("testAttrValue", paragraph.GetAttribute("testAttr"));
@@ -38,7 +38,7 @@ namespace OoxmlToHtml.test.Analyzers
             paragraph.AddChild(pParagraphProp);
 
 
-            Mock<StyleAnalyzer> mockedAnalyzer = new Mock<StyleAnalyzer>(MockBehavior.Strict);
+            Mock<AttributeCopierAnalyzer> mockedAnalyzer = new Mock<AttributeCopierAnalyzer>(MockBehavior.Strict);
             mockedAnalyzer.Setup(z => z.ShouldAnalyze(It.IsAny<INode>())).Returns(false);
             var styleAnalyzer = mockedAnalyzer.Object;
             styleAnalyzer.Analyze(paragraph);
@@ -60,7 +60,7 @@ namespace OoxmlToHtml.test.Analyzers
 
             paragraph.AddChild(pParagraphProp);
 
-            var styleAnalyzer = new StyleAnalyzer();
+            var styleAnalyzer = new AttributeCopierAnalyzer();
             styleAnalyzer.Analyze(paragraph);
 
             Assert.AreEqual("testAttrValue", paragraph.GetAttribute("testAttr"));
@@ -77,7 +77,7 @@ namespace OoxmlToHtml.test.Analyzers
             pParagraphProp.AddChild(pParagraphPropChild);
             paragraph.AddChild(pParagraphProp);
 
-            var styleAnalyzer = new StyleAnalyzer();
+            var styleAnalyzer = new AttributeCopierAnalyzer();
             styleAnalyzer.Analyze(paragraph);
 
             Assert.AreEqual(0, paragraph.Children.Count);

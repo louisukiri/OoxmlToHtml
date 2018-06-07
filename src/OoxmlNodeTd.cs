@@ -1,4 +1,6 @@
-﻿using OoxmlToHtml.Abstracts;
+﻿using System.Collections.Generic;
+using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Analyzers;
 using OoxmlToHtml.Factories;
 using OoxmlToHtml.Parsers;
 using OoxmlToHtml.Tokens;
@@ -8,6 +10,7 @@ namespace OoxmlToHtml
     public class OoxmlNodeTd : Parser
     {
         public IRootNode Root { get; private set; }
+        private Analyzer _analyzers = null;
         public OoxmlNodeTd(Scanner scanner) : base(scanner)
         {
         }
@@ -35,6 +38,20 @@ namespace OoxmlToHtml
 
                 NextToken();
             }
+
+            _analyzers?.Analyze(Root.Root);
+        }
+
+        public void Use(Analyzer analyzer)
+        {
+            if (_analyzers == null)
+            {
+                _analyzers = analyzer;
+                return;
+            }
+
+            analyzer.Next = _analyzers;
+            _analyzers = analyzer;
         }
     }
 }
