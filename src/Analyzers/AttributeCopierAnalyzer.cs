@@ -7,12 +7,13 @@ namespace OoxmlToHtml.Analyzers
      * Will copy all the attributes from all children to the parent
      * This will simplify the rendering of paragraphs as divs
      */
-    public class AttributeCopierAnalyzer : IAnalyzer
+    public class AttributeCopierAnalyzer : Analyzer
     {
-        public IAnalyzer Next { get; set; }
         public virtual bool ShouldAnalyze(INode node) => true;
-        public INode Analyze(INode node)
+        private int _level = 1;
+        protected override INode Act(INode node)
         {
+            _level++;
             var children = node.Children.ToArray();
             foreach (var child in children)
             {
@@ -20,10 +21,20 @@ namespace OoxmlToHtml.Analyzers
                 {
                     continue;
                 }
+                if (child.Type == KeywordToken.Paragraph)
+                {
+                    _level = 1;
+                }
                 Analyze(child);
+                if (_level <= 1)
+                {
+                    continue; ;
+                }
                 node.CopyAttributes(child);
                 node.RemoveChild(child);
             }
+
+            _level--;
             return node;
         }
     }

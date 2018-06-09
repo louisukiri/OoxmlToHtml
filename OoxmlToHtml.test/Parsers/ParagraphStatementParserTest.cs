@@ -70,9 +70,11 @@ namespace OoxmlToHtml.test.Parsers
         private INode ParseString(string text)
         {
             OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));
-            var parser = new ParagraphStatementParser(parent);
+            //var parser = new ParagraphStatementParser(parent);
 
-            return parser.Parse(parser.CurrentToken);
+            //return parser.Parse(parser.CurrentToken);
+            parent.Parse();
+            return parent.Root.Root;
         }
     }
 }

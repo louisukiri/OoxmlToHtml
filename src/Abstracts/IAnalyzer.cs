@@ -2,7 +2,8 @@
 {
     public interface IAnalyzer
     {
-        IAnalyzer Next { get; set; }
+        IAnalyzer Next { get; }
         INode Analyze(INode node);
+        IAnalyzer Use(IAnalyzer next);
     }
 }

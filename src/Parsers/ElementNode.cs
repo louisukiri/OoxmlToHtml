@@ -56,8 +56,6 @@ namespace OoxmlToHtml.Parsers
                         case KeywordToken.Paragraph:
                             elementNode = new ParagraphStatementParser(this);
                             break;
-                        case KeywordToken.ParagraphStyle:
-                            break;
                         case KeywordToken.PreviousParagraph:
                             elementNode = new PreviousParagraphStatementParser(this);
                             break;
@@ -69,6 +67,9 @@ namespace OoxmlToHtml.Parsers
                             break;
                         case KeywordToken.Italic:
                             elementNode = new ItalicStatementParser(this);
+                            break;
+                        case KeywordToken.ParagraphStyle:
+                            elementNode = new ParagraphStyleStatementParser(this);
                             break;
                     }
 

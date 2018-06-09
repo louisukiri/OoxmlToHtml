@@ -22,7 +22,7 @@ namespace OoxmlToHtml.Parsers
             }
 
             var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);
-            newNode.SetAttribute("value", stringBuilder.ToString().TrimEnd());
+            newNode.SetAttribute("Text", stringBuilder.ToString().TrimEnd());
             return newNode;
         }
         

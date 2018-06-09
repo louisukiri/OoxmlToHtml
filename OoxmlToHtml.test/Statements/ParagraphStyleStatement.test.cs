@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using OoxmlToHtml.Statements;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test.Statements
 {
@@ -14,13 +15,14 @@ namespace OoxmlToHtml.test.Statements
         [Test]
         public void ShouldCorrectlyParseValue()
         {
-            var input = @"
-                        <w:pStyle w:val=""Title""/>
+            var input = @"<w:p>
+                            <w:pStyle w:val=""Title""/>
+                          </w:p>
 ";
-            var actual = new OoXmlParser(input).ParseProgram().Statements.First() as ParagraphStyleStatement;
+            var actual = TestHelper.ParseString(input);
             
             Assert.IsNotNull(actual);
-            Assert.AreEqual("Title", actual?.TokenLiteral());
+            Assert.AreEqual("Title", actual?.Children.First().GetAttribute("value"));
         }
     }
 }

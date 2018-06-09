@@ -12,13 +12,22 @@ namespace OoxmlToHtml.Analyzers
         {
             foreach (var child in node.Children)
             {
-                node = Act(child);
+                Act(child);
 
-                if (child.Type == KeywordToken.Color)
-                if (child.Type == KeywordToken.Color)
+                switch (child.Type)
                 {
-                    node.SetAttribute("fontColor", child.GetAttribute("value"));
-                    child.RemoveAttribute("value");
+                    case KeywordToken.Color:
+                        node.SetAttribute("fontColor", child.GetAttribute("value"));
+                        node.RemoveChild(child);
+                        break;
+                    case KeywordToken.Italic:
+                        node.SetAttribute("italic", bool.TrueString);
+                        node.RemoveChild(child);
+                        break;
+                    case KeywordToken.ParagraphStyle:
+                        node.SetAttribute("style", child.GetAttribute("value"));
+                        node.RemoveChild(child);
+                        break;
                 }
 
             }

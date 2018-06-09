@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http.Headers;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Analyzers;
 using OoxmlToHtml.Factories;
@@ -39,7 +40,11 @@ namespace OoxmlToHtml
                 NextToken();
             }
 
-            _analyzers?.Analyze(Root.Root);
+            var result = _analyzers?.Analyze(Root.Root)?? Root.Root;
+            var htmlAnalyzers = (Analyzer)new ElementToAttributeAnalyzer();
+            htmlAnalyzers.Use(new AttributeCopierAnalyzer());
+
+            Root.SetRootNode(htmlAnalyzers.Analyze(result));
         }
 
         public void Use(Analyzer analyzer)
@@ -50,8 +55,7 @@ namespace OoxmlToHtml
                 return;
             }
 
-            analyzer.Next = _analyzers;
-            _analyzers = analyzer;
+            _analyzers.Use(analyzer);
         }
     }
 }
