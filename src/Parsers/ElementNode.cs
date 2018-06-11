@@ -28,7 +28,8 @@ namespace OoxmlToHtml.Parsers
                         break;
                     case KeywordToken.Value:
                         attributeNode = new ValueAttribute(this);
-                        break;                    default:
+                        break;
+                    default:
                         NextToken();
                         break;
                 }
@@ -70,6 +71,12 @@ namespace OoxmlToHtml.Parsers
                             break;
                         case KeywordToken.ParagraphStyle:
                             elementNode = new ParagraphStyleStatementParser(this);
+                            break;
+                        case KeywordToken.Unknown:
+                            elementNode = new UnknownElementParser(this);
+                            break;
+                        case KeywordToken.Bold:
+                            elementNode = new GenericElementNode(this, KeywordToken.Bold);
                             break;
                     }
 

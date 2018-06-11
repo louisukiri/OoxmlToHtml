@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Analyzers;
@@ -28,15 +29,13 @@ namespace OoxmlToHtml.test.Analyzers
         [Test]
         public void ShouldConvertColorAttributeToFontColorOfParent()
         {
-            Assert.AreEqual(_result
-                .Children[0]
+            Assert.AreEqual(_result.Children.First()
                 .GetAttribute("fontColor"), "FF0000");
         }
         [Test]
         public void ShouldRemoveColorElementInConversion()
         {
-            Assert.AreEqual(0, _result
-                .Children[0]
+            Assert.AreEqual(0, _result.Children.First()
                 .Children.Count);
         }
     }

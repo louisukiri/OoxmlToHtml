@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Parsers;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test.Parsers
 {
@@ -45,34 +46,22 @@ namespace OoxmlToHtml.test.Parsers
 
             Assert.AreEqual("test", result.GetAttribute("value"));
         }
-
-        [Test]
-        public void ShouldParseItalicInAttributesToBooleanProperty()
-        {
-            var result = ParseString(@"<w:p w:val=""test"">
-                                            <w:i />
-                                        </w:p>");
-
-            Assert.AreEqual(bool.TrueString, result.GetAttribute("italic"));
-        }
-
+        
         [Test]
         public void ShouldParseColorAttributesToColorProperty()
         {
-            var result = ParseString(@"<w:p w:val=""test"">
+            var result = TestHelper.ParseString(@"<w:p w:val=""test"">
                                             <w:i />
                                             <w:color w:val=""FF0000"" />
                                         </w:p>");
-
-            Assert.AreEqual("FF0000", result.GetAttribute("fontColor"));
+            var colorChild = result.Children[1];
+            Assert.AreEqual("FF0000", colorChild.GetAttribute("value"));
         }
 
         private INode ParseString(string text)
         {
             OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));
-            //var parser = new ParagraphStatementParser(parent);
-
-            //return parser.Parse(parser.CurrentToken);
+            
             parent.Parse();
             return parent.Root.Root;
         }

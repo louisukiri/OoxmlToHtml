@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Analyzers;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test.Analyzers
 {
@@ -58,6 +60,30 @@ namespace OoxmlToHtml.test.Analyzers
             Assert.Throws<KeyNotFoundException>(() => body.GetAttribute("testAttr"));
             Assert.AreEqual("testAttr2Value", body.Children[0].GetAttribute("testAttr2"));
             Assert.AreEqual("testAttrValue", body.Children[0].GetAttribute("testAttr"));
+        }
+
+        [Test]
+        public void ShouldNotTransferAttributesPastRun()
+        {
+            var input = @"
+                <w:body>
+                    <w:p>
+                        <w:r>                            
+                            <w:color w:val=""538135""/>
+                        </w:r>
+                    </w:p>
+                </w:body>
+            ";
+            var attributeCopierAnalyzer = new AttributeCopierAnalyzer();
+
+            var node = TestHelper.ParseString(input);
+            var result = attributeCopierAnalyzer.Analyze(node);
+
+            Assert.Throws<KeyNotFoundException>(() =>  result.GetAttribute("fontColor"));
+            Assert.AreEqual("538135", result
+                .Children.First()
+                .Children.First()
+                    .GetAttribute("fontColor"));
         }
 
         [Test]

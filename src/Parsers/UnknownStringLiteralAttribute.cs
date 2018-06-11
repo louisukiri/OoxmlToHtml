@@ -8,8 +8,6 @@
 
         public override string AttributeName => "unknown";
 
-        public override KeywordToken Token => KeywordToken.StringLiteral
-        
-        ;
+        public override KeywordToken Token => KeywordToken.StringLiteral;
     }
 }

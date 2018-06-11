@@ -1,5 +1,7 @@
 ﻿using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Analyzers;
 using OoxmlToHtml.Parsers;
+using OoxmlToHtml.Printers;
 
 namespace OoxmlToHtml.test.Helpers
 {
@@ -8,9 +10,11 @@ namespace OoxmlToHtml.test.Helpers
         public static INode ParseString(string text)
         {
             OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));
-            var parser = new ParagraphStatementParser(parent);
+            //parent.Use(new ElementToAttributeAnalyzer());
+            //parent.Use(new AttributeCopierAnalyzer());
+            parent.Parse();
 
-            return parser.Parse(parser.CurrentToken);
+            return parent.Root.Root;
         }
     }
 }

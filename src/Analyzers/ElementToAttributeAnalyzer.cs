@@ -28,6 +28,10 @@ namespace OoxmlToHtml.Analyzers
                         node.SetAttribute("style", child.GetAttribute("value"));
                         node.RemoveChild(child);
                         break;
+                    case KeywordToken.Bold:
+                        node.SetAttribute("bold", bool.TrueString);
+                        node.RemoveChild(child);
+                        break;
                 }
 
             }

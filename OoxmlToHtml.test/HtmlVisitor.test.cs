@@ -1,6 +1,8 @@
 ﻿
 using NUnit.Framework;
+using OoxmlToHtml.Printers;
 using OoxmlToHtml.Statements;
+using OoxmlToHtml.test.Helpers;
 using OoxmlToHtml.Visitors;
 
 namespace OoxmlToHtml.test
@@ -23,6 +25,7 @@ namespace OoxmlToHtml.test
         public void ParagraphTest()
         {
             var input = @"
+              <w:body>
                 <w:p>
                     <w:pPr>
                         <w:rPr>
@@ -46,12 +49,14 @@ namespace OoxmlToHtml.test
                         <w:t>ijk</w:t>
                     </w:r>
                 </w:p>
+            </w:body>
 ";
-            var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""><span>Abc louis</span><span style=""font-weight: bold; "">def</span><span>ijk</span></p>";
-            var l = new Lexer(input);
-            var p = new OoXmlParser(l);
+            var expected = @"<div style=""font-weight:bold;font-style:italic;color:#538135;font-size: 16px; ""><span>Abc louis</span><span style=""font-weight:bold; "">def</span><span>ijk</span></div>";
+            var l = TestHelper.ParseString(input);
+            var p = new HtmlPrinter();
+            p.Print(l);
 
-            Assert.AreEqual(expected, p.Parse().Value);
+            Assert.AreEqual(expected, p.HtmlString);
         }
 
         [Test]

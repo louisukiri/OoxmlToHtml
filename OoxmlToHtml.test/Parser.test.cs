@@ -76,7 +76,7 @@ namespace OoxmlToHtml.test
             Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
             Assert.AreEqual("test", rootNode.GetAttribute("unknown"));
             Assert.AreEqual("testagain",rootNode.GetAttribute("unknown_2"));
-            Assert.AreEqual("ok jim", rootNode.GetAttribute("Text"));
+            Assert.AreEqual("ok jim", rootNode.Children.First().GetAttribute("Text"));
         }
 
         [Test]

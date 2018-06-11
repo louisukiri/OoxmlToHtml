@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Analyzers;
 
 namespace OoxmlToHtml.Printers
 {
@@ -14,8 +15,18 @@ namespace OoxmlToHtml.Printers
             return "";
         }
 
-        private void Print(INode node)
+        public string HtmlString => Html.ToString();
+
+        public static INode RunAnalyzers(INode node)
         {
+            var htmlAnalyzers = (Analyzer)new ElementToAttributeAnalyzer();
+            htmlAnalyzers.Use(new AttributeCopierAnalyzer());
+
+            return htmlAnalyzers.Analyze(node);
+        }
+        public void Print(INode node)
+        {
+            node = RunAnalyzers(node);
             switch (node.Type)
             {
                 case KeywordToken.Paragraph:
@@ -63,9 +74,23 @@ namespace OoxmlToHtml.Printers
         }
         private void PrintAttributes(string type, string value)
         {
-            if (type == KeywordToken.Color.ToString())
+            switch (type)
             {
-                Html.AppendFormat("color: {0}", value);
+                case "fontColor":
+                    Html.AppendFormat("color:#{0};", value);
+                    break;
+                case "italic":
+                    Html.AppendFormat("font-style:{0};",
+                        value == bool.TrueString
+                            ? "italic"
+                            : "none");
+                    break;
+                case "bold":
+                    Html.AppendFormat("font-weight:{0};",
+                        value == bool.TrueString
+                            ? "bold"
+                            : "none");
+                    break;
             }
         }
     }

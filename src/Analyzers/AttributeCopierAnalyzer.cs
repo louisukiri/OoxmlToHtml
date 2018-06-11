@@ -21,7 +21,8 @@ namespace OoxmlToHtml.Analyzers
                 {
                     continue;
                 }
-                if (child.Type == KeywordToken.Paragraph)
+                if (child.Type == KeywordToken.Paragraph
+                    || child.Type == KeywordToken.Run)
                 {
                     _level = 1;
                 }

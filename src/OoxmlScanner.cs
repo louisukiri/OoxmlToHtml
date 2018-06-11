@@ -19,6 +19,10 @@ namespace OoxmlToHtml
             {
                 token = new EofToken(Source);
             }
+            else if (currentChar == 'w' && Source.PeekChar == ':')
+            {
+                token = new ElementToken(Source);
+            }
             else if (currentChar.IsLetter())
             {
                 token = new WordToken(Source);

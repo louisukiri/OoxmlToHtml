@@ -40,11 +40,8 @@ namespace OoxmlToHtml
                 NextToken();
             }
 
-            var result = _analyzers?.Analyze(Root.Root)?? Root.Root;
-            var htmlAnalyzers = (Analyzer)new ElementToAttributeAnalyzer();
-            htmlAnalyzers.Use(new AttributeCopierAnalyzer());
-
-            Root.SetRootNode(htmlAnalyzers.Analyze(result));
+            if (_analyzers == null) return;
+            Root.SetRootNode(_analyzers.Analyze(Root.Root));
         }
 
         public void Use(Analyzer analyzer)
