@@ -78,6 +78,12 @@ namespace OoxmlToHtml.Parsers
                         case KeywordToken.Bold:
                             elementNode = new GenericElementNode(this, KeywordToken.Bold);
                             break;
+                        case KeywordToken.Run:
+                            elementNode = new GenericElementNode(this, KeywordToken.Run);
+                            break;
+                        case KeywordToken.Size:
+                            elementNode = new GenericElementNode(this, KeywordToken.Size);
+                            break;
                     }
 
                     if (elementNode != null)

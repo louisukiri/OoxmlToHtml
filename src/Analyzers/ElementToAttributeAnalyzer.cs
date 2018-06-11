@@ -32,6 +32,9 @@ namespace OoxmlToHtml.Analyzers
                         node.SetAttribute("bold", bool.TrueString);
                         node.RemoveChild(child);
                         break;
+                    case KeywordToken.Size:
+                        node.SetAttribute("size", child.GetAttribute("value"));
+                        break;
                 }
 
             }

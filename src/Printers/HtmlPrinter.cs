@@ -32,6 +32,9 @@ namespace OoxmlToHtml.Printers
                 case KeywordToken.Paragraph:
                     PrintBlock(node);
                     break;
+                case KeywordToken.Run:
+                    PrintInlineBlock(node);
+                    break;
                 case KeywordToken.PreviousParagraph:
                     PrintNoTag(node);
                     break;
@@ -41,14 +44,14 @@ namespace OoxmlToHtml.Printers
             }
         }
 
-        private void PrintBlock(INode node)
+        private void PrintInlineBlock(INode node)
         {
-            Html.Append("<div ");
+            Html.Append("<span");
             var attributes = node.GetAllAttributes.Keys;
             IEnumerable<string> enumerable = attributes as string[] ?? attributes.ToArray();
-            if (enumerable.Any())
+            if (enumerable.Any(z => z != "Text" && z != "style"))
             {
-                Html.Append("styles=\"");
+                Html.Append(" style=\"");
                 foreach (var attr in enumerable)
                 {
                     PrintAttributes(attr, node.GetAttribute(attr));
@@ -56,10 +59,57 @@ namespace OoxmlToHtml.Printers
                 Html.Append("\"");
             }
             Html.Append(">");
-
+            if (node.HasAttribute("Text"))
+            {
+                Html.Append(node.GetAttribute("Text"));
+            }
             foreach (var child in node.Children)
             {
                 Print(child);
+            }
+
+            Html.Append("</span>");
+        }
+        private void PrintBlock(INode node)
+        {
+            Html.Append("<div");
+            var attributes = node.GetAllAttributes.Keys;
+            IEnumerable<string> enumerable = attributes as string[] ?? attributes.ToArray();
+            if (enumerable.Any(z => z != "Text" && z != "style"))
+            {
+                Html.Append(" style=\"");
+                foreach (var attr in enumerable)
+                {
+                    PrintAttributes(attr, node.GetAttribute(attr));
+                }
+                Html.Append("\"");
+            }
+            Html.Append(">");
+            if (node.HasAttribute("style"))
+            {
+                switch (node.GetAttribute("style"))
+                {
+                    case "Title":
+                        Html.Append("<h1>");
+                        break;
+                }
+            }
+            if (node.HasAttribute("Text"))
+            {
+                Html.Append(node.GetAttribute("Text"));
+            }
+            foreach (var child in node.Children)
+            {
+                Print(child);
+            }
+            if (node.HasAttribute("style"))
+            {
+                switch (node.GetAttribute("style"))
+                {
+                    case "Title":
+                        Html.Append("</h1>");
+                        break;
+                }
             }
 
             Html.Append("</div>");
@@ -90,6 +140,9 @@ namespace OoxmlToHtml.Printers
                         value == bool.TrueString
                             ? "bold"
                             : "none");
+                    break;
+                case "size":
+                    Html.AppendFormat("font-size:{0}px;", value);
                     break;
             }
         }

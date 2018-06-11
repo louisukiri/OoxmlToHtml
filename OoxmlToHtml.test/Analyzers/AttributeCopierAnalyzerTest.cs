@@ -79,11 +79,10 @@ namespace OoxmlToHtml.test.Analyzers
             var node = TestHelper.ParseString(input);
             var result = attributeCopierAnalyzer.Analyze(node);
 
-            Assert.Throws<KeyNotFoundException>(() =>  result.GetAttribute("fontColor"));
+            Assert.Throws<KeyNotFoundException>(() =>  result.GetAttribute("value"));
             Assert.AreEqual("538135", result
                 .Children.First()
-                .Children.First()
-                    .GetAttribute("fontColor"));
+                .GetAttribute("value"));
         }
 
         [Test]
