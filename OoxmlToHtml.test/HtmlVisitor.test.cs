@@ -1,7 +1,6 @@
-﻿
-using NUnit.Framework;
-using OoxmlToHtml.Statements;
-using OoxmlToHtml.Visitors;
+﻿using NUnit.Framework;
+using OoxmlToHtml.Printers;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test
 {
@@ -9,20 +8,10 @@ namespace OoxmlToHtml.test
     public class HtmlVisitorTest
     {
         [Test]
-        public void ColorTest()
-        {
-            var htmlVisitor = new HtmlVisitor();
-            htmlVisitor.Visit(new ColorStatement(
-                new Tokens(Tokens.Color, "w:color"),
-                "ff000f"
-                ));
-
-            Assert.AreEqual("color:#ff000f; ", htmlVisitor.Value);
-        }
-        [Test]
         public void ParagraphTest()
         {
             var input = @"
+              <w:body>
                 <w:p>
                     <w:pPr>
                         <w:rPr>
@@ -46,12 +35,14 @@ namespace OoxmlToHtml.test
                         <w:t>ijk</w:t>
                     </w:r>
                 </w:p>
+            </w:body>
 ";
-            var expected = @"<p style=""font-weight: bold; font-style: italic; color:#538135; font-size: 16px; ""><span>Abc louis</span><span style=""font-weight: bold; "">def</span><span>ijk</span></p>";
-            var l = new Lexer(input);
-            var p = new Parser(l);
+            var expected = @"<div style=""font-weight:bold;font-style:italic;color:#538135;font-size:16px;""><span>Abc louis<span style=""font-weight:bold;"">def<span>ijk</span></span></span></div>";
+            var l = TestHelper.ParseString(input);
+            var p = new HtmlPrinter();
+            p.Print(l);
 
-            Assert.AreEqual(expected, p.Parse().Value);
+            Assert.AreEqual(expected, p.HtmlString);
         }
 
         [Test]
@@ -67,11 +58,12 @@ namespace OoxmlToHtml.test
                     </w:r>
                 </w:p>
 ";
-            var expected = @"<p style=""""><h1><span>Title</span></h1></p>";
-            var l = new Lexer(input);
-            var p = new Parser(l);
+            var expected = @"<div><h1><span>Title</span></h1></div>";
+            var l = TestHelper.ParseString(input);
+            var p = new HtmlPrinter();
+            p.Print(l);
 
-            Assert.AreEqual(expected, p.Parse().Value);
+            Assert.AreEqual(expected, p.HtmlString);
         }
 
     }

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using OoxmlToHtml.Statements;
 using Moq;
 using OoxmlToHtml.Abstracts;
+using OoxmlToHtml.Analyzers;
 
 namespace OoxmlToHtml.test
 {
@@ -10,8 +10,6 @@ namespace OoxmlToHtml.test
     public class ParserTest
     {
         private string _input;
-        private Lexer _lexer;
-        private Parser _parser;
         [SetUp]
         public void Setup()
         {
@@ -32,93 +30,74 @@ namespace OoxmlToHtml.test
                      </w:p>
                     <w:sz w:val=""16"" />
 ";
-            _lexer = new Lexer(_input);
-            _parser = new Parser(_lexer);
+            //_lexer = new Lexer(_input);
+            //_ooXmlParser = new OoXmlParser(_lexer);
         }
+
         [Test]
-        public void AnalyzeRunsThroughAllAnalyzers()
+        public void AnalyzeRunsThroughAnalyzer()
         {
-            var program = new Mock<IProgram>();
-            var analyzer = new Mock<IAnalyzer>(MockBehavior.Strict);
-            analyzer.Setup(z => z.Analyze(It.IsAny<IProgram>()))
-                .Returns(
-                    program.Object
-                );
-            _parser.Use(analyzer.Object);
+            var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
+                .Returns<INode>(n => n);
 
-            _parser.Analyze(program.Object);
+            var testInput = @"<w:p testAttrib=""test"">ok jim</w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Use(analyzer.Object);
+            a.Parse();
 
-            analyzer.Verify(z => z.Analyze(It.IsAny<IProgram>()));
+            analyzer.Verify(z => z.Analyze(It.IsAny<INode>()));
         }
 
         #region parsing test
+
+        [Test]
+        public void CurrentTokenDoesNotMoveCharForward()
+        {
+            var testInput = @"<w:p testAttrib=""test"">ok jim</w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.NextToken();
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.STARTING_ELEMENT);
+            a.NextToken();
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);
+
+            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);
+        }
         [Test]
         public void TestBasicNode()
         {
-            var program = _parser.ParseProgram();
+            var testInput = @"<w:p testAttrib=""test"" another=""testagain"">ok jim</w:p>";
 
-            if (program == null)
-            {
-                Assert.Fail("ParseProgram() returned null");
-            }
+            var program = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            program.Parse();
 
-            if (program.Statements.Count() != 3)
-            {
-                Assert.Fail("Invalid number of statements in program");
-            }
-
-            TestParagraphStatement(program.Statements[1] as ParagraphStatement, 2);
-            TestSizeStatement(program.Statements[2] as SizeStatement, "16");
-            var tests = new string[]
-            {
-                "w:color"
-            };
-
-            for (var i = 0; i < tests.Length; i++)
-            {
-                var test = tests[i];
-                var statement = program.Statements[i] as ColorStatement;
-                if (!TestColorStatement(statement, test, "FF0000"))
-                {
-                    return;
-                }
-            }
+            var rootNode = program.Root.Root;
+            Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
+            Assert.AreEqual("test", rootNode.GetAttribute("unknown"));
+            Assert.AreEqual("testagain",rootNode.GetAttribute("unknown_2"));
+            Assert.AreEqual("ok jim", rootNode.Children.First().GetAttribute("Text"));
         }
 
-        private bool TestColorStatement(ColorStatement statement, string name, string value)
+        [Test]
+        public void TestContainerElementInsideContainerElement()
         {
-            if (statement.Token.Literal != name)
-            {
-                Assert.Fail("s.TokenLiteral not 'color'");
-            }
+            var testInput = @"<w:p>
+                                <w:pPr>
+                                    <w:color w:val=""FF0000"" />
+                                </w:pPr>
+                                <w:t>testing me too</w:t>
+                              </w:p>";
 
-            if (statement.Value != value)
-            {
-                Assert.Fail("Statement's value is incorrect");
-            }
+            var program = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            program.Parse();
 
-            return true;
-        }
-
-        private bool TestSizeStatement(SizeStatement statement, string size)
-        {
-            if (statement.TokenLiteral() != size)
-            {
-                Assert.Fail("Invalid value ({0}) for size statement", size);
-            }
-
-            return true;
-        }
-
-        private bool TestParagraphStatement(ParagraphStatement statement, int numberOfChildren)
-        {
-
-            if (statement.Statements.Count() != 2)
-            {
-                Assert.Fail("Invalid number of child statements in paragraph statements");
-            }
-
-            return true;
+            var rootNode = program.Root.Root;
+            Assert.AreEqual(KeywordToken.Paragraph, rootNode.Type);
+            //Assert.AreEqual(KeywordToken.Color, rootNode.Children[0].Children[0].Type);
+            // Assert.AreEqual("FF0000", rootNode.GetAttribute("fontColor"));
+            //Assert.AreEqual(KeywordToken.Text, rootNode.Children[1].Type);
+            //Assert.AreEqual("testing me too", rootNode.Children[1].Children[0].GetAttribute("value"));
+            //Assert.AreEqual(2, rootNode.Children.Count);
         }
 #endregion
     }
