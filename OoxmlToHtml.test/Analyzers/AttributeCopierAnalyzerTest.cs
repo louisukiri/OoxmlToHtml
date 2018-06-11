@@ -79,12 +79,12 @@ namespace OoxmlToHtml.test.Analyzers
             var node = TestHelper.ParseString(input);
             var result = attributeCopierAnalyzer.Analyze(node);
 
-            Assert.Throws<KeyNotFoundException>(() =>  result.GetAttribute("value"));
+            Assert.Throws<KeyNotFoundException>(() => result.GetAttribute("value"));
             Assert.AreEqual("538135", result
                 .Children.First()
                 .GetAttribute("value"));
         }
-
+        
         [Test]
         public void ShouldNotTransferAttributesPastParagraph2Levelsdeep()
         {
