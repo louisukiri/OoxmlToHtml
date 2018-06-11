@@ -1,26 +1,12 @@
-﻿
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OoxmlToHtml.Printers;
-using OoxmlToHtml.Statements;
 using OoxmlToHtml.test.Helpers;
-using OoxmlToHtml.Visitors;
 
 namespace OoxmlToHtml.test
 {
     [TestFixture]
     public class HtmlVisitorTest
     {
-        [Test]
-        public void ColorTest()
-        {
-            var htmlVisitor = new HtmlVisitor();
-            htmlVisitor.Visit(new ColorStatement(
-                new Token(Token.Color, "w:color"),
-                "ff000f"
-                ));
-
-            Assert.AreEqual("color:#ff000f; ", htmlVisitor.Value);
-        }
         [Test]
         public void ParagraphTest()
         {
