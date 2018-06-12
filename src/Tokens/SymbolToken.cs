@@ -29,7 +29,7 @@ namespace OoxmlToHtml.Tokens
                         NextChar();
                     }
 
-                    NextChar();
+                    // NextChar();
                     type = KeywordToken.Close;
                     text = stringBuilder.ToString();
                 }

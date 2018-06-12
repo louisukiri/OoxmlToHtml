@@ -46,7 +46,8 @@ namespace OoxmlToHtml.Parsers
                 // we are in the body of the element
                 NextToken();
                 while (CurrentToken.Keyword != KeywordToken.EOF
-                       && CurrentToken.Keyword != KeywordToken.Close)
+                       && !(CurrentToken.Keyword == KeywordToken.Close
+                           && CurrentToken.Text == token.Text))
                 {
                     IStatementParser elementNode = null;
                     switch (CurrentToken.Keyword)
@@ -89,6 +90,12 @@ namespace OoxmlToHtml.Parsers
                     if (elementNode != null)
                     {
                        m.AddChild(elementNode.Parse(CurrentToken));
+                    }
+
+                    if (CurrentToken.Keyword == KeywordToken.Close
+                        && CurrentToken.Text == token.Text)
+                    {
+                        continue;
                     }
                     NextToken();
                 }
