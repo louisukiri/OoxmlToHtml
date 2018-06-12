@@ -78,6 +78,7 @@
     <Compile Include="HtmlVisitor.test.cs" />
     <Compile Include="Statements\AttributeStatement.test.cs" />
     <Compile Include="Statements\ParagraphStyleStatement.test.cs" />
+    <Compile Include="Statements\RunStatementParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
