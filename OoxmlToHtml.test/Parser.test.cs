@@ -72,6 +72,28 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
+        public void ParsePassesDefaultAnalyzersResultsToCustomAnalyzers()
+        {
+            var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
+                .Returns<INode>(n =>
+                {
+                    Assert.AreEqual(bool.TrueString, n.GetAttribute("bold"));
+                    return n;
+                });
+
+            var testInput = @"<w:p testAttrib=""test"">
+                                <w:pPr>
+                                    <w:b />
+                                </w:pPr>
+                              </w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Use(analyzer.Object);
+            a.Parse(true);
+            
+        }
+
+        [Test]
         public void ParseDoesNotRunThroughDefaultAnalyzersWhenSpecified()
         {
             var analyzer = new Mock<Analyzer>(MockBehavior.Strict);

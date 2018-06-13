@@ -45,13 +45,15 @@ namespace OoxmlToHtml
                 if (_analyzers == null)
                 {
                     _analyzers = new ElementToAttributeAnalyzer();
+                    _analyzers.Use(new AttributeCopierAnalyzer());
                 }
                 else
                 {
-                    _analyzers.Use(new ElementToAttributeAnalyzer());
+                    var elementAnalyzer = new ElementToAttributeAnalyzer();
+                    elementAnalyzer.Use(new AttributeCopierAnalyzer())
+                                   .Use(_analyzers);
+                    _analyzers = elementAnalyzer;
                 }
-
-                _analyzers.Use(new AttributeCopierAnalyzer());
             }
             if (_analyzers == null) return;
             Root.SetRootNode(_analyzers.Analyze(Root.Root));
