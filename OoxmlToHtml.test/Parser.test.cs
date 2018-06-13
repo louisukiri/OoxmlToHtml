@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Moq;
 using OoxmlToHtml.Abstracts;
@@ -35,7 +36,7 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
-        public void AnalyzeRunsThroughAnalyzer()
+        public void ShouldRunsAnalyzersOnParse()
         {
             var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
             analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
@@ -49,6 +50,47 @@ namespace OoxmlToHtml.test
             analyzer.Verify(z => z.Analyze(It.IsAny<INode>()));
         }
 
+        [Test]
+        public void ParseDoesRunThroughDefaultAnalyzersWhenSpecified()
+        {
+            var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
+                .Returns<INode>(n => n);
+
+            var testInput = @"<w:p testAttrib=""test"">
+                                <w:pPr>
+                                    <w:b />
+                                </w:pPr>
+                                <w:r>
+                                    <w:t>ok jim</w:t>
+                                </w:r>
+                              </w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Parse(true);
+
+            Assert.AreEqual(bool.TrueString, a.Root.Root.GetAttribute("bold"));
+        }
+
+        [Test]
+        public void ParseDoesNotRunThroughDefaultAnalyzersWhenSpecified()
+        {
+            var analyzer = new Mock<Analyzer>(MockBehavior.Strict);
+            analyzer.Setup(z => z.Analyze(It.IsAny<INode>()))
+                .Returns<INode>(n => n);
+
+            var testInput = @"<w:p testAttrib=""test"">
+                                <w:pPr>
+                                    <w:b />
+                                </w:pPr>
+                                <w:r>
+                                    <w:t>ok jim</w:t>
+                                </w:r>
+                              </w:p>";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Parse();
+
+            Assert.Throws<KeyNotFoundException>(() => a.Root.Root.GetAttribute("bold"));
+        }
         #region parsing test
 
         [Test]

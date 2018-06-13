@@ -21,7 +21,7 @@ namespace OoxmlToHtml
 
         }
 
-        public override void Parse()
+        public override void Parse(bool useDefaultAnalyzers = false)
         {
             NextToken();
             Root = NodeFactory.CreateRootNode();
@@ -40,6 +40,19 @@ namespace OoxmlToHtml
                 NextToken();
             }
 
+            if (useDefaultAnalyzers)
+            {
+                if (_analyzers == null)
+                {
+                    _analyzers = new ElementToAttributeAnalyzer();
+                }
+                else
+                {
+                    _analyzers.Use(new ElementToAttributeAnalyzer());
+                }
+
+                _analyzers.Use(new AttributeCopierAnalyzer());
+            }
             if (_analyzers == null) return;
             Root.SetRootNode(_analyzers.Analyze(Root.Root));
         }

@@ -22,7 +22,7 @@ namespace OoxmlToHtml
             return scanner.NextToken();
         }
         public Token CurrentToken => scanner.CurrentToken();
-        public abstract void Parse();
+        public abstract void Parse(bool useDefaultAnalyzers = false);
 
         protected static ISymTab symTab = null;
         private ISymTabStack _symTabStack;

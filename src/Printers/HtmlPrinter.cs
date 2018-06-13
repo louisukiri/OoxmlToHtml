@@ -24,9 +24,9 @@ namespace OoxmlToHtml.Printers
 
             return htmlAnalyzers.Analyze(node);
         }
-        public void Print(INode node)
+        public void Print(INode node, bool runAnalyzers = true)
         {
-            node = RunAnalyzers(node);
+            if (runAnalyzers) node = RunAnalyzers(node);
             switch (node.Type)
             {
                 case KeywordToken.Paragraph:
