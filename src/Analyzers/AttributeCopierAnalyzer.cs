@@ -26,7 +26,7 @@ namespace OoxmlToHtml.Analyzers
                 {
                     _level = 1;
                 }
-                Analyze(child);
+                Act(child);
                 if (_level <= 1)
                 {
                     continue; ;
