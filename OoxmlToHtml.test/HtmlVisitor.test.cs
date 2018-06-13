@@ -5,7 +5,7 @@ using OoxmlToHtml.test.Helpers;
 namespace OoxmlToHtml.test
 {
     [TestFixture]
-    public class HtmlVisitorTest
+    public class HtmlPrinterTest
     {
         [Test]
         public void ParagraphTest()
@@ -37,7 +37,7 @@ namespace OoxmlToHtml.test
                 </w:p>
             </w:body>
 ";
-            var expected = @"<div style=""font-weight:bold;font-style:italic;color:#538135;font-size:16px;""><span>Abc louis<span style=""font-weight:bold;"">def<span>ijk</span></span></span></div>";
+            var expected = @"<div style=""font-weight:bold;font-style:italic;color:#538135;font-size:16px;""><span>Abc louis</span><span style=""font-weight:bold;"">def</span><span>ijk</span></div>";
             var l = TestHelper.ParseString(input);
             var p = new HtmlPrinter();
             p.Print(l);

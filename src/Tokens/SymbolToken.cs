@@ -28,6 +28,8 @@ namespace OoxmlToHtml.Tokens
                         stringBuilder.Append(CurrentChar);
                         NextChar();
                     }
+
+                    // NextChar();
                     type = KeywordToken.Close;
                     text = stringBuilder.ToString();
                 }
