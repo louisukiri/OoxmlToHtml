@@ -35,6 +35,7 @@ namespace OoxmlToHtml.Printers
                 case KeywordToken.Run:
                     PrintInlineBlock(node);
                     break;
+                case KeywordToken.Body:
                 case KeywordToken.PreviousParagraph:
                     PrintNoTag(node);
                     break;

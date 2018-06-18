@@ -19,6 +19,7 @@ namespace OoxmlToHtml.test.Statements
             Assert.IsNotNull(actual);
             Assert.AreEqual("Title", actual?
                 .Children.First()
+                .Children.First()
                     .GetAttribute("value"));
         }
 

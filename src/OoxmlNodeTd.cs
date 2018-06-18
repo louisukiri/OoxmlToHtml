@@ -35,6 +35,10 @@ namespace OoxmlToHtml
                         var a = new ParagraphStatementParser(this);
                         Root.SetRootNode(a.Parse(CurrentToken));
                         break;
+                    case KeywordToken.Body:
+                        var b = new GenericElementNode(this, KeywordToken.Body);
+                        Root.SetRootNode(b.Parse(CurrentToken));
+                        break;
                 }
 
                 NextToken();

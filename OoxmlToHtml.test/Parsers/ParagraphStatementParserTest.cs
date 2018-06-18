@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Parsers;
@@ -56,6 +57,26 @@ namespace OoxmlToHtml.test.Parsers
                                         </w:p>");
             var colorChild = result.Children[1];
             Assert.AreEqual("FF0000", colorChild.GetAttribute("value"));
+        }
+
+        [Test]
+        public void ShouldParseHeaderAttributesToAttributes()
+        {
+            var result = TestHelper.ParseString(@"<w:body>
+                                                    <w:p w:rsidP=""001F0010"" w:rsidRDefault=""001F0010"" w:rsidR=""001F0010"">
+                                                        <w:pPr><w:pStyle w:val = ""Title""/></w:pPr>
+                                                        <w:r>
+                                                            <w:t>TestTItle</w:t>
+                                                         </w:r>
+                                                    </w:p>
+                                                    <w:p w:rsidRDefault = ""001F0010"" w: rsidR = ""00000000"">
+                                                        <w:r>
+                                                            <w:t> In this simple text entry </ w:t>
+                                                        </w:r>
+                                                    </w:p>", true);
+            var paragraphChild = result.Children.First();
+            Assert.AreEqual("Title", paragraphChild.GetAttribute("style"));
+
         }
 
         private INode ParseString(string text)

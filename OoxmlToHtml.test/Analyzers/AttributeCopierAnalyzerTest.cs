@@ -82,6 +82,7 @@ namespace OoxmlToHtml.test.Analyzers
             Assert.Throws<KeyNotFoundException>(() => result.GetAttribute("value"));
             Assert.AreEqual("538135", result
                 .Children.First()
+                .Children.First()
                 .GetAttribute("value"));
         }
         
@@ -135,5 +136,6 @@ namespace OoxmlToHtml.test.Analyzers
             Assert.AreEqual(0, _paragraph.Children.Count);
             Assert.AreEqual(0, _pParagraphProp.Children.Count);
         }
+        
     }
 }

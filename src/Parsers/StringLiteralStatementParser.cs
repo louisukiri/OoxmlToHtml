@@ -13,6 +13,7 @@ namespace OoxmlToHtml.Parsers
         public virtual INode Parse(Token token)
         {
             StringBuilder stringBuilder = new StringBuilder();
+
             while (CurrentToken.Keyword != KeywordToken.EOF
                    && CurrentToken.Keyword == KeywordToken.StringLiteral)
             {

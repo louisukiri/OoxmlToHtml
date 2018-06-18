@@ -7,12 +7,12 @@ namespace OoxmlToHtml.test.Helpers
 {
     public static class TestHelper
     {
-        public static INode ParseString(string text)
+        public static INode ParseString(string text, bool shouldAnalyze = false)
         {
             OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));
             //parent.Use(new ElementToAttributeAnalyzer());
             //parent.Use(new AttributeCopierAnalyzer());
-            parent.Parse();
+            parent.Parse(shouldAnalyze);
 
             return parent.Root.Root;
         }
