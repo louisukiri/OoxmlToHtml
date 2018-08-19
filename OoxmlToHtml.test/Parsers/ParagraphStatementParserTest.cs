@@ -13,7 +13,7 @@ namespace OoxmlToHtml.test.Parsers
         [Test]
         public void ShouldCreateBaseParagraphNode()
         {
-            var result = ParseString(@"<w:p>
+            var result = TestHelper.ParseString(@"<w:p>
                                     <w:pPr>
                                         <w:jc w:val=""center""/>
                                         <w:rPr>
@@ -33,7 +33,7 @@ namespace OoxmlToHtml.test.Parsers
         [Test]
         public void ShouldParseUnknownStringLiteralInAttributesAsProperty()
         {
-            var result = ParseString(@"<w:p someProp=""test"">
+            var result = TestHelper.ParseString(@"<w:p someProp=""test"">
                                         </w:p>");
 
             Assert.AreEqual("test", result.GetAttribute("unknown"));
@@ -42,7 +42,7 @@ namespace OoxmlToHtml.test.Parsers
         [Test]
         public void ShouldParseValueInAttributesAsProperty()
         {
-            var result = ParseString(@"<w:p w:val=""test"">
+            var result = TestHelper.ParseString(@"<w:p w:val=""test"">
                                         </w:p>");
 
             Assert.AreEqual("test", result.GetAttribute("value"));
@@ -73,18 +73,9 @@ namespace OoxmlToHtml.test.Parsers
                                                         <w:r>
                                                             <w:t> In this simple text entry </ w:t>
                                                         </w:r>
-                                                    </w:p>", true);
+                                                    </w:p></w:body>", true);
             var paragraphChild = result.Children.First();
             Assert.AreEqual("Title", paragraphChild.GetAttribute("style"));
-
-        }
-
-        private INode ParseString(string text)
-        {
-            OoxmlNodeTd parent = new OoxmlNodeTd(new OoxmlScanner(new Source(text)));
-            
-            parent.Parse();
-            return parent.Root.Root;
         }
     }
 }

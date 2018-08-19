@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace OoxmlToHtml.Extensions
@@ -9,6 +10,11 @@ namespace OoxmlToHtml.Extensions
         {
             var tokenType = (TokenAttribute)Attribute.GetCustomAttribute(ForValue(value), typeof(TokenAttribute));
             return tokenType.Text;
+        }
+        public static IList<string> GetAliases<T>(this T value)
+        {
+            var tokenType = (TokenAttribute)Attribute.GetCustomAttribute(ForValue(value), typeof(TokenAttribute));
+            return tokenType.Aliases;
         }
         public static bool IsCharTokenType<T>(this T value)
         {

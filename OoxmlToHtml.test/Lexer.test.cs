@@ -18,7 +18,7 @@ namespace OoxmlToHtml.test
         {
             var l = new OoxmlScanner(new Source(@"<>
 w:p w:r w:t ""testvalue"" someOtherText
-w:color w:val = /> </w:p w:pPr w:b w:i w:sz xml:space w:pStyle"));
+w:color w:val = /> </w:p> w:pPr w:b w:i w:sz xml:space w:pStyle"));
             var expected = new Dictionary<KeywordToken, string>
             {
                 { KeywordToken.STARTING_ELEMENT, "<" },
@@ -42,7 +42,33 @@ w:color w:val = /> </w:p w:pPr w:b w:i w:sz xml:space w:pStyle"));
                 { KeywordToken.EOF, null }
             };
 
-            foreach(var i in expected.Keys)
+            foreach (var i in expected.Keys)
+            {
+                var expectedToken = i;
+                var expectedText = expected[i];
+                var token = l.NextToken();
+                if (token.Keyword != expectedToken)
+                {
+                    Assert.Fail("Token type. Expected {0} got {1}", expectedToken, token.Keyword);
+                }
+
+                if (expectedText != token.Text)
+                {
+                    Assert.Fail("Token Literal {0} got {1}", expectedText, token.Text);
+                }
+            }
+        }
+        [Test]
+        public void TestDuplicateTokens()
+        {
+            var l = new OoxmlScanner(new Source(@"w:rPr"));
+            var expected = new Dictionary<KeywordToken, string>
+            {
+                { KeywordToken.PreviousParagraph, "w:rPr" },
+                { KeywordToken.EOF, null }
+            };
+
+            foreach (var i in expected.Keys)
             {
                 var expectedToken = i;
                 var expectedText = expected[i];

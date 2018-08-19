@@ -11,9 +11,17 @@ namespace OoxmlToHtml
     {
         public string Text;
         public bool IsChar = false;
-        internal TokenAttribute(string text)
+        public IList<string> Aliases = new List<string>();
+        internal TokenAttribute(params string[] text)
         {
-            Text = text;
+            Text = text[0];
+            if (text.Length > 1)
+            {
+                for (int i = 1; i < text.Length; i++)
+                {
+                    Aliases.Add(text[i]);
+                }
+            }
         }
 
         internal TokenAttribute(char ch)
@@ -31,7 +39,7 @@ namespace OoxmlToHtml
         [TokenAttribute("w:t")] Text,
         [TokenAttribute("w:p")] Paragraph,
         [TokenAttribute("w:color")] Color,
-        [TokenAttribute("w:pPr")] PreviousParagraph,
+        [TokenAttribute("w:pPr", "w:rPr")] PreviousParagraph,
         [TokenAttribute("w:b")] Bold,
         [TokenAttribute("w:i")] Italic,
         [TokenAttribute("w:sz")] Size,
@@ -41,7 +49,8 @@ namespace OoxmlToHtml
         [TokenAttribute("/>")] ShortClose,
         [TokenAttribute("</")] Close,
         [TokenAttribute("xml:space")] Space,
-        [TokenAttribute("w:pStyle")] ParagraphStyle,
+        [TokenAttribute("w:pStyle", "w:rStyle")] ParagraphStyle,
+        [TokenAttribute("w:document")] Document,
         // ReSharper disable InconsistentNaming
         [TokenAttribute('<')] STARTING_ELEMENT,
         [TokenAttribute('>')] ENDING_ELEMENT,
@@ -77,7 +86,14 @@ namespace OoxmlToHtml
                     {
                         continue;
                     }
-                    _reservedWords.Add(e.GetText().ToLower(), (KeywordToken)Enum.Parse(typeof(KeywordToken), z));
+
+                    var text = e.GetText().ToLower();
+                    var tokenEnum = (KeywordToken) Enum.Parse(typeof(KeywordToken), z);
+                    _reservedWords.Add(text, tokenEnum);
+                    foreach (var alias in e.GetAliases())
+                    {
+                        _reservedWords.Add(alias.ToLower(), tokenEnum);
+                    }
                 }
 
                 return _reservedWords;

@@ -8,7 +8,7 @@ namespace OoxmlToHtml.Abstracts
         INode Parent { get; }
         KeywordToken Type { get; }
         IReadOnlyList<INode> Children { get; }
-        void SetAttribute(string name, string value);
+        bool SetAttribute(string name, string value, AttributeMergeStrategy strategy = AttributeMergeStrategy.Rename);
         string GetAttribute(string name);
         IReadOnlyDictionary<string, string> GetAllAttributes { get; }
         void SetParent(INode parent);
@@ -16,6 +16,7 @@ namespace OoxmlToHtml.Abstracts
         void CopyAttributes(INode source);
         void RemoveChild(INode child);
         bool HasAttribute(string attributeName);
+        bool MergeAttribute(string name, string value);
         void RemoveAttribute(string value);
     }
 }

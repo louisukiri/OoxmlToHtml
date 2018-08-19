@@ -16,6 +16,9 @@ namespace OoxmlToHtml.test.Analyzers
         [SetUp]
         public void Setup()
         {
+            /*
+             * p->ppr(testAttr=testAttrValue, testAttr2=testAttr2Value)
+             */
             _paragraph = new Node(KeywordToken.Paragraph);
             _pParagraphProp = new Node(KeywordToken.PreviousParagraph);
             _pParagraphProp.SetAttribute("testAttr", "testAttrValue");
@@ -89,6 +92,10 @@ namespace OoxmlToHtml.test.Analyzers
         [Test]
         public void ShouldNotTransferAttributesPastParagraph2Levelsdeep()
         {
+            /*
+             * body->body->paragraph->ppr(testAttr=testAttrValue, testAttr2=testAttr2Value)
+             *
+             */
             var attributeCopierAnalyzer = new AttributeCopierAnalyzer();
 
             var body = new Node(KeywordToken.Body);

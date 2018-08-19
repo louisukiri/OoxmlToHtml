@@ -48,13 +48,15 @@ namespace OoxmlToHtml
             {
                 if (_analyzers == null)
                 {
-                    _analyzers = new ElementToAttributeAnalyzer();
-                    _analyzers.Use(new AttributeCopierAnalyzer());
+                    _analyzers = new ChildrenAnalyzer();
+                    _analyzers.Use(new ElementToAttributeAnalyzer())
+                              .Use(new AttributeCopierAnalyzer());
                 }
                 else
                 {
-                    var elementAnalyzer = new ElementToAttributeAnalyzer();
-                    elementAnalyzer.Use(new AttributeCopierAnalyzer())
+                    var elementAnalyzer = new ChildrenAnalyzer();
+                    elementAnalyzer.Use(new ElementToAttributeAnalyzer())
+                                   .Use(new AttributeCopierAnalyzer())
                                    .Use(_analyzers);
                     _analyzers = elementAnalyzer;
                 }

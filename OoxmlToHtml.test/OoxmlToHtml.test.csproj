@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyzers\ChildrenAnalyzerTest.cs" />
     <Compile Include="Analyzers\ElementToAttributeAnalyzerTest.cs" />
     <Compile Include="Analyzers\ParagraphNodeAnalyzerTest.cs" />
     <Compile Include="Analyzers\AttributeCopierAnalyzerTest.cs" />
@@ -90,6 +91,9 @@
       <Project>{7f8436a0-b314-4bd7-972d-01b5e7effe66}</Project>
       <Name>OoxmlToHtml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\RootNodeTest.xml" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

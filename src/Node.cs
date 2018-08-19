@@ -6,6 +6,13 @@ using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml
 {
+    public enum AttributeMergeStrategy
+    {
+        Merge,
+        Overwrite,
+        Append,
+        Rename
+    }
     public class Node : Dictionary<string, string>, INode
     {
         private readonly HashSet<INode> _children = new HashSet<INode>();
@@ -21,23 +28,40 @@ namespace OoxmlToHtml
         }
         public INode AddChild(INode child)
         {
-            _children.Add(child);            
+            _children.Add(child);
+            child.SetParent(this);
             return child;
         }
 
-        public void SetAttribute(string name, string value)
+        public bool SetAttribute(string name, string value, AttributeMergeStrategy mergeStrategy=AttributeMergeStrategy.Rename)
         {
             if (ContainsKey(name))
             {
-                var keyIndex = 2;
-                while (ContainsKey(name + "_" + keyIndex))
+                if (name == "Text") mergeStrategy = AttributeMergeStrategy.Append;
+                switch (mergeStrategy)
                 {
-                    keyIndex++;
+                    case AttributeMergeStrategy.Merge:
+                        if (value != GetAttribute(name)) return false;
+                        return true;
+                    case AttributeMergeStrategy.Overwrite:
+                        RemoveAttribute(name);
+                        break;
+                    case AttributeMergeStrategy.Append:
+                        value = GetAttribute(name) + value;
+                        RemoveAttribute(name);
+                    break;
+                    default:
+                        var keyIndex = 2;
+                        while (ContainsKey(name + "_" + keyIndex))
+                        {
+                            keyIndex++;
+                        }
+                        name = name + "_" + keyIndex;
+                   break;
                 }
-
-                name = name + "_" + keyIndex;
             }
             Add(name, value);
+            return true;
         }
 
         public string GetAttribute(string name) => this[name];
@@ -78,6 +102,11 @@ namespace OoxmlToHtml
         public bool HasAttribute(string attributeName)
         {
             return this.ContainsKey(attributeName);
+        }
+
+        public bool MergeAttribute(string name, string value)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void RemoveAttribute(string name)

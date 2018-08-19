@@ -28,6 +28,17 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
+        public void ShouldAddChildsParentOnAdd()
+        {
+            var child = new Node(KeywordToken.PreviousParagraph);
+
+            var oldCount = node.Children.Count;
+            node.AddChild(child);
+
+            Assert.AreEqual(node, child.Parent);
+        }
+
+        [Test]
         public void ShouldGetAndSetAttribute()
         {
             Assert.Throws<KeyNotFoundException>(() =>
@@ -39,6 +50,82 @@ namespace OoxmlToHtml.test
 
             Assert.AreEqual("testValue", node["test"]);
             Assert.AreEqual("testValue", node.GetAttribute("test"));
+        }
+
+        [Test]
+        public void ShouldRenameAttrWhenSettingAttrThatExistsWithRename()
+        {
+            node.SetAttribute("test", "testValue");
+            node.SetAttribute("test", "testValue2");
+
+            Assert.AreEqual("testValue2", node["test_2"]);
+            Assert.AreEqual("testValue2", node.GetAttribute("test_2"));
+        }
+
+        [Test]
+        public void ShouldAppendAttrWhenSettingAttrThatExistsWithAppend()
+        {
+            node.SetAttribute("test", "testValue");
+            node.SetAttribute("test", "testValue2", AttributeMergeStrategy.Append);
+
+            Assert.AreEqual("testValuetestValue2", node["test"]);
+            Assert.AreEqual("testValuetestValue2", node.GetAttribute("test"));
+        }
+
+        [Test]
+        public void ShouldAppendAttrWhenSettingAttrNamedText()
+        {
+            node.SetAttribute("Text", "testValue");
+            node.SetAttribute("Text", "testValue2");
+
+            Assert.AreEqual("testValuetestValue2", node["Text"]);
+            Assert.AreEqual("testValuetestValue2", node.GetAttribute("Text"));
+        }
+
+        [Test]
+        public void ShouldOverwriteAttrWhenSettingAttrThatExistsWithOverwrite()
+        {
+            node.SetAttribute("test", "testValue");
+            node.SetAttribute("test", "testValue2", AttributeMergeStrategy.Overwrite);
+
+            Assert.AreEqual("testValue2", node["test"]);
+            Assert.AreEqual("testValue2", node.GetAttribute("test"));
+        }
+
+        [Test]
+        public void ShouldNotAddAttrWhenSettingAttrThatExistsWithDiffValueUsingMerge()
+        {
+            node.SetAttribute("test", "testValue");
+            var oldAttributeCount = node.Count;
+            var result = node.SetAttribute("test", "testValue2", AttributeMergeStrategy.Merge);
+
+            Assert.AreEqual("testValue", node["test"]);
+            Assert.AreEqual("testValue", node.GetAttribute("test"));
+            Assert.AreEqual(oldAttributeCount, node.Count);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ShouldNotAddAttrWhenSettingAttrThatExistsWithSameValueUsingMerge()
+        {
+            node.SetAttribute("test", "testValue");
+            var oldAttributeCount = node.Count;
+            var result = node.SetAttribute("test", "testValue", AttributeMergeStrategy.Merge);
+
+            Assert.AreEqual("testValue", node["test"]);
+            Assert.AreEqual("testValue", node.GetAttribute("test"));
+            Assert.AreEqual(oldAttributeCount, node.Count);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ShouldAddAttrWhenSettingAttrThatDoesNotExistUsingMerge()
+        {
+            var result = node.SetAttribute("test", "testValue", AttributeMergeStrategy.Merge);
+
+            Assert.AreEqual("testValue", node["test"]);
+            Assert.AreEqual("testValue", node.GetAttribute("test"));
+            Assert.IsTrue(result);
         }
 
         [Test]

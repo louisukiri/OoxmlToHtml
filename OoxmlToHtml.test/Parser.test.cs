@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Moq;
@@ -91,6 +93,57 @@ namespace OoxmlToHtml.test
             a.Use(analyzer.Object);
             a.Parse(true);
             
+        }
+
+        [Test]
+        public void ParseReturnsBodyAsRootNodeWhereAppropriate()
+        {
+            // new DirectoryInfo(Environment.CurrentDirectory).Parent.Parent.FullName
+            var pathCurrentDirectory = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory)
+                .Parent?
+                .Parent?
+                .FullName + "/Data/RootNodeTest.xml";
+
+            var testInput = File.ReadAllText(pathCurrentDirectory);
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Parse(true);
+
+            Assert.AreEqual(KeywordToken.Body, a.Root.Root.Type);
+        }
+
+
+        [Test]
+        public void ParseWillNotParseAnyTagsOutsideOfW_Document()
+        {
+            var testInput = @"<pkg:package>
+                                <pkg:xmlData><w:document>
+                                <w:body>
+                                    <w:p testAttrib=""test"">
+                                    <w:pPr>
+                                        <w:b />
+                                    </w:pPr>
+                                    </w:p>
+                            </w:body></w:document></pkg:xmlData>
+                            <pkg:part pkg:name=""/word/footnotes.xml"" pkg:contentType=""application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"">
+                                <pkg:xmlData>
+                                    <w:footnote w:type=""separator"" w:id="" - 1"">
+                                        <w:p w:rsidR = ""00644911"" w:rsidRDefault = ""00644911"" w:rsidP = ""00230A5E"">
+                                            <w:pPr>
+                                                <w:spacing w:after=""0"" w:line = ""240"" w:lineRule=""auto"" />
+                                            </ w:pPr >
+                                            <w:r>                   
+                                                <w:separator/>
+                                            </w:r>
+                                        </w:p>
+                                    </w:footnote>                      
+                                </pkg:xmlData>
+                            <pkg:part>
+                          </pkg:package>
+";
+            var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
+            a.Parse(true);
+
+            Assert.AreEqual(KeywordToken.Body, a.Root.Root.Type);
         }
 
         [Test]

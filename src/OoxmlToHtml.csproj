@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.4.0" />
+    <PackageReference Include="Moq" Version="4.9.0" />
   </ItemGroup>
 
 </Project>

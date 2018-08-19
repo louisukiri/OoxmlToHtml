@@ -10,6 +10,7 @@ namespace OoxmlToHtml.Analyzers
     public class AttributeCopierAnalyzer : Analyzer
     {
         public virtual bool ShouldAnalyze(INode node) => true;
+        public virtual bool ShouldRemoveChild() => true;
         private int _level = 1;
         protected override INode Act(INode node)
         {
@@ -32,7 +33,10 @@ namespace OoxmlToHtml.Analyzers
                     continue; ;
                 }
                 node.CopyAttributes(child);
-                node.RemoveChild(child);
+                if (ShouldRemoveChild())
+                {
+                    node.RemoveChild(child);
+                }
             }
 
             _level--;

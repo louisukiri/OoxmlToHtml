@@ -20,7 +20,25 @@ namespace OoxmlToHtml.test.Statements
             Assert.AreEqual("Title", actual?
                 .Children.First()
                 .Children.First()
-                    .GetAttribute("value"));
+                .GetAttribute("value"));
+        }
+
+        [Test]
+        public void ShouldCorrectlyParseValueWithRuns()
+        {
+            var input = @"<w:body>
+                            <w:p>
+                              <w:rStyle w:val=""Title""/>
+                          </w:p>
+                        </w:body>
+";
+            var actual = TestHelper.ParseString(input);
+
+            Assert.IsNotNull(actual);
+            Assert.AreEqual("Title", actual?
+                .Children.First()
+                .Children.First()
+                .GetAttribute("value"));
         }
 
         [Test]

@@ -23,15 +23,16 @@ namespace OoxmlToHtml.Tokens
                 {
                     NextChar(2);
                     var stringBuilder = new StringBuilder();
-                    while (CurrentChar.IsLetter())
+                    while (CurrentChar != '>')
                     {
                         stringBuilder.Append(CurrentChar);
                         NextChar();
                     }
 
                     // NextChar();
-                    type = KeywordToken.Close;
                     text = stringBuilder.ToString();
+                    // force file ending when w:document closes
+                    type = text == "w:document"? KeywordToken.EOF : KeywordToken.Close;
                 }
                 else if (CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`')
                 {

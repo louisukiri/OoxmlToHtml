@@ -9,7 +9,6 @@ namespace OoxmlToHtml.test.Analyzers
         [Test]
         public void ShouldAnalyzePreviousParagraph()
         {
-
             var paragraph = new Node(KeywordToken.Paragraph);
             var pParagraphProp = new Node(KeywordToken.PreviousParagraph);
             pParagraphProp.SetAttribute("testAttr", "testAttrValue");
