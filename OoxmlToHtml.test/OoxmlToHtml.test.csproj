@@ -70,6 +70,7 @@
     <Compile Include="Analyzers\ElementToAttributeAnalyzerTest.cs" />
     <Compile Include="Analyzers\ParagraphNodeAnalyzerTest.cs" />
     <Compile Include="Analyzers\AttributeCopierAnalyzerTest.cs" />
+    <Compile Include="Analyzers\SiblingsAnalyzerTest.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Lexer.test.cs" />
     <Compile Include="Node.test.cs" />
