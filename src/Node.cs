@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml
@@ -11,7 +12,8 @@ namespace OoxmlToHtml
         Merge,
         Overwrite,
         Append,
-        Rename
+        Rename,
+        Skip
     }
     public class Node : Dictionary<string, string>, INode
     {
@@ -54,6 +56,10 @@ namespace OoxmlToHtml
             if (ContainsKey(name))
             {
                 if (name == "Text") mergeStrategy = AttributeMergeStrategy.Append;
+                if (name == "style" && value == this[name])
+                {
+                    mergeStrategy = AttributeMergeStrategy.Skip;
+                }
                 switch (mergeStrategy)
                 {
                     case AttributeMergeStrategy.Merge:
@@ -66,6 +72,8 @@ namespace OoxmlToHtml
                         value = GetAttribute(name) + value;
                         RemoveAttribute(name);
                     break;
+                    case AttributeMergeStrategy.Skip:
+                        return true;
                     default:
                         var keyIndex = 2;
                         while (ContainsKey(name + "_" + keyIndex))
@@ -143,6 +151,23 @@ namespace OoxmlToHtml
         public void RemoveAttribute(string name)
         {
             Remove(name);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append($"<{this.Type.ToString()} ");
+            foreach (var attribute in GetAllAttributes.Keys)
+            {
+                builder.Append($" {attribute}='{this.GetAttribute(attribute)} '");
+            }
+            builder.Append($">");
+            foreach (var child in _children)
+            {
+                builder.Append(child.ToString());
+            }
+            builder.Append($"</{this.Type.ToString()}>");
+            return builder.ToString();
         }
     }
 }
