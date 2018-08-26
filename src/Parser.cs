@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Factories;
 
@@ -17,10 +18,13 @@ namespace OoxmlToHtml
             this.scanner = scanner;
         }
 
+        private List<int> _openTokens = new List<int> { -1 };
         public Token NextToken()
         {
-            return scanner.NextToken();
+            var token = scanner.NextToken();
+            return token;
         }
+        
         public Token CurrentToken => scanner.CurrentToken();
         public abstract void Parse(bool useDefaultAnalyzers = false);
 

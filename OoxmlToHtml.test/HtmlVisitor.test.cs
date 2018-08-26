@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using OoxmlToHtml.Printers;
 using OoxmlToHtml.test.Helpers;
 
@@ -41,7 +42,7 @@ namespace OoxmlToHtml.test
             var l = TestHelper.ParseString(input);
             var p = new HtmlPrinter();
             p.Print(l);
-
+            Console.WriteLine(p.HtmlString);
             Assert.AreEqual(expected, p.HtmlString);
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 using OoxmlToHtml.Abstracts;
@@ -47,7 +48,7 @@ namespace OoxmlToHtml.test.Parsers
 
             Assert.AreEqual("test", result.GetAttribute("value"));
         }
-        
+
         [Test]
         public void ShouldParseColorAttributesToColorProperty()
         {
@@ -57,6 +58,25 @@ namespace OoxmlToHtml.test.Parsers
                                         </w:p>");
             var colorChild = result.Children[1];
             Assert.AreEqual("FF0000", colorChild.GetAttribute("value"));
+        }
+
+        [Test]
+        public void ShouldNotCollapseChildOfTheSameTypeAsParentIntoParent()
+        {
+            var result = TestHelper.ParseString(@"<w:body>
+                                                    <w:p w:val=""test"">
+                                                        <w:p>
+                                                            <w:t>Te</w:t>
+                                                        </w:p>
+                                                        <w:p w:rsidRPr=""00C63EA3"">
+                                                            <w:t>sting this testing thing</w:t>
+                                                        </w:p>
+                                                        <w:p></w:p>
+                                                    </w:p>
+                                                  </w:body>");
+            var paragraphChild = result.Children[0];
+            Console.WriteLine(result.ToString());
+            Assert.AreEqual(3, paragraphChild.Children.Count);
         }
 
         [Test]

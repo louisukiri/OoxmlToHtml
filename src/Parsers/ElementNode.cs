@@ -13,7 +13,7 @@ namespace OoxmlToHtml.Parsers
         protected virtual KeywordToken[] IgnoredTokens => null;
         public virtual INode Parse(Token token)
         {
-            var m = NodeFactory.CreateNode(AttributeName);
+            var currentNode = NodeFactory.CreateNode(AttributeName);
             NextToken();
             while (CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT
                    && CurrentToken.Keyword != KeywordToken.EOF
@@ -36,7 +36,7 @@ namespace OoxmlToHtml.Parsers
 
                 if (attributeNode != null)
                 {
-                    m.SetAttribute(attributeNode.AttributeName,
+                    currentNode.SetAttribute(attributeNode.AttributeName,
                         attributeNode.Parse(CurrentToken).GetAttribute("value"));
                 }
             }
@@ -45,9 +45,12 @@ namespace OoxmlToHtml.Parsers
             {
                 // we are in the body of the element
                 NextToken();
+                // if we are not at the end of the file or at the end tag of the of the current tag. go into the while
+                // if we are at the end of the current tag, stop collecting children for the current tag
                 while (CurrentToken.Keyword != KeywordToken.EOF
-                       && !(CurrentToken.Keyword == KeywordToken.Close
-                           && CurrentToken.Text == token.Text))
+                        && (!(CurrentToken.Keyword == KeywordToken.Close
+                        && CurrentToken.Text == token.Text))
+                       )
                 {
                     IStatementParser elementNode = null;
                     switch (CurrentToken.Keyword)
@@ -89,18 +92,28 @@ namespace OoxmlToHtml.Parsers
 
                     if (elementNode != null)
                     {
-                       m.AddChild(elementNode.Parse(CurrentToken));
+                        currentNode.AddChild(elementNode.Parse(CurrentToken));
                     }
 
+                    // if we are at the closing tag of the current parent (token) skip moving to the next token
+                    // This has got to be able to tell a difference between the child end tag and a parent end tag that's exactly
+                    //   the same
                     if (CurrentToken.Keyword == KeywordToken.Close
-                        && CurrentToken.Text == token.Text)
+                            && CurrentToken.Text == token.Text
+                        // if you comig out of adding a child that has the same type as the parent it was added to,
+                        //  you need to advance the NextToken so that it doesn't erroeously "continue" and evaluate the while
+                        //  as the end of the parent hereby merging the nodes
+                        //  The following checks will check for this
+                            && currentNode.Children.Any()
+                            && currentNode.Children.Last().Type != currentNode.Type
+                        )
                     {
                         continue;
                     }
                     NextToken();
                 }
             }
-            return m;
+            return currentNode;
         }
     }
 }

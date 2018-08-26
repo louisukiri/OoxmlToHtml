@@ -21,7 +21,7 @@ namespace OoxmlToHtml.Parsers
                 stringBuilder.Append(' ');
                 NextToken();
             }
-
+            
             var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);
             newNode.SetAttribute("Text", stringBuilder.ToString().TrimEnd());
             return newNode;

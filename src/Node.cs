@@ -34,7 +34,8 @@ namespace OoxmlToHtml
         {
             var previousChild = _children.LastOrDefault();
             var childAttr = child.GetAllAttributes;
-            if (previousChild != null 
+            if (child.Type == KeywordToken.Run
+                && previousChild != null 
                 && previousChild.Type == child.Type
                 && childAttr.Keys.All(attribute =>
                     previousChild.CanSetAttribute(attribute, childAttr[attribute], AttributeMergeStrategy.Merge)))

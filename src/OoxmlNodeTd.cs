@@ -20,7 +20,6 @@ namespace OoxmlToHtml
         {
 
         }
-
         public override void Parse(bool useDefaultAnalyzers = false)
         {
             NextToken();

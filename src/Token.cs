@@ -11,7 +11,7 @@ namespace OoxmlToHtml
         protected KeywordToken type;
         protected object value;
         protected Source source;
-        protected int position;
+        public int position;
         protected string text;
 
         public string Type { get; }

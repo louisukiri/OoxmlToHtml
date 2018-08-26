@@ -9,7 +9,6 @@ namespace OoxmlToHtml.test.Statements
         [Test]
         public void ShouldNotNestTextStatements()
         {
-
             var input = @"<w:body>
                     <w:p>
                       <w:pPr></w:pPr>
