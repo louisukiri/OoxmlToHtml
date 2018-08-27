@@ -7,22 +7,27 @@ namespace OoxmlToHtml.Analyzers
     {
         protected override INode Act(INode node)
         {
-            var children = node.Children.ToArray();
-            foreach (var child in children)
+            if (node.child != null)
             {
-                Act(child);
-                var parentNode = child.Parent;
-                if (parentNode == null || parentNode.Type != child.Type) continue;
-                var childAttributes = child.GetAllAttributes;
-                if (childAttributes.Keys.Any(attribute => !parentNode.SetAttribute(attribute, childAttributes[attribute],
-                    AttributeMergeStrategy.Merge)))
-                {
-                    return node;
-                }
-                parentNode.CopyChildren(child);
-                parentNode.RemoveChild(child);
+                Act(node.child);
             }
-            return node;
+
+            if (node.Next != null)
+            {
+                Act(node.Next);
+            }
+
+            if (node.Parent == null || node.Parent.Type != node.Type) return node;
+            var attributes = node.GetAllAttributes;
+            var attributesAreMergeable = attributes.Keys.All(attribute => node.Parent.CanSetAttribute(attribute,
+                attributes[attribute],
+                AttributeMergeStrategy.Merge));
+            if (!attributesAreMergeable) return node;
+
+            node.Parent.CopyAttributes(node);
+            node.Parent.RemoveChild(node);
+            node.Parent.AddChild(node.child);
+            return node.Parent;
         }
     }
 }

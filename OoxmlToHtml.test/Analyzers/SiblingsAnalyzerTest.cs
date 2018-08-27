@@ -22,13 +22,13 @@ namespace OoxmlToHtml.test.Analyzers
                                                         </w:r>
                                                         <w:r w:rsidRPr=""00C63EA3"">
                                                             <w:rPr>
-                                                                <w:rStyle w:val=""TitleChar""/>
+                                                                <w:rStyle w:val=""TitleChar2""/>
                                                             </w:rPr>
                                                             <w:t>sting this testing thing</w:t>
                                                         </w:r>
                                                         <w:r>
                                                             <w:rPr>
-                                                                <w:rStyle w:val=""TitleChar""/>
+                                                                <w:rStyle w:val=""TitleChar3""/>
                                                             </w:rPr>
                                                             <w:t>2</w:t>
                                                         </w:r>

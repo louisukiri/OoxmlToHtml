@@ -8,6 +8,7 @@ namespace OoxmlToHtml.Abstracts
         INode Parent { get; }
         INode Previous { get; }
         INode Next { get; }
+        INode child { get; }
         KeywordToken Type { get; }
         IReadOnlyList<INode> Children { get; }
         bool SetAttribute(string name, string value, AttributeMergeStrategy strategy = AttributeMergeStrategy.Rename);

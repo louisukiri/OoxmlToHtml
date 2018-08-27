@@ -28,6 +28,40 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
+        public void ShouldAddChildToTree()
+        {
+            var child = new Node(KeywordToken.PreviousParagraph);
+            node.AddChild(child);
+
+            Assert.AreEqual(node.child, child);
+        }
+
+        [Test]
+        public void ShouldChildToMainChildNextWhenChildExists()
+        {
+            var child = new Node(KeywordToken.PreviousParagraph);
+            var child2 = new Node(KeywordToken.Run);
+            
+            node.AddChild(child);
+            node.AddChild(child2);
+
+            Assert.AreEqual(child.Next, child2);
+            Assert.AreEqual(child2.Previous, child);
+        }
+
+        [Test]
+        public void ShouldAddParentToNonMainChildToo()
+        {
+            var child = new Node(KeywordToken.PreviousParagraph);
+            var child2 = new Node(KeywordToken.Run);
+
+            node.AddChild(child);
+            node.AddChild(child2);
+            
+            Assert.AreEqual(child2.Parent, node);
+        }
+
+        [Test]
         public void ShouldAddChildsParentOnAdd()
         {
             var child = new Node(KeywordToken.PreviousParagraph);
@@ -214,7 +248,7 @@ namespace OoxmlToHtml.test
         }
 
         [Test]
-        public void ShouldRemoveChild()
+        public void ShouldRemoveOnlyChild()
         {
             var child = new Node(KeywordToken.ParagraphStyle);
             node.AddChild(child);
@@ -225,6 +259,39 @@ namespace OoxmlToHtml.test
 
             Assert.AreEqual(1, afterAdd);
             Assert.AreEqual(0, node.Children.Count);
+        }
+
+
+        [Test]
+        public void ShouldRemoveFirstChild()
+        {
+            var child = new Node(KeywordToken.ParagraphStyle);
+            var child2 = new Node(KeywordToken.Run);
+            node.AddChild(child);
+            node.AddChild(child2);
+
+            int afterAdd = node.Children.Count;
+
+            node.RemoveChild(child);
+
+            Assert.AreEqual(2, afterAdd);
+            Assert.AreEqual(0, node.Children.Count);
+        }
+
+        [Test]
+        public void ShouldRemoveNonFirstChild()
+        {
+            var child = new Node(KeywordToken.ParagraphStyle);
+            var child2 = new Node(KeywordToken.Run);
+            node.AddChild(child);
+            node.AddChild(child2);
+
+            int afterAdd = node.Children.Count;
+
+            node.RemoveChild(child2);
+
+            Assert.AreEqual(2, afterAdd);
+            Assert.AreEqual(1, node.Children.Count);
         }
     }
 }

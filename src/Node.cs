@@ -15,6 +15,7 @@ namespace OoxmlToHtml
         Rename,
         Skip
     }
+
     public class Node : Dictionary<string, string>, INode
     {
         private readonly HashSet<INode> _children = new HashSet<INode>();
@@ -23,30 +24,73 @@ namespace OoxmlToHtml
         public INode Next { get; private set; }
         public KeywordToken Type { get; }
 
-        public IReadOnlyList<INode> Children => _children.ToList().AsReadOnly();   
+        public IReadOnlyList<INode> Children {
+            get
+            {
+                var ch = child;
+                List<INode> nodes = new List<INode>();
+                if (ch == null)
+                {
+                    return nodes.AsReadOnly();
+                }
+                nodes.Add(ch);
+                while (ch.Next != null)
+                {
+                    nodes.Add(ch.Next);
+                    ch = ch.Next;
+                }
+                return nodes.AsReadOnly();
+            }
+        }
 
-        public Node(KeywordToken tokenType)
+    public Node(KeywordToken tokenType)
         {
             Type = tokenType;
             Parent = null;
         }
         public INode AddChild(INode child)
         {
-            var previousChild = _children.LastOrDefault();
-            var childAttr = child.GetAllAttributes;
-            if (child.Type == KeywordToken.Run
-                && previousChild != null 
-                && previousChild.Type == child.Type
-                && childAttr.Keys.All(attribute =>
-                    previousChild.CanSetAttribute(attribute, childAttr[attribute], AttributeMergeStrategy.Merge)))
+            if (child == null)
             {
-                foreach (var childAttrKey in childAttr.Keys)
-                {
-                    previousChild.SetAttribute(childAttrKey, childAttr[childAttrKey], AttributeMergeStrategy.Merge);
-                }
-                previousChild.CopyChildren(child);
-                return previousChild;
+                return null;
             }
+            if (this.child == child)
+            {
+                return child;
+            }
+
+            var currentChild = this.child;
+            if (currentChild == null)
+            {
+                this.child = child;
+            }
+            else
+            {
+                while (currentChild.Next != null)
+                {
+                    currentChild = currentChild.Next;
+                }
+                currentChild.SetNext(child);
+            }
+            //else
+            //{
+            //    this.child = child;
+            //}
+            //var previousChild = _children.LastOrDefault();
+            //var childAttr = child.GetAllAttributes;
+            //if (child.Type == KeywordToken.Run
+            //    && previousChild != null 
+            //    && previousChild.Type == child.Type
+            //    && childAttr.Keys.All(attribute =>
+            //        previousChild.CanSetAttribute(attribute, childAttr[attribute], AttributeMergeStrategy.Merge)))
+            //{
+            //    foreach (var childAttrKey in childAttr.Keys)
+            //    {
+            //        previousChild.SetAttribute(childAttrKey, childAttr[childAttrKey], AttributeMergeStrategy.Merge);
+            //    }
+            //    previousChild.CopyChildren(child);
+            //    return previousChild;
+            //}
             _children.Add(child);
             child.SetParent(this);
             return child;
@@ -91,12 +135,15 @@ namespace OoxmlToHtml
 
         public bool CanSetAttribute(string name, string value, AttributeMergeStrategy mergeStrategy = AttributeMergeStrategy.Rename)
         {
-            return !(ContainsKey(name) && mergeStrategy == AttributeMergeStrategy.Merge
-                                     && value != GetAttribute(name));
+            var canSetAttribute = !(ContainsKey(name) && mergeStrategy == AttributeMergeStrategy.Merge
+                                                      && value != GetAttribute(name));
+            return canSetAttribute;
         }
 
         public string GetAttribute(string name) => this[name];
         public IReadOnlyDictionary<string, string> GetAllAttributes => new ReadOnlyDictionary<string, string>(this);
+
+        public INode child { get; set; }
 
         public void SetParent(INode parent)
         {
@@ -106,6 +153,10 @@ namespace OoxmlToHtml
         public void SetPrev(INode prevNode)
         {
             Previous = prevNode;
+            if (Previous == null)
+            {
+                return;
+            }
             if (prevNode.Next == this) return;
             prevNode.SetNext(this);
         }
@@ -113,6 +164,7 @@ namespace OoxmlToHtml
         public void SetNext(INode nextNode)
         {
             Next = nextNode;
+            if (Next == null) return;
             if (nextNode.Next == this) return;
             nextNode.SetPrev(this);
         }
@@ -141,7 +193,13 @@ namespace OoxmlToHtml
 
         public void RemoveChild(INode child)
         {
-            _children.Remove(child);
+            if (child == this.child)
+            {
+                this.child = null;
+                return;
+            }
+            var childToRemove = Children.FirstOrDefault(z => child == z);
+            childToRemove?.Previous.SetNext(null);
         }
 
         public bool HasAttribute(string attributeName)
