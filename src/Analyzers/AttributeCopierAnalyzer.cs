@@ -11,36 +11,29 @@ namespace OoxmlToHtml.Analyzers
     {
         public virtual bool ShouldAnalyze(INode node) => true;
         public virtual bool ShouldRemoveChild() => true;
-        private int _level = 1;
         protected override INode Act(INode node)
         {
-            _level++;
-            var children = node.Children.ToArray();
-            foreach (var child in children)
+            if (node.child != null)
             {
-                if (!ShouldAnalyze(child))
-                {
-                    continue;
-                }
-                if (child.Type == KeywordToken.Paragraph
-                    || child.Type == KeywordToken.Run)
-                {
-                    _level = 1;
-                }
-                Act(child);
-                if (_level <= 1)
-                {
-                    continue; ;
-                }
-                node.CopyAttributes(child);
-                if (ShouldRemoveChild())
-                {
-                    node.RemoveChild(child);
-                }
+                Act(node.child);
             }
 
-            _level--;
-            return node;
+            if (node.Next != null)
+            {
+                Act(node.Next);
+            }
+
+            // we don't want attributes propagating past Runs and paragraphs
+            if (!ShouldAnalyze(node)
+                || node.Type == KeywordToken.Paragraph
+                || node.Type == KeywordToken.Run) return node;
+            
+            node.Parent?.CopyAttributes(node);
+            // only remove empty nodes
+            if (ShouldRemoveChild() && node.child == null)
+                node.Parent?.RemoveChild(node);
+
+            return node.Parent ?? node;
         }
     }
 }

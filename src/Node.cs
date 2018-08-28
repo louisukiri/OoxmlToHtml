@@ -135,8 +135,8 @@ namespace OoxmlToHtml
 
         public bool CanSetAttribute(string name, string value, AttributeMergeStrategy mergeStrategy = AttributeMergeStrategy.Rename)
         {
-            var canSetAttribute = !(ContainsKey(name) && mergeStrategy == AttributeMergeStrategy.Merge
-                                                      && value != GetAttribute(name));
+            var canSetAttribute = !((ContainsKey(name) && mergeStrategy == AttributeMergeStrategy.Merge
+                                                      && value != GetAttribute(name)) && !ContainsKey("style"));
             return canSetAttribute;
         }
 
@@ -195,11 +195,11 @@ namespace OoxmlToHtml
         {
             if (child == this.child)
             {
-                this.child = null;
+                this.child = child.Next;
                 return;
             }
             var childToRemove = Children.FirstOrDefault(z => child == z);
-            childToRemove?.Previous.SetNext(null);
+            childToRemove?.Previous.SetNext(childToRemove.Next);
         }
 
         public bool HasAttribute(string attributeName)
@@ -215,17 +215,20 @@ namespace OoxmlToHtml
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append($"<{this.Type.ToString()} ");
+            builder.Append($"<{this.Type.ToString().ToLower()}");
             foreach (var attribute in GetAllAttributes.Keys)
             {
-                builder.Append($" {attribute}='{this.GetAttribute(attribute)} '");
+                builder.Append($" {attribute.ToLower()}='{this.GetAttribute(attribute)}'");
             }
-            builder.Append($">");
-            foreach (var child in _children)
+            if (child != null)
             {
-                builder.Append(child.ToString());
+                builder.Append($">");
+                builder.Append(child);
+                builder.Append($"</{Type.ToString().ToLower()}>");
             }
-            builder.Append($"</{this.Type.ToString()}>");
+            else builder.Append($" />");
+            if (Next != null)
+                builder.Append(Next);
             return builder.ToString();
         }
     }

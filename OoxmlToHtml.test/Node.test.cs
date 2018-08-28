@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test
 {
@@ -275,7 +276,7 @@ namespace OoxmlToHtml.test
             node.RemoveChild(child);
 
             Assert.AreEqual(2, afterAdd);
-            Assert.AreEqual(0, node.Children.Count);
+            Assert.AreEqual(1, node.Children.Count);
         }
 
         [Test]
@@ -292,6 +293,40 @@ namespace OoxmlToHtml.test
 
             Assert.AreEqual(2, afterAdd);
             Assert.AreEqual(1, node.Children.Count);
+        }
+
+        [Test]
+        public void ShouldRemoveMiddleChild()
+        {
+            var child = new Node(KeywordToken.ParagraphStyle);
+            var child2 = new Node(KeywordToken.Run);
+            var child3 = new Node(KeywordToken.Text);
+            node.AddChild(child);
+            node.AddChild(child2);
+            node.AddChild(child3);
+
+            int afterAdd = node.Children.Count;
+
+            node.RemoveChild(child2);
+
+            Assert.AreEqual(3, afterAdd);
+            Assert.AreEqual(2, node.Children.Count);
+        }
+
+        [Test]
+        public void ShouldPrintExpectedToString()
+        {
+            var testNode = TestHelper.ParseString(@"<w:body>
+                                                    <w:p w:rsidP=""001F0010"" w:rsidRDefault=""001F0010"" w:rsidR=""001F0010"">
+                                                        <w:pPr><w:pStyle w:val = ""Title""/></w:pPr>
+                                                        <w:p>
+                                                            <w:t>TestTItle</w:t>
+                                                         </w:p>
+                                                    </w:p>
+                                                </w:body>");
+            var expected = @"<body><paragraph><previousparagraph><paragraphstyle value='Title' /></previousparagraph><paragraph><text><stringliteral text='TestTItle' /></text></paragraph></paragraph></body>";
+            Console.WriteLine(testNode.ToString());
+            Assert.AreEqual(expected, testNode.ToString());
         }
     }
 }

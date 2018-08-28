@@ -10,34 +10,41 @@ namespace OoxmlToHtml.Analyzers
     {
         protected override INode Act(INode node)
         {
-            foreach (var child in node.Children)
+            if (node.child != null)
             {
-                Act(child);
-
-                switch (child.Type)
-                {
-                    case KeywordToken.Color:
-                        node.SetAttribute("fontColor", child.GetAttribute("value"));
-                        node.RemoveChild(child);
-                        break;
-                    case KeywordToken.Italic:
-                        node.SetAttribute("italic", bool.TrueString);
-                        node.RemoveChild(child);
-                        break;
-                    case KeywordToken.ParagraphStyle:
-                        node.SetAttribute("style", child.GetAttribute("value"));
-                        node.RemoveChild(child);
-                        break;
-                    case KeywordToken.Bold:
-                        node.SetAttribute("bold", bool.TrueString);
-                        node.RemoveChild(child);
-                        break;
-                    case KeywordToken.Size:
-                        node.SetAttribute("size", child.GetAttribute("value"));
-                        break;
-                }
-
+                Act(node.child);
             }
+
+            if (node.Next != null)
+            {
+                Act(node.Next);
+            }
+
+            if (node.Parent == null) return node;
+
+            switch (node.Type)
+            {
+                case KeywordToken.Color:
+                    node.Parent.SetAttribute("fontColor", node.GetAttribute("value"));
+                    node.Parent.RemoveChild(node);
+                    break;
+                case KeywordToken.Italic:
+                    node.Parent.SetAttribute("italic", bool.TrueString);
+                    node.Parent.RemoveChild(node);
+                    break;
+                case KeywordToken.ParagraphStyle:
+                    node.Parent.SetAttribute("style", node.GetAttribute("value"));
+                    node.Parent.RemoveChild(node);
+                    break;
+                case KeywordToken.Bold:
+                    node.Parent.SetAttribute("bold", bool.TrueString);
+                    node.Parent.RemoveChild(node);
+                    break;
+                case KeywordToken.Size:
+                    node.Parent.SetAttribute("size", node.GetAttribute("value"));
+                    break;
+            }
+
             return node;
         }
     }

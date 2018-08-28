@@ -38,7 +38,7 @@ namespace OoxmlToHtml.test
                 </w:p>
             </w:body>
 ";
-            var expected = @"<div style=""font-weight:bold;font-style:italic;color:#538135;font-size:16px;""><span>Abc louis</span><span style=""font-weight:bold;"">def</span><span>ijk</span></div>";
+            var expected = @"<div style=""font-size:16px;color:#538135;font-style:italic;font-weight:bold;""><span>Abc louis</span><span style=""font-weight:bold;"">def</span><span>ijk</span></div>";
             var l = TestHelper.ParseString(input);
             var p = new HtmlPrinter();
             p.Print(l);
@@ -60,12 +60,11 @@ namespace OoxmlToHtml.test
                 </w:p>
 ";
             var expected = @"<div><h1><span>Title</span></h1></div>";
-            var l = TestHelper.ParseString(input);
+            var l = TestHelper.ParseString(input, true);
             var p = new HtmlPrinter();
             p.Print(l);
 
             Assert.AreEqual(expected, p.HtmlString);
         }
-
     }
 }
