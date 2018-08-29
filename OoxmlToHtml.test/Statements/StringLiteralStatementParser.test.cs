@@ -33,5 +33,30 @@ namespace OoxmlToHtml.test.Statements
             Assert.AreEqual("Abc louis", stringLiteralNode.GetAttribute("Text"));
             Assert.AreEqual("def louis", stringLiteralNode2.GetAttribute("Text"));
         }
+        
+        [TestCase(',')]
+        [TestCase('-')]
+        [TestCase('!')]
+        [TestCase('(')]
+        [TestCase(')')]
+        [TestCase(':')]
+        [TestCase('.')]
+        public void ShouldIncludeSomeSpecialCharacters(char specialChar)
+        {
+
+            var input = @"<w:body>
+                    <w:p>
+                        <w:r>                            
+                            <w:t xml:space=""preserve"">Abc" + specialChar + @" louis</w:t>
+                        </w:r>
+                    </w:p>
+                </w:body>";
+
+            var node = TestHelper.ParseString(input);
+
+            var stringLiteralNode = node.child.child.child.child;
+
+            Assert.AreEqual("Abc"+ specialChar +" louis", stringLiteralNode.GetAttribute("Text"));;
+        }
     }
 }

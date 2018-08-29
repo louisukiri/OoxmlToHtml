@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using OoxmlToHtml.Extensions;
 
 namespace OoxmlToHtml
@@ -13,7 +15,7 @@ namespace OoxmlToHtml
         protected override void Extract()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            while (CurrentChar.IsLetter())
+            while (CurrentChar.IsLetter() || isWordChar(CurrentChar))
             {
                 stringBuilder.Append(CurrentChar);
                 NextChar();
@@ -24,6 +26,21 @@ namespace OoxmlToHtml
                 ? TokenType.RESERVED_WORDS[text.ToLower()]
                 : KeywordToken.StringLiteral;
 
+        }
+
+        // determines if a character is valid in the context of a word
+        static bool isWordChar(char wordChar)
+        {
+            return new char[]
+            {
+                '.',
+                ',',
+                '!',
+                '(',
+                ')',
+                ':',
+                '-'
+            }.Contains(wordChar);
         }
     }
 }

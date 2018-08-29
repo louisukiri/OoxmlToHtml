@@ -18,7 +18,6 @@ namespace OoxmlToHtml
 
     public class Node : Dictionary<string, string>, INode
     {
-        private readonly HashSet<INode> _children = new HashSet<INode>();
         public INode Parent { get; private set; }
         public INode Previous { get; private set; }
         public INode Next { get; private set; }
@@ -43,7 +42,7 @@ namespace OoxmlToHtml
             }
         }
 
-    public Node(KeywordToken tokenType)
+        public Node(KeywordToken tokenType)
         {
             Type = tokenType;
             Parent = null;
@@ -72,26 +71,6 @@ namespace OoxmlToHtml
                 }
                 currentChild.SetNext(child);
             }
-            //else
-            //{
-            //    this.child = child;
-            //}
-            //var previousChild = _children.LastOrDefault();
-            //var childAttr = child.GetAllAttributes;
-            //if (child.Type == KeywordToken.Run
-            //    && previousChild != null 
-            //    && previousChild.Type == child.Type
-            //    && childAttr.Keys.All(attribute =>
-            //        previousChild.CanSetAttribute(attribute, childAttr[attribute], AttributeMergeStrategy.Merge)))
-            //{
-            //    foreach (var childAttrKey in childAttr.Keys)
-            //    {
-            //        previousChild.SetAttribute(childAttrKey, childAttr[childAttrKey], AttributeMergeStrategy.Merge);
-            //    }
-            //    previousChild.CopyChildren(child);
-            //    return previousChild;
-            //}
-            _children.Add(child);
             child.SetParent(this);
             return child;
         }
