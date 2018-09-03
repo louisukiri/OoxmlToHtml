@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Castle.Core.Internal;
 using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml.Analyzers
@@ -23,6 +24,8 @@ namespace OoxmlToHtml.Analyzers
                 Act(node.Next);
             }
 
+            if (node.GetAllAttributes.IsNullOrEmpty())
+                return node;
             // we don't want attributes propagating past Runs and paragraphs
             if (!ShouldAnalyze(node)
                 || node.Type == KeywordToken.Paragraph

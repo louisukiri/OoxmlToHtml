@@ -27,7 +27,9 @@ namespace OoxmlToHtml.Printers
         public void Print(INode node, bool runAnalyzers = true)
         {
             if (runAnalyzers) node = RunAnalyzers(node);
-            switch (node.Type)
+            KeywordToken type = node.Type;
+            if (node.HasAttribute("Code")) type = KeywordToken.Code;
+            switch (type)
             {
                 case KeywordToken.Paragraph:
                     PrintBlock(node);
@@ -41,6 +43,9 @@ namespace OoxmlToHtml.Printers
                     break;
                 case KeywordToken.Color:
                     PrintAttributes(KeywordToken.Color.ToString(), node.GetAttribute("value"));
+                    break;
+                case KeywordToken.Code:
+                    PrintBlock(node, "Code");
                     break;
             }
         }
@@ -71,9 +76,9 @@ namespace OoxmlToHtml.Printers
 
             Html.Append("</span>");
         }
-        private void PrintBlock(INode node)
+        private void PrintBlock(INode node, string tagName = "div")
         {
-            Html.Append("<div");
+            Html.Append($"<{tagName}");
             var attributes = node.GetAllAttributes.Keys;
             IEnumerable<string> enumerable = attributes as string[] ?? attributes.ToArray();
             if (enumerable.Any(z => z != "Text" && z != "style"))
@@ -113,7 +118,7 @@ namespace OoxmlToHtml.Printers
                 }
             }
 
-            Html.Append("</div>");
+            Html.Append($"</{tagName}>");
         }
 
         private void PrintNoTag(INode node)

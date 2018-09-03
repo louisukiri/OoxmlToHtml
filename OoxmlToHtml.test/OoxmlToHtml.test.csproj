@@ -67,6 +67,7 @@
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Lexer.test.cs" />
     <Compile Include="Node.test.cs" />
+    <Compile Include="OoxmlScannerTest.cs" />
     <Compile Include="Parser.test.cs" />
     <Compile Include="Parsers\ParagraphStatementParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

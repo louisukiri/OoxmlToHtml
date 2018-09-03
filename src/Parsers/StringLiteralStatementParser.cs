@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Factories;
 
@@ -12,18 +13,23 @@ namespace OoxmlToHtml.Parsers
         
         public virtual INode Parse(Token token)
         {
+
+            var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);
             StringBuilder stringBuilder = new StringBuilder();
 
-            while (CurrentToken.Keyword != KeywordToken.EOF
-                   && CurrentToken.Keyword == KeywordToken.StringLiteral)
+            stringBuilder.Append(token.Text);
+            stringBuilder.Append(' ');
+            while (_parent.PeekToken.Keyword == KeywordToken.StringLiteral)
             {
-                stringBuilder.Append(CurrentToken.Text);
+                _parent.NextToken();
+                stringBuilder.Append(_parent.CurrentToken.Text);
                 stringBuilder.Append(' ');
-                NextToken();
             }
-            
-            var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);
-            newNode.SetAttribute("Text", stringBuilder.ToString().TrimEnd());
+
+            string value = stringBuilder.ToString().TrimEnd();
+            newNode.SetAttribute("Text", value);
+            // we have consumed all string literals put the cursor on what comes next
+            _parent.NextToken();
             return newNode;
         }
         

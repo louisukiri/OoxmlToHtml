@@ -66,5 +66,23 @@ namespace OoxmlToHtml.test
 
             Assert.AreEqual(expected, p.HtmlString);
         }
+
+        [Test]
+        public void CodeTest()
+        {
+            var input = @"
+                <w:p>
+                    <w:r  test=""efg"">
+                        <w:t>some text```</w:t>
+                    </w:r>
+                </w:p>
+";
+            var l = TestHelper.ParseString(input, false);
+            Console.WriteLine(l.ToString());
+            var p = new HtmlPrinter();
+            p.Print(l);
+            
+            Assert.AreEqual(KeywordToken.Code, l.child?.child?.Children[0].Type);
+        }
     }
 }

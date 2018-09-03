@@ -12,13 +12,15 @@ namespace OoxmlToHtml
     {
         public IRootNode Root { get; private set; }
         private Analyzer _analyzers = null;
+        protected OoxmlNodeTd _parent;
         public OoxmlNodeTd(Scanner scanner) : base(scanner)
         {
+            _parent = this;
         }
 
         public OoxmlNodeTd(OoxmlNodeTd parent) : base(parent.scanner)
         {
-
+            _parent = parent;
         }
         public override void Parse(bool useDefaultAnalyzers = false)
         {
