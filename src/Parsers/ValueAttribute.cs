@@ -2,7 +2,7 @@
 {
     public class ValueAttribute : AttributeNode
     {
-        public ValueAttribute(OoxmlNodeTd parent) : base(parent)
+        public ValueAttribute(OoxmlNodeTd parser) : base(parser)
         {
         }
 

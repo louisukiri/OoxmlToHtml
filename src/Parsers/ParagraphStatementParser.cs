@@ -4,7 +4,7 @@ namespace OoxmlToHtml.Parsers
 {
     public class ParagraphStatementParser : ElementNode
     {
-        public ParagraphStatementParser(OoxmlNodeTd parent) : base(parent)
+        public ParagraphStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
 

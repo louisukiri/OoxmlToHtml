@@ -7,7 +7,7 @@ namespace OoxmlToHtml.Parsers
 {
     public class StringLiteralStatementParser : OoxmlNodeTd, IStatementParser
     {
-        public StringLiteralStatementParser(OoxmlNodeTd parent) : base(parent)
+        public StringLiteralStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
         
@@ -19,17 +19,17 @@ namespace OoxmlToHtml.Parsers
 
             stringBuilder.Append(token.Text);
             stringBuilder.Append(' ');
-            while (_parent.PeekToken.Keyword == KeywordToken.StringLiteral)
+            while (parser.PeekToken.Keyword == KeywordToken.StringLiteral)
             {
-                _parent.NextToken();
-                stringBuilder.Append(_parent.CurrentToken.Text);
+                parser.NextToken();
+                stringBuilder.Append(parser.CurrentToken.Text);
                 stringBuilder.Append(' ');
             }
 
             string value = stringBuilder.ToString().TrimEnd();
             newNode.SetAttribute("Text", value);
             // we have consumed all string literals put the cursor on what comes next
-            _parent.NextToken();
+            parser.NextToken();
             return newNode;
         }
         

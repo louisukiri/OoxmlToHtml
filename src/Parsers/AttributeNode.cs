@@ -6,7 +6,7 @@ namespace OoxmlToHtml.Parsers
 {
     public abstract class AttributeNode : OoxmlNodeTd, IAttributeStatementParser
     {
-        protected AttributeNode(OoxmlNodeTd parent) : base(parent)
+        protected AttributeNode(OoxmlNodeTd parser) : base(parser)
         {
         }
 

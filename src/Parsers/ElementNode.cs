@@ -7,7 +7,7 @@ namespace OoxmlToHtml.Parsers
 {
     public abstract class ElementNode : OoxmlNodeTd, IStatementParser
     {
-        protected ElementNode(OoxmlNodeTd parent) : base(parent)
+        protected ElementNode(OoxmlNodeTd parser) : base(parser)
         {
         }
         protected abstract KeywordToken AttributeName { get; }
@@ -16,12 +16,12 @@ namespace OoxmlToHtml.Parsers
         {
             var currentNode = NodeFactory.CreateNode(AttributeName);
             NextToken();
-            while (CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT
-                   && CurrentToken.Keyword != KeywordToken.EOF
-                   && CurrentToken.Keyword != KeywordToken.ShortClose)
+            while (parser.CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT
+                   && parser.CurrentToken.Keyword != KeywordToken.EOF
+                   && parser.CurrentToken.Keyword != KeywordToken.ShortClose)
             {
                 IAttributeStatementParser attributeNode = null;
-                switch (CurrentToken.Keyword)
+                switch (parser.CurrentToken.Keyword)
                 {
                     // parse attributes
                     case KeywordToken.StringLiteral:
@@ -38,28 +38,28 @@ namespace OoxmlToHtml.Parsers
                 if (attributeNode != null)
                 {
                     currentNode.SetAttribute(attributeNode.AttributeName,
-                        attributeNode.Parse(CurrentToken).GetAttribute("value"));
+                        attributeNode.Parse(parser.CurrentToken).GetAttribute("value"));
                 }
             }
             // if it's an EOF it's unexpected err out
-            if (CurrentToken.Keyword == KeywordToken.EOF) throw new Exception("Invalid end of file");
+            if (parser.CurrentToken.Keyword == KeywordToken.EOF) throw new Exception("Invalid end of file");
 
-            if (CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT)
+            if (parser.CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT)
             {
-                NextToken();
+                parser.NextToken();
                 return currentNode;
             }
             // we are in the body of the element
-            NextToken();
+            parser.NextToken();
             // if we are not at the end of the file or at the end tag of the of the current tag. go into the while
             // if we are at the end of the current tag, stop collecting children for the current tag
-            while (CurrentToken.Keyword != KeywordToken.EOF
-                   && (!(CurrentToken.Keyword == KeywordToken.Close
-                         && CurrentToken.Text == token.Text))
+            while (parser.CurrentToken.Keyword != KeywordToken.EOF
+                   && (!(parser.CurrentToken.Keyword == KeywordToken.Close
+                         && parser.CurrentToken.Text == token.Text))
             )
             {
                 IStatementParser elementNode = null;
-                switch (CurrentToken.Keyword)
+                switch (parser.CurrentToken.Keyword)
                 {
                     case KeywordToken.Code:
                         elementNode = new CodeParser(this);
@@ -103,9 +103,9 @@ namespace OoxmlToHtml.Parsers
                 {
                     currentNode.AddChild(elementNode.Parse(CurrentToken));
                 }
-                else NextToken();
+                else parser.NextToken();
             }
-            NextToken();
+            parser.NextToken();
             return currentNode;
         }
     }

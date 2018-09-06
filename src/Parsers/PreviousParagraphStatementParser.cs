@@ -2,7 +2,7 @@
 {
     public class PreviousParagraphStatementParser : ElementNode
     {
-        public PreviousParagraphStatementParser(OoxmlNodeTd parent) : base(parent)
+        public PreviousParagraphStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
 

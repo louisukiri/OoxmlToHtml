@@ -2,7 +2,7 @@
 {
     public class GenericElementNode : ElementNode
     {
-        public GenericElementNode(OoxmlNodeTd parent, KeywordToken token) : base(parent)
+        public GenericElementNode(OoxmlNodeTd parser, KeywordToken token) : base(parser)
         {
             AttributeName = token;
         }

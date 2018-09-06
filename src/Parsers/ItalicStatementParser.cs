@@ -4,7 +4,7 @@ namespace OoxmlToHtml.Parsers
 {
     public class ItalicStatementParser : ElementNode
     {
-        public ItalicStatementParser(OoxmlNodeTd parent) : base(parent)
+        public ItalicStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
 
