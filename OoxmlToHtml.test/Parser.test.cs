@@ -6,6 +6,8 @@ using NUnit.Framework;
 using Moq;
 using OoxmlToHtml.Abstracts;
 using OoxmlToHtml.Analyzers;
+using OoxmlToHtml.Printers;
+using OoxmlToHtml.test.Helpers;
 
 namespace OoxmlToHtml.test
 {
@@ -216,6 +218,23 @@ namespace OoxmlToHtml.test
             //Assert.AreEqual("testing me too", rootNode.Children[1].Children[0].GetAttribute("value"));
             //Assert.AreEqual(2, rootNode.Children.Count);
         }
-#endregion
+
+        [Test]
+        public void CodeTest()
+        {
+            var input = @"
+                <w:p>
+                    <w:r  test=""efg"">
+                        <w:t>some text```</w:t>
+                    </w:r>
+                </w:p>
+";
+            var l = TestHelper.ParseString(input, false);
+            var p = new HtmlPrinter();
+            p.Print(l);
+
+            Assert.AreEqual(KeywordToken.Code, l.child?.child?.Children[0].Type);
+        }
+        #endregion
     }
 }

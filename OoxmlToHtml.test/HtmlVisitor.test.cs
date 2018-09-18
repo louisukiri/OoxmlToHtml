@@ -59,7 +59,7 @@ namespace OoxmlToHtml.test
                     </w:r>
                 </w:p>
 ";
-            var expected = @"<div><h1><span>Title</span></h1></div>";
+            var expected = @"<div><h1><span>Title </span></h1></div>";
             var l = TestHelper.ParseString(input, true);
             var p = new HtmlPrinter();
             p.Print(l);
@@ -73,16 +73,22 @@ namespace OoxmlToHtml.test
             var input = @"
                 <w:p>
                     <w:r  test=""efg"">
-                        <w:t>some text```</w:t>
+                        <w:t>```some text</w:t>
+                    </w:r>
+                    <w:r>
+                        ok jim
+                    </w:r>
+                    <w:r>
+                        <w:t>another test```</w:t>
                     </w:r>
                 </w:p>
 ";
             var l = TestHelper.ParseString(input, false);
-            Console.WriteLine(l.ToString());
             var p = new HtmlPrinter();
             p.Print(l);
             
-            Assert.AreEqual(KeywordToken.Code, l.child?.child?.Children[0].Type);
+            Console.WriteLine(l.ToString());
+            Assert.AreEqual("<div><Code>some text ok jim another test </Code></div>", p.HtmlString);
         }
     }
 }
