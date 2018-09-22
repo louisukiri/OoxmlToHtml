@@ -7,9 +7,11 @@ namespace OoxmlToHtml.Tokens
     {
         public ElementToken(Source source) : base(source)
         {
+
+            Extract();
         }
         
-        protected override void Extract()
+        protected sealed override void Extract()
         {
             StringBuilder stringBuilder = new StringBuilder();
             while (CurrentChar.IsLetter())

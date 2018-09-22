@@ -6,9 +6,9 @@ namespace OoxmlToHtml.Tokens
     {
         public EofToken(Source source) : base(source)
         {
-
+            Extract();
         }
-        protected override void Extract()
+        protected sealed override void Extract()
         {
             type = KeywordToken.EOF;
             text = null;

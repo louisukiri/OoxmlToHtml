@@ -7,9 +7,10 @@ namespace OoxmlToHtml.Tokens
     {
         public SymbolToken(Source source) : base(source)
         {
+            Extract();
         }
 
-        protected override void Extract()
+        protected sealed override void Extract()
         {
             if (CurrentChar.IsSymbol())
             {

@@ -83,7 +83,6 @@ namespace OoxmlToHtml
         {
             this.source = source;
             this.position = source.Position;
-            Extract();
         }
         public Token(string type, string literal)
         {

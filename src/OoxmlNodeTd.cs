@@ -33,7 +33,7 @@ namespace OoxmlToHtml
                 switch (CurrentToken.Keyword)
                 {
                     case KeywordToken.Paragraph:
-                        var a = new ParagraphStatementParser(this);
+                        var a = new ParagraphStatementParser(parser);
                         Root.SetRootNode(a.Parse(CurrentToken));
                         break;
                     case KeywordToken.Body:

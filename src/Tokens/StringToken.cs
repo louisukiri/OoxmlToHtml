@@ -7,10 +7,10 @@ namespace OoxmlToHtml.Tokens
     {
         public StringToken(Source source) : base(source)
         {
-
+            Extract();
         }
 
-        protected override void Extract()
+        protected sealed override void Extract()
         {
             var stringBuilder = new StringBuilder();
             NextChar();

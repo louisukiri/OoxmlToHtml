@@ -5,17 +5,19 @@ using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
 {
-    public abstract class ElementNode : OoxmlNodeTd, IStatementParser
+    public abstract class ElementNode : IStatementParser
     {
-        protected ElementNode(OoxmlNodeTd parser) : base(parser)
+        private OoxmlNodeTd parser;
+        protected ElementNode(OoxmlNodeTd parser)
         {
+            this.parser = parser;
         }
         protected abstract KeywordToken AttributeName { get; }
         protected virtual KeywordToken[] IgnoredTokens => null;
         public virtual INode Parse(Token token)
         {
             var currentNode = NodeFactory.CreateNode(AttributeName);
-            NextToken();
+            parser.NextToken();
             while (parser.CurrentToken.Keyword != KeywordToken.ENDING_ELEMENT
                    && parser.CurrentToken.Keyword != KeywordToken.EOF
                    && parser.CurrentToken.Keyword != KeywordToken.ShortClose)
@@ -25,13 +27,13 @@ namespace OoxmlToHtml.Parsers
                 {
                     // parse attributes
                     case KeywordToken.StringLiteral:
-                        attributeNode = new UnknownStringLiteralAttribute(this);
+                        attributeNode = new UnknownStringLiteralAttribute(parser);
                         break;
                     case KeywordToken.Value:
-                        attributeNode = new ValueAttribute(this);
+                        attributeNode = new ValueAttribute(parser);
                         break;
                     default:
-                        NextToken();
+                        parser.NextToken();
                         break;
                 }
 
@@ -62,46 +64,46 @@ namespace OoxmlToHtml.Parsers
                 switch (parser.CurrentToken.Keyword)
                 {
                     case KeywordToken.Code:
-                        elementNode = new CodeParser(this);
+                        elementNode = new CodeParser(parser);
                         break;
                     case KeywordToken.StringLiteral:
-                        elementNode = new StringLiteralStatementParser(this);
+                        elementNode = new StringLiteralStatementParser(parser);
                         break;
                     case KeywordToken.Paragraph:
-                        elementNode = new ParagraphStatementParser(this);
+                        elementNode = new ParagraphStatementParser(parser);
                         break;
                     case KeywordToken.PreviousParagraph:
-                        elementNode = new PreviousParagraphStatementParser(this);
+                        elementNode = new PreviousParagraphStatementParser(parser);
                         break;
                     case KeywordToken.Color:
-                        elementNode = new ColorStatementNode(this);
+                        elementNode = new ColorStatementNode(parser);
                         break;
                     case KeywordToken.Text:
-                        elementNode = new TextStatementParser(this);
+                        elementNode = new TextStatementParser(parser);
                         break;
                     case KeywordToken.Italic:
-                        elementNode = new ItalicStatementParser(this);
+                        elementNode = new ItalicStatementParser(parser);
                         break;
                     case KeywordToken.ParagraphStyle:
-                        elementNode = new ParagraphStyleStatementParser(this);
+                        elementNode = new ParagraphStyleStatementParser(parser);
                         break;
                     case KeywordToken.Unknown:
-                        elementNode = new UnknownElementParser(this);
+                        elementNode = new UnknownElementParser(parser);
                         break;
                     case KeywordToken.Bold:
-                        elementNode = new GenericElementNode(this, KeywordToken.Bold);
+                        elementNode = new GenericElementNode(parser, KeywordToken.Bold);
                         break;
                     case KeywordToken.Run:
-                        elementNode = new GenericElementNode(this, KeywordToken.Run);
+                        elementNode = new GenericElementNode(parser, KeywordToken.Run);
                         break;
                     case KeywordToken.Size:
-                        elementNode = new GenericElementNode(this, KeywordToken.Size);
+                        elementNode = new GenericElementNode(parser, KeywordToken.Size);
                         break;
                 }
 
                 if (elementNode != null)
                 {
-                    currentNode.AddChild(elementNode.Parse(CurrentToken));
+                    currentNode.AddChild(elementNode.Parse(parser.CurrentToken));
                 }
                 else parser.NextToken();
             }
