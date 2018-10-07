@@ -6,7 +6,7 @@ namespace OoxmlToHtml.Parsers
 {
     public abstract class ElementNode : IStatementParser
     {
-        private OoxmlNodeTd parser;
+        protected OoxmlNodeTd parser;
         protected ElementNode(OoxmlNodeTd parser)
         {
             this.parser = parser;
@@ -89,6 +89,9 @@ namespace OoxmlToHtml.Parsers
                             break;
                         case KeywordToken.Size:
                             elementNode = new GenericElementNode(parser, KeywordToken.Size);
+                            break;
+                        case KeywordToken.Code:
+                            elementNode = new CodeStatementParser(parser);
                             break;
                     }
 

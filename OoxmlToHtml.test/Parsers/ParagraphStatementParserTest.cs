@@ -97,5 +97,27 @@ namespace OoxmlToHtml.test.Parsers
             var paragraphChild = result.Children.First();
             Assert.AreEqual("Title", paragraphChild.GetAttribute("style"));
         }
+        [Test]
+        public void ParseShouldLeaveCursorOneTokenPastTheParagraphBoundary()
+        {
+            var parserNode = new OoxmlNodeTd(new OoxmlScanner(
+                new Source(@"<w:body>
+                                <w:p>
+                                    <w:t>Testing this string</w:t>
+                                </w:p>
+                            </w:body>")
+            ));
+            parserNode.NextToken();
+            while (parserNode.CurrentToken.Keyword != KeywordToken.Paragraph)
+            {
+                parserNode.NextToken();
+            }
+            var sut = new ParagraphStatementParser(parserNode);
+            sut.Parse(parserNode.CurrentToken);
+
+            var currentToken = parserNode.CurrentToken;
+            Assert.AreEqual(KeywordToken.Close, currentToken.Keyword);
+            Assert.AreEqual("w:body", currentToken.Text);
+        }
     }
 }

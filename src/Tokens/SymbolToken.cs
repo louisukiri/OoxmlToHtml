@@ -36,16 +36,9 @@ namespace OoxmlToHtml.Tokens
                 }
                 else if (CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`')
                 {
-                    NextChar(3);
-                    var stringBuilder = new StringBuilder();
-                    while (!(CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`'))
-                    {
-                        stringBuilder.Append(CurrentChar);
-                        NextChar();
-                    }
                     NextChar(2);
                     type = KeywordToken.Code;
-                    text = stringBuilder.ToString();
+                    text = "";
                 }
                 else
                 {

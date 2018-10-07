@@ -12,7 +12,8 @@ namespace OoxmlToHtml
     {
         public IRootNode Root { get; private set; }
         private Analyzer _analyzers = null;
-        protected OoxmlNodeTd parser;
+        public OoxmlNodeTd parser { get; }
+
         public OoxmlNodeTd(Scanner scanner) : base(scanner)
         {
             parser = this;
