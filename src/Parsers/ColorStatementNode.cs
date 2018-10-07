@@ -4,7 +4,7 @@ namespace OoxmlToHtml.Parsers
 {
     public class ColorStatementNode : ElementNode
     {
-        public ColorStatementNode(OoxmlNodeTd parent) : base(parent)
+        public ColorStatementNode(OoxmlNodeTd parser) : base(parser)
         {
         }
 

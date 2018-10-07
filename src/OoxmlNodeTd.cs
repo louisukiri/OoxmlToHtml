@@ -12,13 +12,15 @@ namespace OoxmlToHtml
     {
         public IRootNode Root { get; private set; }
         private Analyzer _analyzers = null;
+        protected OoxmlNodeTd parser;
         public OoxmlNodeTd(Scanner scanner) : base(scanner)
         {
+            parser = this;
         }
 
-        public OoxmlNodeTd(OoxmlNodeTd parent) : base(parent.scanner)
+        public OoxmlNodeTd(OoxmlNodeTd parser) : base(parser.scanner)
         {
-
+            this.parser = parser;
         }
         public override void Parse(bool useDefaultAnalyzers = false)
         {
@@ -31,7 +33,7 @@ namespace OoxmlToHtml
                 switch (CurrentToken.Keyword)
                 {
                     case KeywordToken.Paragraph:
-                        var a = new ParagraphStatementParser(this);
+                        var a = new ParagraphStatementParser(parser);
                         Root.SetRootNode(a.Parse(CurrentToken));
                         break;
                     case KeywordToken.Body:
