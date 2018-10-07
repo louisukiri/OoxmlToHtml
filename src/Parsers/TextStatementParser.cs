@@ -2,7 +2,7 @@
 {
     public class TextStatementParser : ElementNode
     {
-        public TextStatementParser(OoxmlNodeTd parent) : base(parent)
+        public TextStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
 

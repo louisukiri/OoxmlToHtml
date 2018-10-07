@@ -132,16 +132,28 @@ namespace OoxmlToHtml.test.Analyzers
         [Test]
         public void ShouldDeletePPrChildrenFromParentNode()
         {
-            var pParagraphPropChild = new Node(KeywordToken.Color);
+            /*
+            _paragraph = new Node(KeywordToken.Paragraph);
+            _pParagraphProp = new Node(KeywordToken.PreviousParagraph);
+            _pParagraphProp.SetAttribute("testAttr", "testAttrValue");
+            _pParagraphProp.SetAttribute("testAttr2", "testAttr2Value");
 
-            _pParagraphProp.AddChild(pParagraphPropChild);
             _paragraph.AddChild(_pParagraphProp);
+             */
+            /*
+             * p->ppr(testAttr=testAttrValue, testAttr2=testAttr2Value)->color
+             */
+            var pToString = @"<w:p>
+                                <w:pPr testAttr=""testAttrValue"" testAttr2=""testAttr2Value"" >
+                                    
+                                </w:pPr>
+                              </w:p>";
 
             var attributeCopierAnalyzer = new AttributeCopierAnalyzer();
-            attributeCopierAnalyzer.Analyze(_paragraph);
+            var result = attributeCopierAnalyzer.Analyze(TestHelper.ParseString(pToString));
 
-            Assert.AreEqual(0, _paragraph.Children.Count);
-            Assert.AreEqual(0, _pParagraphProp.Children.Count);
+            Assert.AreEqual(0, result.Children.Count);
+            //Assert.AreEqual(0, _pParagraphProp.Children.Count);
         }
         
     }

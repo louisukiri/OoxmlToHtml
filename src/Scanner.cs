@@ -25,6 +25,15 @@ namespace OoxmlToHtml
             return _currentToken;
         }
 
+        public Token PeekToken()
+        {
+            var currentPos = Source.Position;
+            var nextToken = ExtractToken();
+            Source.SetPosition(currentPos);
+
+            return nextToken;
+        }
+
         public abstract Token ExtractToken();
 
         public char CurrentChar => Source.CurrentChar;

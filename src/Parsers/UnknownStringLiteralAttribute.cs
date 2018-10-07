@@ -2,7 +2,7 @@
 {
     public class UnknownStringLiteralAttribute : AttributeNode
     {
-        public UnknownStringLiteralAttribute(OoxmlNodeTd parent) : base(parent)
+        public UnknownStringLiteralAttribute(OoxmlNodeTd parser) : base(parser)
         {
         }
 

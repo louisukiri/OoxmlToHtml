@@ -21,10 +21,13 @@ namespace OoxmlToHtml
         private List<int> _openTokens = new List<int> { -1 };
         public Token NextToken()
         {
+            if (CurrentToken?.Keyword == KeywordToken.EOF)
+                return CurrentToken;
             var token = scanner.NextToken();
             return token;
         }
-        
+
+        public Token PeekToken => scanner.PeekToken();
         public Token CurrentToken => scanner.CurrentToken();
         public abstract void Parse(bool useDefaultAnalyzers = false);
 

@@ -2,7 +2,7 @@
 {
     public class ParagraphStyleStatementParser: ElementNode
     {
-        public ParagraphStyleStatementParser(OoxmlNodeTd parent) : base(parent)
+        public ParagraphStyleStatementParser(OoxmlNodeTd parser) : base(parser)
         {
         }
 

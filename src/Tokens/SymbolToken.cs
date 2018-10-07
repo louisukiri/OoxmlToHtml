@@ -7,9 +7,10 @@ namespace OoxmlToHtml.Tokens
     {
         public SymbolToken(Source source) : base(source)
         {
+            Extract();
         }
 
-        protected override void Extract()
+        protected sealed override void Extract()
         {
             if (CurrentChar.IsSymbol())
             {
@@ -36,16 +37,9 @@ namespace OoxmlToHtml.Tokens
                 }
                 else if (CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`')
                 {
-                    NextChar(3);
-                    var stringBuilder = new StringBuilder();
-                    while (!(CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`'))
-                    {
-                        stringBuilder.Append(CurrentChar);
-                        NextChar();
-                    }
-                    NextChar(2);
+                    NextChar(2);                    
                     type = KeywordToken.Code;
-                    text = stringBuilder.ToString();
+                    text = string.Empty;
                 }
                 else
                 {

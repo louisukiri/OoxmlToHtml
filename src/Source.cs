@@ -32,6 +32,10 @@ namespace OoxmlToHtml
 
         public int Position => _position;
 
+        public void SetPosition(int newPosition)
+        {
+            _position = newPosition;
+        }
         public void NextChar(int offset = 1)
         {
             _position += offset;
