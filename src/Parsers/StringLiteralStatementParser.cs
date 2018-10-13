@@ -12,7 +12,7 @@ namespace OoxmlToHtml.Parsers
             this._parser = parent.parser;
         }
         
-        public virtual INode Parse(Token token)
+        public virtual INode Parse(Token token, int level = 0)
         {
             StringBuilder stringBuilder = new StringBuilder();
 

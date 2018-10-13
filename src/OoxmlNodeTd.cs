@@ -30,6 +30,7 @@ namespace OoxmlToHtml
 
             while (CurrentToken.Keyword != KeywordToken.EOF)
             {
+                NextToken();
                 // only container elements can be processed here
                 switch (CurrentToken.Keyword)
                 {
@@ -39,11 +40,11 @@ namespace OoxmlToHtml
                         break;
                     case KeywordToken.Body:
                         var b = new GenericElementNode(this, KeywordToken.Body);
-                        Root.SetRootNode(b.Parse(CurrentToken));
+                        var bodyNode = b.Parse(CurrentToken);
+                        Root.SetRootNode(bodyNode);
                         break;
                 }
 
-                NextToken();
             }
 
             if (useDefaultAnalyzers)

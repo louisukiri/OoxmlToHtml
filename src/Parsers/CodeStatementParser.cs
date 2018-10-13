@@ -9,7 +9,7 @@ namespace OoxmlToHtml.Parsers
         {
         }
 
-        public INode Parse(Token token)
+        public INode Parse(Token token, int level = 0)
         {
             parser.NextToken();
             return NodeFactory.CreateNode(KeywordToken.Code);
