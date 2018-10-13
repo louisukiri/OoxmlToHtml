@@ -14,6 +14,14 @@ namespace OoxmlToHtml
             Source = source;
         }
 
+        public Token PeekToken()
+        {
+            var currentPosition = Source.Position;
+            var result = NextToken();
+            Source.NextChar(currentPosition - Source.Position);
+            return result;
+        }
+
         public Token NextToken()
         {
             _currentToken = ExtractToken();

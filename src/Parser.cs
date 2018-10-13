@@ -24,7 +24,12 @@ namespace OoxmlToHtml
             var token = scanner.NextToken();
             return token;
         }
-        
+
+        public Token PeekToken()
+        {
+            return scanner.PeekToken();
+        }
+
         public Token CurrentToken => scanner.CurrentToken();
         public abstract void Parse(bool useDefaultAnalyzers = false);
 

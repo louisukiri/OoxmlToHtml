@@ -22,6 +22,10 @@ namespace OoxmlToHtml.Parsers
                 stringBuilder.Append(_parser.CurrentToken.Text);
                 stringBuilder.Append(' ');
 
+                if (_parser.PeekToken().Keyword == KeywordToken.Code)
+                {
+                    break;
+                }
                 _parser.NextToken();
             }
             

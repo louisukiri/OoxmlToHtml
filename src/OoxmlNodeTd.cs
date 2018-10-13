@@ -23,6 +23,7 @@ namespace OoxmlToHtml
         {
             this.parser = parser;
         }
+
         public override void Parse(bool useDefaultAnalyzers = false)
         {
             NextToken();
