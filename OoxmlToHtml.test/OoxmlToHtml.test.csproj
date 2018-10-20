@@ -64,11 +64,11 @@
     <Compile Include="Analyzers\ParagraphNodeAnalyzerTest.cs" />
     <Compile Include="Analyzers\AttributeCopierAnalyzerTest.cs" />
     <Compile Include="Analyzers\SiblingsAnalyzerTest.cs" />
+    <Compile Include="Analyzers\TextAnalyzerTest.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Lexer.test.cs" />
     <Compile Include="Node.test.cs" />
     <Compile Include="Parser.test.cs" />
-    <Compile Include="Parsers\CodeStatementParserTest.cs" />
     <Compile Include="Parsers\ParagraphStatementParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HtmlVisitor.test.cs" />

@@ -39,7 +39,8 @@ namespace OoxmlToHtml
                 '(',
                 ')',
                 ':',
-                '-'
+                '-',
+                '`'
             }.Contains(wordChar);
         }
     }

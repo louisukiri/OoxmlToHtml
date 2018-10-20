@@ -34,12 +34,6 @@ namespace OoxmlToHtml.Tokens
                     // force file ending when w:document closes
                     type = text == "w:document"? KeywordToken.EOF : KeywordToken.Close;
                 }
-                else if (CurrentChar == '`' && PeekChar == '`' && PeekCharAhead(2) == '`')
-                {
-                    NextChar(2);
-                    type = KeywordToken.Code;
-                    text = "";
-                }
                 else
                 {
                     type = CurrentChar.ToTokenType();

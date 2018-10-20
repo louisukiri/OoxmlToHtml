@@ -89,9 +89,6 @@ namespace OoxmlToHtml.Parsers
                         case KeywordToken.Size:
                             elementNode = new GenericElementNode(parser, KeywordToken.Size);
                             break;
-                        case KeywordToken.Code:
-                            elementNode = new CodeStatementParser(parser);
-                            break;
                     }
 
                     if (elementNode != null)
