@@ -58,5 +58,25 @@ namespace OoxmlToHtml.test.Statements
 
             Assert.AreEqual("Abc"+ specialChar +" louis", stringLiteralNode.GetAttribute("Text"));;
         }
+        [Test]
+        public void ParseShouldLeaveCursorOneTokenPastTheWordBoundary()
+        {
+            var parserNode = new OoxmlNodeTd(new OoxmlScanner(
+                new Source(@"<w:body>
+                                <w:p>
+                                    <w:t>Testing this string</w:t>
+                                </w:p>
+                            </w:body>")
+            ));
+            parserNode.NextToken();
+            while (parserNode.CurrentToken.Keyword != KeywordToken.StringLiteral)
+            {
+                parserNode.NextToken();
+            }
+            var Sut = new OoxmlToHtml.Parsers.StringLiteralStatementParser(parserNode);
+            Sut.Parse(parserNode.CurrentToken);
+
+            Assert.AreEqual(KeywordToken.Close, parserNode.CurrentToken.Keyword);
+        }
     }
 }

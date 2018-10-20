@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Moq;
 using OoxmlToHtml.Abstracts;
 
 namespace OoxmlToHtml
@@ -120,6 +121,7 @@ namespace OoxmlToHtml
         }
 
         public string GetAttribute(string name) => this[name];
+        public string GetAttributeOrEmpty(string name) => ContainsKey(name) ? this[name] : string.Empty;
         public IReadOnlyDictionary<string, string> GetAllAttributes => new ReadOnlyDictionary<string, string>(this);
 
         public INode child { get; set; }

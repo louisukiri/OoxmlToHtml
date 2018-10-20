@@ -12,7 +12,8 @@ namespace OoxmlToHtml
     {
         public IRootNode Root { get; private set; }
         private Analyzer _analyzers = null;
-        protected OoxmlNodeTd parser;
+        public OoxmlNodeTd parser { get; }
+
         public OoxmlNodeTd(Scanner scanner) : base(scanner)
         {
             parser = this;
@@ -22,6 +23,7 @@ namespace OoxmlToHtml
         {
             this.parser = parser;
         }
+
         public override void Parse(bool useDefaultAnalyzers = false)
         {
             NextToken();
@@ -29,6 +31,7 @@ namespace OoxmlToHtml
 
             while (CurrentToken.Keyword != KeywordToken.EOF)
             {
+                NextToken();
                 // only container elements can be processed here
                 switch (CurrentToken.Keyword)
                 {
@@ -38,11 +41,11 @@ namespace OoxmlToHtml
                         break;
                     case KeywordToken.Body:
                         var b = new GenericElementNode(this, KeywordToken.Body);
-                        Root.SetRootNode(b.Parse(CurrentToken));
+                        var bodyNode = b.Parse(CurrentToken);
+                        Root.SetRootNode(bodyNode);
                         break;
                 }
 
-                NextToken();
             }
 
             if (useDefaultAnalyzers)

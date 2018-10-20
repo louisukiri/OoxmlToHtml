@@ -64,6 +64,7 @@
     <Compile Include="Analyzers\ParagraphNodeAnalyzerTest.cs" />
     <Compile Include="Analyzers\AttributeCopierAnalyzerTest.cs" />
     <Compile Include="Analyzers\SiblingsAnalyzerTest.cs" />
+    <Compile Include="Analyzers\TextAnalyzerTest.cs" />
     <Compile Include="Helpers\TestHelper.cs" />
     <Compile Include="Lexer.test.cs" />
     <Compile Include="Node.test.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="HtmlVisitor.test.cs" />
     <Compile Include="Statements\AttributeStatement.test.cs" />
     <Compile Include="Statements\ParagraphStyleStatement.test.cs" />
+    <Compile Include="Statements\PreviousParagraphStatementParserTest.cs" />
     <Compile Include="Statements\RunStatementParser.test.cs" />
     <Compile Include="Statements\StringLiteralStatementParser.test.cs" />
     <Compile Include="Statements\TextStatementParser.test.cs" />

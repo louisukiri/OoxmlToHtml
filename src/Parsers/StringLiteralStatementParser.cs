@@ -4,22 +4,29 @@ using OoxmlToHtml.Factories;
 
 namespace OoxmlToHtml.Parsers
 {
-    public class StringLiteralStatementParser : OoxmlNodeTd, IStatementParser
+    public class StringLiteralStatementParser : IStatementParser
     {
-        public StringLiteralStatementParser(OoxmlNodeTd parent) : base(parent)
+        private readonly OoxmlNodeTd _parser;
+        public StringLiteralStatementParser(OoxmlNodeTd parent)
         {
+            this._parser = parent.parser;
         }
         
         public virtual INode Parse(Token token)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            while (CurrentToken.Keyword != KeywordToken.EOF
-                   && CurrentToken.Keyword == KeywordToken.StringLiteral)
+            while (_parser.CurrentToken.Keyword != KeywordToken.EOF
+                   && _parser.CurrentToken.Keyword == KeywordToken.StringLiteral)
             {
-                stringBuilder.Append(CurrentToken.Text);
+                stringBuilder.Append(_parser.CurrentToken.Text);
                 stringBuilder.Append(' ');
-                NextToken();
+
+                if (_parser.PeekToken().Keyword == KeywordToken.Code)
+                {
+                    break;
+                }
+                _parser.NextToken();
             }
             
             var newNode = NodeFactory.CreateNode(KeywordToken.StringLiteral);

@@ -1,4 +1,6 @@
-﻿namespace OoxmlToHtml.Parsers
+﻿using OoxmlToHtml.Abstracts;
+
+namespace OoxmlToHtml.Parsers
 {
     public class PreviousParagraphStatementParser : ElementNode
     {

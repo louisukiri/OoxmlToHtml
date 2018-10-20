@@ -6,10 +6,10 @@ namespace OoxmlToHtml.Parsers
 {
     public abstract class ElementNode : IStatementParser
     {
-        private OoxmlNodeTd parser;
+        protected OoxmlNodeTd parser;
         protected ElementNode(OoxmlNodeTd parser)
         {
-            this.parser = parser;
+            this.parser = parser.parser;
         }
         protected abstract KeywordToken AttributeName { get; }
         protected virtual KeywordToken[] IgnoredTokens => null;
@@ -45,15 +45,14 @@ namespace OoxmlToHtml.Parsers
 
             if (parser.CurrentToken.Keyword == KeywordToken.ENDING_ELEMENT)
             {
-                // we are in the body of the element
-                parser.NextToken();
                 // if we are not at the end of the file or at the end tag of the of the current tag. go into the while
                 // if we are at the end of the current tag, stop collecting children for the current tag
                 while (parser.CurrentToken.Keyword != KeywordToken.EOF
-                        && (!(parser.CurrentToken.Keyword == KeywordToken.Close
-                        && parser.CurrentToken.Text == token.Text))
-                       )
+                       && parser.CurrentToken.Keyword != KeywordToken.Close
+                 )
                 {
+                    // we are in the body of the element
+                    parser.NextToken();
                     IStatementParser elementNode = null;
                     switch (parser.CurrentToken.Keyword)
                     {
@@ -96,24 +95,9 @@ namespace OoxmlToHtml.Parsers
                     {
                         currentNode.AddChild(elementNode.Parse(parser.CurrentToken));
                     }
-
-                    // if we are at the closing tag of the current parent (token) skip moving to the next token
-                    // This has got to be able to tell a difference between the child end tag and a parent end tag that's exactly
-                    //   the same
-                    if (parser.CurrentToken.Keyword == KeywordToken.Close
-                            && parser.CurrentToken.Text == token.Text
-                        // if you comig out of adding a child that has the same type as the parent it was added to,
-                        //  you need to advance the NextToken so that it doesn't erroeously "continue" and evaluate the while
-                        //  as the end of the parent hereby merging the nodes
-                        //  The following checks will check for this
-                            && currentNode.Children.Any()
-                            && currentNode.Children.Last().Type != currentNode.Type
-                        )
-                    {
-                        continue;
-                    }
-                    parser.NextToken();
                 }
+
+                parser.NextToken();
             }
             return currentNode;
         }
