@@ -4,6 +4,6 @@ namespace OoxmlToHtml.Abstracts
 {
     public interface IStatementParser
     {
-        INode Parse(Token token, int level = 0);
+        INode Parse(Token token);
     }
 }
