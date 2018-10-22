@@ -7,9 +7,9 @@ namespace OoxmlToHtml.Analyzers
     {
         protected override INode Act(INode node)
         {
-            if (node.child != null)
+            if (node.Child != null)
             {
-                Act(node.child);
+                Act(node.Child);
             }
 
             if (node.Next != null)
@@ -26,7 +26,7 @@ namespace OoxmlToHtml.Analyzers
 
             node.Parent.CopyAttributes(node);
             node.Parent.RemoveChild(node);
-            node.Parent.AddChild(node.child);
+            node.Parent.AddChild(node.Child);
             return node.Parent;
         }
     }

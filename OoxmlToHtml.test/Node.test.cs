@@ -34,7 +34,7 @@ namespace OoxmlToHtml.test
             var child = new Node(KeywordToken.PreviousParagraph);
             node.AddChild(child);
 
-            Assert.AreEqual(node.child, child);
+            Assert.AreEqual(node.Child, child);
         }
 
         [Test]
@@ -328,5 +328,81 @@ namespace OoxmlToHtml.test
             Console.WriteLine(testNode.ToString());
             Assert.AreEqual(expected, testNode.ToString());
         }
+
+        [Test]
+        public void ShouldIndicateNodeNotEqualGivenDifferentAttributes()
+        {
+            var testNode = TestHelper.ParseString(@"<w:body>
+	                <w:p w:rsidR=""00644911"" w:rsidRPr=""00C63EA3"" w:rsidRDefault=""00644911"" w:rsidP=""00644911"">
+                        <w:r w:val=""test"">
+                            <w:rPr>
+                                <w:rStyle w:val=""TitleChar""/>
+                            </w:rPr>
+                            <w:t>Te</w:t>
+                        </w:r>
+                        <w:r w:rsidRPr=""00C63EA3""><w:rPr><w:rStyle w:val=""TitleChar""/></w:rPr>
+                            <w:t>sting this testing thing</w:t>
+                        </w:r>
+                    </w:p>
+                                                </w:body>");
+            Assert.IsFalse(testNode.Child.Child.Equals(testNode.Child.Child.Next));
+        }
+
+        [Test]
+        public void ShouldIndicateNodeEqualGivenTypeAndAttribMatch()
+        {
+            var testNode = TestHelper.ParseString(@"<w:body>
+	                <w:p w:rsidR=""00644911"" w:rsidRPr=""00C63EA3"" w:rsidRDefault=""00644911"" w:rsidP=""00644911"">
+                        <w:r>
+                            <w:rPr>
+                                <w:rStyle w:val=""TitleChar""/>
+                            </w:rPr>
+                            <w:t>Te</w:t>
+                        </w:r>
+                        <w:r><w:rPr><w:rStyle w:val=""TitleChar""/></w:rPr>
+                            <w:t>sting this testing thing</w:t>
+                        </w:r>
+                    </w:p>
+                                                </w:body>");
+            Assert.IsTrue(testNode.Child.Child.Equals(testNode.Child.Child.Next));
+        }
+
+        [Test]
+        public void ShouldIndicateNodeNotEqualGivenTypeMisMatch()
+        {
+            var testNode = TestHelper.ParseString(@"<w:body>
+	                <w:p w:rsidR=""00644911"" w:rsidRPr=""00C63EA3"" w:rsidRDefault=""00644911"" w:rsidP=""00644911"">
+                        <w:p>
+                            <w:rPr>
+                                <w:rStyle w:val=""TitleChar""/>
+                            </w:rPr>
+                            <w:t>Te</w:t>
+                        </w:p>
+                        <w:r w:rsidRPr=""00C63EA3""><w:rPr><w:rStyle w:val=""TitleChar""/></w:rPr>
+                            <w:t>sting this testing thing</w:t>
+                        </w:r>
+                    </w:p>
+                                                </w:body>");
+            Assert.IsFalse(testNode.Child.Child.Equals(testNode.Child.Child.Next));
+        }
+
+        //[Test]
+        //public void ShouldMoveChildrenDuringMerge()
+        //{
+        //    var testNode = TestHelper.ParseString(@"<w:body>
+	       //         <w:p w:rsidR=""00644911"" w:rsidRPr=""00C63EA3"" w:rsidRDefault=""00644911"" w:rsidP=""00644911"">
+        //                <w:p>
+        //                    <w:rPr>
+        //                        <w:rStyle w:val=""TitleChar""/>
+        //                    </w:rPr>
+        //                    <w:t>Te</w:t>
+        //                </w:p>
+        //                <w:r w:rsidRPr=""00C63EA3""><w:rPr><w:rStyle w:val=""TitleChar""/></w:rPr>
+        //                    <w:t>sting this testing thing</w:t>
+        //                </w:r>
+        //            </w:p>
+        //                                        </w:body>");
+        //    Assert.IsFalse(testNode.child.child.Equals(testNode.child.child.Next));
+        //}
     }
 }

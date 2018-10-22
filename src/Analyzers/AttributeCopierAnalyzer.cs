@@ -13,9 +13,9 @@ namespace OoxmlToHtml.Analyzers
         public virtual bool ShouldRemoveChild() => true;
         protected override INode Act(INode node)
         {
-            if (node.child != null)
+            if (node.Child != null)
             {
-                Act(node.child);
+                Act(node.Child);
             }
 
             if (node.Next != null)
@@ -30,7 +30,7 @@ namespace OoxmlToHtml.Analyzers
             
             node.Parent?.CopyAttributes(node);
             // only remove empty nodes
-            if (ShouldRemoveChild() && node.child == null)
+            if (ShouldRemoveChild() && node.Child == null)
                 node.Parent?.RemoveChild(node);
 
             return node.Parent ?? node;

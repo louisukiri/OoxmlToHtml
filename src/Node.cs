@@ -27,7 +27,7 @@ namespace OoxmlToHtml
         public IReadOnlyList<INode> Children {
             get
             {
-                var ch = child;
+                var ch = Child;
                 List<INode> nodes = new List<INode>();
                 if (ch == null)
                 {
@@ -54,15 +54,15 @@ namespace OoxmlToHtml
             {
                 return null;
             }
-            if (this.child == child)
+            if (this.Child == child)
             {
                 return child;
             }
 
-            var currentChild = this.child;
+            var currentChild = this.Child;
             if (currentChild == null)
             {
-                this.child = child;
+                this.Child = child;
             }
             else
             {
@@ -115,8 +115,14 @@ namespace OoxmlToHtml
 
         public bool CanSetAttribute(string name, string value, AttributeMergeStrategy mergeStrategy = AttributeMergeStrategy.Rename)
         {
-            var canSetAttribute = !((ContainsKey(name) && mergeStrategy == AttributeMergeStrategy.Merge
-                                                      && value != GetAttribute(name)) && !ContainsKey("style"));
+            var alreadyContainsKey = ContainsKey(name);
+            var valueIsNotIdentical = GetAttributeOrEmpty(name) != value;
+            var doesNotHaveStyle = !ContainsKey("style");
+            if (name == "Text") mergeStrategy = AttributeMergeStrategy.Append;
+            var canSetAttribute = !(alreadyContainsKey 
+                                    && mergeStrategy == AttributeMergeStrategy.Merge
+                                    && valueIsNotIdentical
+                                    && doesNotHaveStyle);
             return canSetAttribute;
         }
 
@@ -124,7 +130,7 @@ namespace OoxmlToHtml
         public string GetAttributeOrEmpty(string name) => ContainsKey(name) ? this[name] : string.Empty;
         public IReadOnlyDictionary<string, string> GetAllAttributes => new ReadOnlyDictionary<string, string>(this);
 
-        public INode child { get; set; }
+        public INode Child { get; set; }
 
         public void SetParent(INode parent)
         {
@@ -174,9 +180,9 @@ namespace OoxmlToHtml
 
         public void RemoveChild(INode child)
         {
-            if (child == this.child)
+            if (child == this.Child)
             {
-                this.child = child.Next;
+                this.Child = child.Next;
                 return;
             }
             var childToRemove = Children.FirstOrDefault(z => child == z);
@@ -193,6 +199,27 @@ namespace OoxmlToHtml
             Remove(name);
         }
 
+        public override bool Equals(object obj)
+        {
+            var rhs = obj as Node;
+            var lhs = this;
+            if (rhs == null) return false;
+            if (lhs.Type != rhs.Type) return false;
+            if (lhs.Count != rhs.Count) return false;
+            //var lhsAttribs = lhs.GetAllAttributes;
+            //var rhsAttribs = rhs.GetAllAttributes;
+
+            foreach (string key in lhs.Keys)
+            {
+                if (!rhs.ContainsKey(key)) return false;
+                if (rhs[key] != lhs[key]) return false;
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode() => base.GetHashCode();
+
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
@@ -201,10 +228,10 @@ namespace OoxmlToHtml
             {
                 builder.Append($" {attribute.ToLower()}='{this.GetAttribute(attribute)}'");
             }
-            if (child != null)
+            if (Child != null)
             {
                 builder.Append($">");
-                builder.Append(child);
+                builder.Append(Child);
                 builder.Append($"</{Type.ToString().ToLower()}>");
             }
             else builder.Append($" />");

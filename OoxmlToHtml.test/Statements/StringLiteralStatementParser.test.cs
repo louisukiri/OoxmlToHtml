@@ -54,7 +54,7 @@ namespace OoxmlToHtml.test.Statements
 
             var node = TestHelper.ParseString(input);
 
-            var stringLiteralNode = node.child.child.child.child;
+            var stringLiteralNode = node.Child.Child.Child.Child;
 
             Assert.AreEqual("Abc"+ specialChar +" louis", stringLiteralNode.GetAttribute("Text"));;
         }

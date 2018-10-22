@@ -7,24 +7,9 @@ namespace OoxmlToHtml.Analyzers
     {
         protected override INode Act(INode node)
         {
-            //var previousChild = _children.LastOrDefault();
-            //var childAttr = child.GetAllAttributes;
-            //if (child.Type == KeywordToken.Run
-            //    && previousChild != null 
-            //    && previousChild.Type == child.Type
-            //    && childAttr.Keys.All(attribute =>
-            //        previousChild.CanSetAttribute(attribute, childAttr[attribute], AttributeMergeStrategy.Merge)))
-            //{
-            //    foreach (var childAttrKey in childAttr.Keys)
-            //    {
-            //        previousChild.SetAttribute(childAttrKey, childAttr[childAttrKey], AttributeMergeStrategy.Merge);
-            //    }
-            //    previousChild.CopyChildren(child);
-            //    return previousChild;
-            //}
-            if (node.child != null)
+            if (node.Child != null)
             {
-                Act(node.child);
+                Act(node.Child);
             }
 
             if (node.Next != null)
@@ -34,14 +19,16 @@ namespace OoxmlToHtml.Analyzers
 
             if (node.Previous == null) return node;
             var attributes = node.GetAllAttributes;
-            if (node.Type == KeywordToken.Run
+            if (node.Type != KeywordToken.Paragraph
                 && node.Previous.Type == node.Type
                 && node.GetAllAttributes.Keys.All(attribute => 
                     node.Previous.CanSetAttribute(attribute, attributes[attribute], AttributeMergeStrategy.Merge))
+                && node.Child != null
                 )
             {
-                node.Previous.AddChild(node.child);
-                node.Parent.RemoveChild(node);
+                    node.Previous.AddChild(node.Child);
+                    node.Parent.RemoveChild(node);
+                    Act(node.Previous.Child);
             }
                         
             return node.Previous;

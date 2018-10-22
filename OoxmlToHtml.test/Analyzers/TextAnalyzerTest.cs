@@ -31,7 +31,7 @@ namespace OoxmlToHtml.test.Analyzers
         [Test]
         public void ShouldPropagateTextAttributeToRun()
         {
-            var paragraphNode = result.child.child;
+            var paragraphNode = result.Child.Child;
             Assert.AreEqual("ok jim, ok", paragraphNode.GetAttribute("Text"));
         }
     }
