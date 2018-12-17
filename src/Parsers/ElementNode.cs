@@ -52,7 +52,7 @@ namespace OoxmlToHtml.Parsers
                  )
                 {
                     // we are in the body of the element
-                    parser.NextToken();
+                    //parser.NextToken();
                     IStatementParser elementNode = null;
                     switch (parser.CurrentToken.Keyword)
                     {
@@ -94,6 +94,11 @@ namespace OoxmlToHtml.Parsers
                     if (elementNode != null)
                     {
                         currentNode.AddChild(elementNode.Parse(parser.CurrentToken));
+                    }
+                    else if (parser.CurrentToken.Keyword != KeywordToken.EOF
+                        && parser.CurrentToken.Keyword != KeywordToken.Close)
+                    {
+                        parser.NextToken();
                     }
                 }
 

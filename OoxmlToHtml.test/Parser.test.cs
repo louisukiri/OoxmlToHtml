@@ -174,8 +174,6 @@ namespace OoxmlToHtml.test
             var testInput = @"<w:p testAttrib=""test"">ok jim</w:p>";
             var a = new OoxmlNodeTd(new OoxmlScanner(new Source(testInput)));
             a.NextToken();
-            Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.STARTING_ELEMENT);
-            a.NextToken();
             Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);
 
             Assert.AreEqual(a.CurrentToken.Keyword, KeywordToken.Paragraph);

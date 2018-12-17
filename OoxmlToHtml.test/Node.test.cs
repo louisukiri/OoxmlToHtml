@@ -317,7 +317,7 @@ namespace OoxmlToHtml.test
         public void ShouldPrintExpectedToString()
         {
             var testNode = TestHelper.ParseString(@"<w:body>
-                                                    <w:p w:rsidP=""001F0010"" w:rsidRDefault=""001F0010"" w:rsidR=""001F0010"">
+                                                    <w:p>
                                                         <w:pPr><w:pStyle w:val = ""Title""/></w:pPr>
                                                         <w:p>
                                                             <w:t>TestTItle</w:t>
@@ -365,6 +365,18 @@ namespace OoxmlToHtml.test
                     </w:p>
                                                 </w:body>");
             Assert.IsTrue(testNode.Child.Child.Equals(testNode.Child.Child.Next));
+        }
+
+        [Test]
+        public void ShouldHaveExpectedChildren()
+        {
+            var testNode = TestHelper.ParseString(@"<w:body>
+	                <w:p>
+                    </w:p>
+                    <w:p></w:p>
+                 </w:body>");
+            Assert.AreEqual(2, testNode.Children.Count);
+            Assert.IsNotNull(testNode.Child.Next);
         }
 
         [Test]

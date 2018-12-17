@@ -92,7 +92,6 @@ w:color w:val = /> </w:p> w:pPr w:b w:i w:sz xml:space w:pStyle"));
 
             var expected2 = new Tuple<KeywordToken, string>[]
             {
-                new Tuple<KeywordToken, string>(KeywordToken.STARTING_ELEMENT, "<"),
                 new Tuple<KeywordToken, string>(KeywordToken.Text, "w:t"),
                 new Tuple<KeywordToken, string>(KeywordToken.ENDING_ELEMENT, ">"),
                 new Tuple<KeywordToken, string>(KeywordToken.StringLiteral, "test```another"),

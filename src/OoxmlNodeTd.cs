@@ -31,7 +31,6 @@ namespace OoxmlToHtml
 
             while (CurrentToken.Keyword != KeywordToken.EOF)
             {
-                NextToken();
                 // only container elements can be processed here
                 switch (CurrentToken.Keyword)
                 {
@@ -45,7 +44,8 @@ namespace OoxmlToHtml
                         Root.SetRootNode(bodyNode);
                         break;
                 }
-
+                if (CurrentToken.Keyword != KeywordToken.EOF)
+                NextToken();
             }
 
             if (useDefaultAnalyzers)

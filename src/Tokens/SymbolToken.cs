@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Linq;
+using System.Text;
 using OoxmlToHtml.Extensions;
 
 namespace OoxmlToHtml.Tokens
@@ -19,9 +21,9 @@ namespace OoxmlToHtml.Tokens
                     text = KeywordToken.ShortClose.GetText();
                     NextChar();
                 }
-                else if (CurrentChar == '<' && PeekChar == '/')
+                else if (CurrentChar == '/')
                 {
-                    NextChar(2);
+                    NextChar();
                     var stringBuilder = new StringBuilder();
                     while (CurrentChar != '>')
                     {
@@ -40,7 +42,23 @@ namespace OoxmlToHtml.Tokens
                     text = CurrentChar.ToString();
                 }
             }
-            NextChar();
+            if (type != KeywordToken.EOF)
+                NextChar();
+        }
+
+        public static Token Create(Source source)
+        {
+            if (source.CurrentChar != '<'
+                || !new[] {'w', '/'}.Contains(source.PeekChar))
+            {
+                return new SymbolToken(source);
+            }
+            source.NextChar();
+            if (source.CurrentChar == 'w')
+            {
+                return new ElementToken(source);
+            }
+            return new SymbolToken(source);
         }
     }
 }

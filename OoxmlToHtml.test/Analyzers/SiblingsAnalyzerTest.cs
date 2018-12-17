@@ -64,34 +64,34 @@ namespace OoxmlToHtml.test.Analyzers
         }
 
 
-        [Test]
-        public void ShouldMergeSiblingsOfSameType2()
-        {
-            var result = TestHelper.ParseString(@"<w:body>
-                                                    <w:p w:rsidP=""001F0010"" w:rsidRDefault=""001F0010"" w:rsidR=""001F0010"">
-                                                        <w:pPr>
-                                                            <w:pStyle w:val = ""Title""/>
-                                                        </w:pPr>
-                                                        <w:r>
-                                                            <w:t>Te</w:t>
-                                                        </w:r>
-                                                        <w:r w:rsidRPr=""00C63EA3"">
-                                                            <w:t>sting this testing thing</w:t>
-                                                        </w:r>
-                                                        <w:r>
-                                                            <w:rPr>
-                                                                <w:rStyle w:val=""TitleChar3""/>
-                                                            </w:rPr>
-                                                            <w:t>2</w:t>
-                                                        </w:r>
-                                                    </w:p>
-                                                </w:body>", true);
-            var paragraphChild = result.Child;
+        //[Test]
+        //public void ShouldMergeSiblingsOfSameType2()
+        //{
+        //    var result = TestHelper.ParseString(@"<w:body>
+        //                                            <w:p w:rsidP=""001F0010"" w:rsidRDefault=""001F0010"" w:rsidR=""001F0010"">
+        //                                                <w:pPr>
+        //                                                    <w:pStyle w:val = ""Title""/>
+        //                                                </w:pPr>
+        //                                                <w:r>
+        //                                                    <w:t>Te</w:t>
+        //                                                </w:r>
+        //                                                <w:r w:rsidRPr=""00C63EA3"">
+        //                                                    <w:t>sting this testing thing</w:t>
+        //                                                </w:r>
+        //                                                <w:r>
+        //                                                    <w:rPr>
+        //                                                        <w:rStyle w:val=""TitleChar3""/>
+        //                                                    </w:rPr>
+        //                                                    <w:t>2</w:t>
+        //                                                </w:r>
+        //                                            </w:p>
+        //                                        </w:body>", true);
+        //    var paragraphChild = result.Child;
 
 
-            Console.WriteLine(result.ToString());
-            Assert.AreEqual(2, paragraphChild.Children.Count);
-            Assert.AreEqual(KeywordToken.Text, paragraphChild.Children[1].Children[0].Type);
-        }
+        //    Console.WriteLine(result.ToString());
+        //    Assert.AreEqual(2, paragraphChild.Children.Count);
+        //    Assert.AreEqual(KeywordToken.Text, paragraphChild.Children[1].Children[0].Type);
+        //}
     }
 }

@@ -89,7 +89,7 @@ namespace OoxmlToHtml.test.Parsers
                                                             <w:t>TestTItle</w:t>
                                                          </w:r>
                                                     </w:p>
-                                                    <w:p w:rsidRDefault = ""001F0010"" w: rsidR = ""00000000"">
+                                                    <w:p w:rsidRDefault = ""001F0010"" w:rsidR = ""00000000"">
                                                         <w:r>
                                                             <w:t> In this simple text entry </ w:t>
                                                         </w:r>
